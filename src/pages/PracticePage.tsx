@@ -100,6 +100,12 @@ export function PracticePage() {
               <p>{vocabulary.length} palabras del curso</p>
             </div>
           </Link>
+          <Link className="lesson-row" to="/sionismo">
+            <div>
+              <h4>Términos de sionismo</h4>
+              <p>Léxico histórico y cultural</p>
+            </div>
+          </Link>
         </div>
       </section>
     )

@@ -1,3 +1,5 @@
+import { zionismTerms } from './zionism'
+
 export type VocabItem = {
   id: string
   hebrew: string
@@ -6,7 +8,7 @@ export type VocabItem = {
   tags: string[]
 }
 
-export const vocabulary: VocabItem[] = [
+const coreVocabulary: VocabItem[] = [
   // Saludos
   { id: 'shalom', hebrew: 'שָׁלוֹם', translit: 'shalom', spanish: 'hola / paz', tags: ['saludos'] },
   { id: 'boker-tov', hebrew: 'בֹּקֶר טוֹב', translit: 'bóker tov', spanish: 'buenos días', tags: ['saludos'] },
@@ -124,6 +126,18 @@ export const vocabulary: VocabItem[] = [
   { id: 'ein', hebrew: 'אֵין', translit: 'ein', spanish: 'no hay / no tengo', tags: ['basico'] },
 ]
 
+/** Léxico general + sección Sionismo */
+export const vocabulary: VocabItem[] = [
+  ...coreVocabulary,
+  ...zionismTerms.map(({ id, hebrew, translit, spanish, tags }) => ({
+    id,
+    hebrew,
+    translit,
+    spanish,
+    tags,
+  })),
+]
+
 export const vocabTags = [
   'saludos',
   'basico',
@@ -139,6 +153,7 @@ export const vocabTags = [
   'colores',
   'lugares',
   'verbos',
+  'sionismo',
 ] as const
 
 export const tagLabels: Record<string, string> = {
@@ -156,6 +171,7 @@ export const tagLabels: Record<string, string> = {
   colores: 'Colores',
   lugares: 'Lugares',
   verbos: 'Verbos',
+  sionismo: 'Sionismo',
 }
 
 export function vocabByTag(tag: string): VocabItem[] {

@@ -502,6 +502,148 @@ export const lessons: Lesson[] = [
       },
     ],
   },
+  {
+    id: 'u5-l1',
+    unit: 'Unidad 5 · Sionismo',
+    title: 'Ideas centrales',
+    subtitle: 'Sión, sionismo, aliá y pueblo',
+    estimatedMinutes: 9,
+    steps: [
+      {
+        type: 'info',
+        title: 'Léxico con historia',
+        body: 'Esta unidad presenta términos hebreos del sionismo y de la historia israelí moderna. Sirve para leer carteles, himnos, noticias y conversaciones culturales.',
+        hebrew: 'צִיּוֹן',
+      },
+      {
+        type: 'vocab',
+        vocabIds: ['tzion', 'tzionut', 'tzioni', 'eretz-yisrael', 'am-yisrael', 'galut', 'gueula', 'bait-leumi'],
+      },
+      {
+        type: 'quiz',
+        prompt: 'צִיּוֹנוּת significa…',
+        options: ['Independencia', 'Sionismo', 'Kibutz'],
+        answerIndex: 1,
+      },
+      {
+        type: 'quiz',
+        prompt: 'אֶרֶץ יִשְׂרָאֵל es…',
+        options: ['Tierra de Israel', 'Pueblo de Israel', 'Estado de Israel'],
+        answerIndex: 0,
+      },
+    ],
+  },
+  {
+    id: 'u5-l2',
+    unit: 'Unidad 5 · Sionismo',
+    title: 'Aliá y pioneros',
+    subtitle: 'Ascender, inmigrar, construir',
+    estimatedMinutes: 8,
+    steps: [
+      {
+        type: 'info',
+        title: 'עֲלִיָּה',
+        body: 'Aliá significa literalmente “ascenso”: inmigrar a Israel. Quien lo hace es עוֹלֶה / עוֹלָה. Los pioneros se llaman חֲלוּצִים.',
+        hebrew: 'עֲלִיָּה',
+      },
+      { type: 'vocab', vocabIds: ['alia', 'ole', 'ola', 'jalutz', 'jalutza', 'shivat-tzion', 'yishuv'] },
+      {
+        type: 'quiz',
+        prompt: 'עֲלִיָּה es…',
+        options: ['Exilio', 'Inmigración a Israel', 'Parlamento'],
+        answerIndex: 1,
+      },
+      {
+        type: 'quiz',
+        prompt: 'חָלוּץ significa…',
+        options: ['Pionero', 'Himno', 'Bandera'],
+        answerIndex: 0,
+      },
+    ],
+  },
+  {
+    id: 'u5-l3',
+    unit: 'Unidad 5 · Sionismo',
+    title: 'Estado, símbolos e instituciones',
+    subtitle: 'Independencia, Knéset, HaTikvá',
+    estimatedMinutes: 9,
+    steps: [
+      {
+        type: 'vocab',
+        vocabIds: [
+          'atzmaut',
+          'medinat-yisrael',
+          'kneset',
+          'hatikva',
+          'degel',
+          'magen-david',
+          'sojnut',
+          'keren-kayemet',
+          'heskem-balfour',
+          'tzahal',
+        ],
+      },
+      {
+        type: 'quiz',
+        prompt: 'הַתִּקְוָה es…',
+        options: ['El himno nacional', 'El parlamento', 'Un kibutz'],
+        answerIndex: 0,
+      },
+      {
+        type: 'quiz',
+        prompt: 'כְּנֶסֶת es…',
+        options: ['El ejército', 'El parlamento', 'La bandera'],
+        answerIndex: 1,
+      },
+      {
+        type: 'quiz',
+        prompt: 'עַצְמָאוּת significa…',
+        options: ['Seguridad', 'Independencia', 'Diáspora'],
+        answerIndex: 1,
+      },
+    ],
+  },
+  {
+    id: 'u5-l4',
+    unit: 'Unidad 5 · Sionismo',
+    title: 'Lugares, lengua y figuras',
+    subtitle: 'Herzl, Ben-Yehuda, Tel Aviv',
+    estimatedMinutes: 8,
+    steps: [
+      {
+        type: 'vocab',
+        vocabIds: [
+          'tel-aviv',
+          'yerushalayim-zion',
+          'kibutz',
+          'moshav',
+          'herzl',
+          'ben-yehuda',
+          'tejiat-halashon',
+          'ivrit-zion',
+          'bitajon',
+        ],
+      },
+      {
+        type: 'info',
+        title: 'Lengua y nación',
+        body: 'El renacimiento del hebreo (תְּחִיַּת הַלָּשׁוֹן) es parte del mismo proceso histórico: una lengua para la vida cotidiana de la nación.',
+        hebrew: 'עִבְרִית',
+      },
+      {
+        type: 'quiz',
+        prompt: '¿Quién impulsó el hebreo hablado moderno?',
+        options: ['Herzl', 'Ben-Yehuda', 'Balfour'],
+        answerIndex: 1,
+      },
+      {
+        type: 'quiz',
+        prompt: 'קִבּוּץ es…',
+        options: ['Comunidad cooperativa', 'Himno', 'Exilio'],
+        answerIndex: 0,
+      },
+    ],
+  },
 ]
 
 export function getLesson(id: string): Lesson | undefined {

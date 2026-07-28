@@ -10,6 +10,7 @@ import { PracticePage } from './pages/PracticePage'
 import { ProgressPage } from './pages/ProgressPage'
 import { QuizPage } from './pages/QuizPage'
 import { VocabularyPage } from './pages/VocabularyPage'
+import { ZionismPage } from './pages/ZionismPage'
 
 export default function App() {
   return (
@@ -22,6 +23,7 @@ export default function App() {
           <Route path="alefato" element={<AlphabetPage />} />
           <Route path="gramatica" element={<GrammarPage />} />
           <Route path="vocabulario" element={<VocabularyPage />} />
+          <Route path="sionismo" element={<ZionismPage />} />
           <Route path="frases" element={<PhrasesPage />} />
           <Route path="practica" element={<PracticePage />} />
           <Route path="quiz" element={<QuizPage />} />

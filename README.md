@@ -7,6 +7,7 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 - **Lecciones** guiadas (alefato, vocabulario, gramática, frases)
 - **Alefato** completo con formas finales y vocales (nikud)
 - **Vocabulario** buscable por temas
+- **Sionismo**: sección especial de términos históricos y culturales
 - **Gramática** básica para hispanohablantes
 - **Frases útiles** por situación
 - **Práctica** SRS + quizzes rápidos

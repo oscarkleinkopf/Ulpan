@@ -735,3 +735,31 @@ button.lesson-row {
   cursor: pointer;
 }
 
+.zion-term {
+  padding: 1rem 1.05rem;
+  border-radius: 14px;
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+}
+
+.zion-term-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.25rem;
+}
+
+.zion-term-head .he {
+  font-size: 1.55rem;
+  color: var(--brand);
+}
+
+.zion-note {
+  margin: 0.55rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+

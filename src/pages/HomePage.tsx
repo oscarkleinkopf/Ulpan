@@ -99,6 +99,12 @@ export function HomePage() {
               <p>Café, presentaciones y la calle</p>
             </div>
           </Link>
+          <Link className="lesson-row" to="/sionismo">
+            <div>
+              <h4>6 · Sionismo</h4>
+              <p>Aliá, instituciones, símbolos y figuras</p>
+            </div>
+          </Link>
         </div>
       </section>
     </>

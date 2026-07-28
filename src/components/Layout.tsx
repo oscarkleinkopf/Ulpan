@@ -5,6 +5,7 @@ const desktopLinks = [
   { to: '/lecciones', label: 'Lecciones' },
   { to: '/alefato', label: 'Alefato' },
   { to: '/vocabulario', label: 'Vocabulario' },
+  { to: '/sionismo', label: 'Sionismo' },
   { to: '/gramatica', label: 'Gramática' },
   { to: '/frases', label: 'Frases' },
   { to: '/practica', label: 'Práctica' },
