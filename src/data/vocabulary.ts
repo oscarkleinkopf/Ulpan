@@ -154,6 +154,7 @@ export const vocabTags = [
   'lugares',
   'verbos',
   'sionismo',
+  'calendario',
 ] as const
 
 export const tagLabels: Record<string, string> = {
@@ -172,6 +173,7 @@ export const tagLabels: Record<string, string> = {
   lugares: 'Lugares',
   verbos: 'Verbos',
   sionismo: 'Sionismo',
+  calendario: 'Calendario',
 }
 
 export function vocabByTag(tag: string): VocabItem[] {

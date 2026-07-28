@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
+import { springArc, zionistCalendarDays } from '../data/calendar'
 import { zionismByGroup, zionismTerms, type ZionismGroup } from '../data/zionism'
 import { SpeakButton } from '../components/SpeakButton'
 import { enqueueForSrs } from '../lib/progress'
@@ -15,6 +16,8 @@ export function ZionismPage() {
     return groups.filter((g) => g.group === filter)
   }, [filter, groups])
 
+  const calendarTerms = zionismTerms.filter((t) => t.group === 'calendario')
+
   function addAll() {
     update((prev) =>
       enqueueForSrs(
@@ -24,12 +27,21 @@ export function ZionismPage() {
     )
   }
 
+  function addCalendar() {
+    update((prev) =>
+      enqueueForSrs(
+        prev,
+        calendarTerms.map((t) => ({ id: t.id, kind: 'vocab' as const })),
+      ),
+    )
+  }
+
   return (
     <section className="section">
       <h2>Sionismo</h2>
       <p className="lead">
-        Léxico hebreo de conceptos, instituciones y símbolos del sionismo y de la historia israelí moderna. Enfoque
-        lingüístico y cultural; transliteración en español (ח = j).
+        Léxico hebreo de conceptos, instituciones, símbolos y el calendario nacional. Enfoque lingüístico y cultural;
+        transliteración en español (ח = j).
       </p>
 
       <div className="panel" style={{ marginBottom: '1.25rem' }}>
@@ -39,6 +51,47 @@ export function ZionismPage() {
         <p style={{ textAlign: 'center', color: 'var(--ink-soft)', margin: 0 }}>
           tzionút — sionismo · {zionismTerms.length} términos
         </p>
+      </div>
+
+      <div className="panel calendar-panel">
+        <h3 style={{ marginTop: 0, fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
+          Calendario sionista
+        </h3>
+        <p style={{ color: 'var(--ink-soft)', marginTop: 0 }}>
+          El arco primaveral: de la memoria a la independencia.
+        </p>
+        <div className="calendar-arc" aria-label="Arco primaveral">
+          {springArc.map((step, i) => (
+            <div className="calendar-arc-step" key={step.id}>
+              <span className="he">{step.he}</span>
+              <strong>{step.label}</strong>
+              {i < springArc.length - 1 ? <span className="calendar-arc-arrow" aria-hidden="true">→</span> : null}
+            </div>
+          ))}
+        </div>
+        <div className="calendar-day-list">
+          {zionistCalendarDays.map((d) => (
+            <div className={`calendar-day tone-${d.tone}`} key={d.id}>
+              <div className="zion-term-head">
+                <span className="he">{d.hebrew}</span>
+                <SpeakButton text={d.hebrew.replace(/״/g, '')} />
+              </div>
+              <div className="es">{d.spanish}</div>
+              <div className="tr">
+                {d.translit} · {d.hebrewMonth}
+              </div>
+              <p className="zion-note">{d.note}</p>
+            </div>
+          ))}
+        </div>
+        <div className="cta-row" style={{ marginTop: '1rem' }}>
+          <Link className="btn btn-solid" to="/lecciones/u6-l1">
+            Lecciones del calendario
+          </Link>
+          <button type="button" className="btn btn-outline" onClick={addCalendar}>
+            Practicar léxico del calendario
+          </button>
+        </div>
       </div>
 
       <div className="filter-chips">
@@ -66,7 +119,10 @@ export function ZionismPage() {
           Añadir todos a práctica
         </button>
         <Link className="btn btn-outline" to="/lecciones/u5-l1">
-          Ir a la lección
+          Unidad 5 · Sionismo
+        </Link>
+        <Link className="btn btn-outline" to="/lecciones/u6-l1">
+          Unidad 6 · Calendario
         </Link>
       </div>
 
@@ -78,7 +134,7 @@ export function ZionismPage() {
               <article className="zion-term" key={t.id}>
                 <div className="zion-term-head">
                   <span className="he">{t.hebrew}</span>
-                  <SpeakButton text={t.hebrew} />
+                  <SpeakButton text={t.hebrew.replace(/״/g, '')} />
                 </div>
                 <div className="es">{t.spanish}</div>
                 <div className="tr">{t.translit}</div>

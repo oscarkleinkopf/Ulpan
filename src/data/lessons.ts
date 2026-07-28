@@ -644,6 +644,155 @@ export const lessons: Lesson[] = [
       },
     ],
   },
+  {
+    id: 'u6-l1',
+    unit: 'Unidad 6 · Calendario sionista',
+    title: 'El arco de la primavera',
+    subtitle: 'Shoá, Zikarón, Atzmaút y Yerushaláyim',
+    estimatedMinutes: 10,
+    steps: [
+      {
+        type: 'info',
+        title: 'Un calendario con emoción colectiva',
+        body: 'En pocas semanas de primavera (Nisán–Iyar) Israel pasa de la memoria de la Shoá al duelo de los caídos y, al día siguiente, a la Independencia. Luego llega el Día de Jerusalén. Ese arco es el corazón del calendario sionista-israelí.',
+        hebrew: 'זִכָּרוֹן ← עַצְמָאוּת',
+      },
+      {
+        type: 'vocab',
+        vocabIds: [
+          'cal-luaj',
+          'cal-nisan',
+          'cal-iyar',
+          'cal-yom-hashoah',
+          'cal-yom-hazikaron',
+          'cal-yom-haatzmaut',
+          'cal-yom-yerushalayim',
+        ],
+      },
+      {
+        type: 'quiz',
+        prompt: '¿Qué día suele ir justo antes de יוֹם הָעַצְמָאוּת?',
+        options: ['יוֹם הַזִּכָּרוֹן', 'ט״וּ בִּשְׁבָט', 'יוֹם הָעֲלִיָּה'],
+        answerIndex: 0,
+      },
+      {
+        type: 'quiz',
+        prompt: 'יוֹם יְרוּשָׁלַיִם conmemora…',
+        options: ['La plantación de árboles', 'La reunificación de Jerusalén (1967)', 'La Declaración Balfour'],
+        answerIndex: 1,
+      },
+    ],
+  },
+  {
+    id: 'u6-l2',
+    unit: 'Unidad 6 · Calendario sionista',
+    title: 'Días de memoria',
+    subtitle: 'Shoá, zikarón, sirena y bandera',
+    estimatedMinutes: 9,
+    steps: [
+      {
+        type: 'info',
+        title: 'Silencio nacional',
+        body: 'En יוֹם הַשּׁוֹאָה y יוֹם הַזִּכָּרוֹן suena la צְפִירָה (sirena). La gente se detiene. La bandera suele ondear בַּחֲצִי הַתֹּרֶן (a media asta).',
+        hebrew: 'צְפִירָה',
+      },
+      {
+        type: 'vocab',
+        vocabIds: [
+          'cal-yom-hashoah',
+          'cal-shoa',
+          'cal-gvura',
+          'cal-yom-hazikaron',
+          'cal-zikaron',
+          'cal-tzfira',
+          'cal-degel-hatzi',
+        ],
+      },
+      {
+        type: 'quiz',
+        prompt: 'צְפִירָה en este contexto es…',
+        options: ['Una fiesta', 'La sirena de silencio', 'Un mes del año'],
+        answerIndex: 1,
+      },
+      {
+        type: 'quiz',
+        prompt: 'שׁוֹאָה significa…',
+        options: ['Independencia', 'Shoá / Holocausto', 'Aliá'],
+        answerIndex: 1,
+      },
+    ],
+  },
+  {
+    id: 'u6-l3',
+    unit: 'Unidad 6 · Calendario sionista',
+    title: 'Independencia y celebración',
+    subtitle: 'Atzmaút, jagigá y símbolos',
+    estimatedMinutes: 8,
+    steps: [
+      {
+        type: 'info',
+        title: 'De la memoria a la fiesta',
+        body: 'Al caer la noche tras Yom HaZikarón comienza יוֹם הָעַצְמָאוּת: banderas, picnic y חֲגִיגוֹת. El contraste es parte del relato nacional.',
+        hebrew: 'יוֹם הָעַצְמָאוּת',
+      },
+      {
+        type: 'vocab',
+        vocabIds: ['cal-yom-haatzmaut', 'atzmaut', 'cal-hagiga', 'hatikva', 'degel', 'medinat-yisrael'],
+      },
+      {
+        type: 'quiz',
+        prompt: 'יוֹם הָעַצְמָאוּת es…',
+        options: ['Día de la Independencia', 'Día de la Shoá', 'Día de la Aliá'],
+        answerIndex: 0,
+      },
+      {
+        type: 'quiz',
+        prompt: 'חֲגִיגָה significa…',
+        options: ['Sirena', 'Celebración', 'Exilio'],
+        answerIndex: 1,
+      },
+    ],
+  },
+  {
+    id: 'u6-l4',
+    unit: 'Unidad 6 · Calendario sionista',
+    title: 'Tierra, aliá y figuras',
+    subtitle: 'Tu BiShvat, Yom HaAliá y Yom Herzl',
+    estimatedMinutes: 8,
+    steps: [
+      {
+        type: 'info',
+        title: 'Más allá de la primavera',
+        body: 'El calendario sionista también marca el vínculo con la tierra (ט״וּ בִּשְׁבָט), la inmigración (יוֹם הָעֲלִיָּה) y a Herzl (יוֹם הֶרְצְל).',
+        hebrew: 'ט״וּ בִּשְׁבָט',
+      },
+      {
+        type: 'vocab',
+        vocabIds: [
+          'cal-tu-bishvat',
+          'cal-shvat',
+          'cal-netia',
+          'cal-yom-haalia',
+          'cal-jesvan',
+          'cal-yom-herzl',
+          'alia',
+          'herzl',
+        ],
+      },
+      {
+        type: 'quiz',
+        prompt: 'ט״וּ בִּשְׁבָט se asocia sobre todo a…',
+        options: ['Los árboles y la tierra', 'La sirena de silencio', 'El parlamento'],
+        answerIndex: 0,
+      },
+      {
+        type: 'quiz',
+        prompt: 'יוֹם הָעֲלִיָּה celebra…',
+        options: ['La inmigración a Israel', 'La Guerra de los Seis Días', 'El himno nacional'],
+        answerIndex: 0,
+      },
+    ],
+  },
 ]
 
 export function getLesson(id: string): Lesson | undefined {

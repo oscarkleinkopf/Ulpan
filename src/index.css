@@ -762,4 +762,74 @@ button.lesson-row {
   line-height: 1.45;
 }
 
+.calendar-panel {
+  margin-bottom: 1.5rem;
+}
+
+.calendar-arc {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 0.35rem;
+  align-items: center;
+  margin: 0.75rem 0 1.1rem;
+}
+
+.calendar-arc-step {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  position: relative;
+  padding: 0.45rem 0.7rem;
+  border-radius: 12px;
+  background: rgba(26, 58, 50, 0.08);
+}
+
+.calendar-arc-step .he {
+  color: var(--brand);
+  font-size: 1.05rem;
+}
+
+.calendar-arc-step strong {
+  font-size: 0.85rem;
+}
+
+.calendar-arc-arrow {
+  position: absolute;
+  inset-inline-end: -0.85rem;
+  color: var(--accent-deep);
+  font-weight: 700;
+}
+
+.calendar-day-list {
+  display: grid;
+  gap: 0.65rem;
+}
+
+.calendar-day {
+  padding: 0.9rem 1rem;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface-solid);
+  border-inline-start: 4px solid var(--brand-mid);
+}
+
+.calendar-day.tone-memorial {
+  border-inline-start-color: #6b5a4a;
+}
+
+.calendar-day.tone-celebration {
+  border-inline-start-color: var(--accent-deep);
+}
+
+.calendar-day.tone-culture {
+  border-inline-start-color: var(--brand-mid);
+}
+
+@media (max-width: 640px) {
+  .calendar-arc-arrow {
+    display: none;
+  }
+}
+
+
 

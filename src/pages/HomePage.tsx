@@ -101,8 +101,8 @@ export function HomePage() {
           </Link>
           <Link className="lesson-row" to="/sionismo">
             <div>
-              <h4>6 · Sionismo</h4>
-              <p>Aliá, instituciones, símbolos y figuras</p>
+              <h4>6 · Sionismo y calendario</h4>
+              <p>Aliá, instituciones, Shoá–Zikarón–Atzmaút</p>
             </div>
           </Link>
         </div>

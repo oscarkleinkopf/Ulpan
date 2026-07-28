@@ -1,3 +1,5 @@
+import { calendarSupportTerms, zionistCalendarDays } from './calendar'
+
 /** Términos del ámbito sionista e israelí moderno (aprendizaje cultural / léxico) */
 export type ZionismTerm = {
   id: string
@@ -17,6 +19,7 @@ export type ZionismGroup =
   | 'simbolos'
   | 'lugares'
   | 'figuras'
+  | 'calendario'
 
 export const zionismGroupLabels: Record<ZionismGroup, string> = {
   ideas: 'Ideas y conceptos',
@@ -26,9 +29,10 @@ export const zionismGroupLabels: Record<ZionismGroup, string> = {
   simbolos: 'Símbolos',
   lugares: 'Lugares',
   figuras: 'Figuras y lengua',
+  calendario: 'Calendario sionista',
 }
 
-export const zionismTerms: ZionismTerm[] = [
+const zionismCoreTerms: ZionismTerm[] = [
   {
     id: 'tzion',
     hebrew: 'צִיּוֹן',
@@ -337,6 +341,22 @@ export const zionismTerms: ZionismTerm[] = [
   },
 ]
 
+const calendarDayTerms: ZionismTerm[] = zionistCalendarDays.map((d) => ({
+  id: d.id,
+  hebrew: d.hebrew,
+  translit: d.translit,
+  spanish: d.spanish,
+  tags: ['sionismo', 'calendario'],
+  group: 'calendario',
+  note: `${d.hebrewMonth}. ${d.note}`,
+}))
+
+export const zionismTerms: ZionismTerm[] = [
+  ...zionismCoreTerms,
+  ...calendarDayTerms,
+  ...calendarSupportTerms,
+]
+
 export function zionismByGroup(): { group: ZionismGroup; label: string; terms: ZionismTerm[] }[] {
   const order: ZionismGroup[] = [
     'ideas',
@@ -346,6 +366,7 @@ export function zionismByGroup(): { group: ZionismGroup; label: string; terms: Z
     'simbolos',
     'lugares',
     'figuras',
+    'calendario',
   ]
   return order.map((group) => ({
     group,
