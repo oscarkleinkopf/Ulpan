@@ -1,0 +1,136 @@
+export type Phrase = {
+  id: string
+  hebrew: string
+  translit: string
+  spanish: string
+  situation: string
+}
+
+export const phrases: Phrase[] = [
+  {
+    id: 'intro-name-m',
+    hebrew: 'שָׁלוֹם, קוֹרְאִים לִי…',
+    translit: 'shalom, korím li…',
+    spanish: 'Hola, me llamo…',
+    situation: 'Presentaciones',
+  },
+  {
+    id: 'nice-meet',
+    hebrew: 'נָעִים מְאֹד',
+    translit: 'naím meód',
+    spanish: 'Mucho gusto',
+    situation: 'Presentaciones',
+  },
+  {
+    id: 'how-are-you-m',
+    hebrew: 'מַה שְׁלוֹמְךָ?',
+    translit: 'ma shlomjá?',
+    spanish: '¿Cómo estás? (a un hombre)',
+    situation: 'Saludos',
+  },
+  {
+    id: 'how-are-you-f',
+    hebrew: 'מַה שְׁלוֹמֵךְ?',
+    translit: 'ma shlomáj?',
+    spanish: '¿Cómo estás? (a una mujer)',
+    situation: 'Saludos',
+  },
+  {
+    id: 'im-fine',
+    hebrew: 'אֲנִי בְּסֵדֶר, תּוֹדָה',
+    translit: 'aní beséder, todá',
+    spanish: 'Estoy bien, gracias',
+    situation: 'Saludos',
+  },
+  {
+    id: 'speak-hebrew',
+    hebrew: 'אֲנִי לוֹמֵד עִבְרִית',
+    translit: 'aní loméd ivrít',
+    spanish: 'Estoy aprendiendo hebreo (m.)',
+    situation: 'Presentaciones',
+  },
+  {
+    id: 'speak-hebrew-f',
+    hebrew: 'אֲנִי לוֹמֶדֶת עִבְרִית',
+    translit: 'aní lomédet ivrít',
+    spanish: 'Estoy aprendiendo hebreo (f.)',
+    situation: 'Presentaciones',
+  },
+  {
+    id: 'slow-please',
+    hebrew: 'יוֹתֵר לְאַט, בְּבַקָּשָׁה',
+    translit: 'yotér leát, bevakashá',
+    spanish: 'Más despacio, por favor',
+    situation: 'En clase / en la calle',
+  },
+  {
+    id: 'dont-understand',
+    hebrew: 'אֲנִי לֹא מֵבִין',
+    translit: 'aní lo mevín',
+    spanish: 'No entiendo (m.)',
+    situation: 'En clase / en la calle',
+  },
+  {
+    id: 'dont-understand-f',
+    hebrew: 'אֲנִי לֹא מְבִינָה',
+    translit: 'aní lo meviná',
+    spanish: 'No entiendo (f.)',
+    situation: 'En clase / en la calle',
+  },
+  {
+    id: 'where-is',
+    hebrew: 'אֵיפֹה…?',
+    translit: 'éifo…?',
+    spanish: '¿Dónde está…?',
+    situation: 'Direcciones',
+  },
+  {
+    id: 'how-much',
+    hebrew: 'כַּמָּה זֶה עוֹלֶה?',
+    translit: 'káma ze olé?',
+    spanish: '¿Cuánto cuesta?',
+    situation: 'Compras',
+  },
+  {
+    id: 'coffee-please',
+    hebrew: 'קָפֶה, בְּבַקָּשָׁה',
+    translit: 'kafé, bevakashá',
+    spanish: 'Un café, por favor',
+    situation: 'Café / restaurante',
+  },
+  {
+    id: 'water-please',
+    hebrew: 'מַיִם, בְּבַקָּשָׁה',
+    translit: 'máyim, bevakashá',
+    spanish: 'Agua, por favor',
+    situation: 'Café / restaurante',
+  },
+  {
+    id: 'bill',
+    hebrew: 'אֶת הַחֶשְׁבּוֹן, בְּבַקָּשָׁה',
+    translit: 'et ha-jeshbón, bevakashá',
+    spanish: 'La cuenta, por favor',
+    situation: 'Café / restaurante',
+  },
+  {
+    id: 'help',
+    hebrew: 'תַּעֲזֹר לִי?',
+    translit: 'taazór li?',
+    spanish: '¿Me ayudas? (a un hombre)',
+    situation: 'Ayuda',
+  },
+  {
+    id: 'toilet',
+    hebrew: 'אֵיפֹה הַשֵּׁרוּתִים?',
+    translit: 'éifo ha-sherutím?',
+    spanish: '¿Dónde está el baño?',
+    situation: 'Direcciones',
+  },
+  {
+    id: 'goodbye',
+    hebrew: 'לְהִתְרָאוֹת',
+    translit: 'lehitraót',
+    spanish: 'Hasta luego',
+    situation: 'Despedidas',
+  },
+]
