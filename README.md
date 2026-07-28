@@ -6,10 +6,17 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 
 - **Lecciones** guiadas (alefato, vocabulario, gramática, frases)
 - **Alefato** completo con formas finales y vocales (nikud)
+- **Vocabulario** buscable por temas
 - **Gramática** básica para hispanohablantes
 - **Frases útiles** por situación
-- **Práctica** con repetición espaciada (SRS) y progreso en el dispositivo
+- **Práctica** SRS + quizzes rápidos
+- **Progreso** local (racha, XP, preferencia de género gramatical)
 - Pronunciación vía Web Speech API cuando el navegador la soporte
+- Manifest PWA para instalar en el móvil
+
+## Transliteración
+
+Para hispanohablantes, **ח** y **כ** suave se escriben con **j** (nunca *ch*): *slijá*, *jaláv*, *ajót*.
 
 ## Desarrollo
 

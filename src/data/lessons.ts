@@ -162,7 +162,7 @@ export const lessons: Lesson[] = [
         title: 'Empezar a hablar',
         body: 'Con pocas palabras ya puedes saludar y ser cortés. Practica en voz alta.',
       },
-      { type: 'vocab', vocabIds: ['shalom', 'boker-tov', 'erev-tov', 'toda', 'bevakasha', 'slicha', 'ken', 'lo', 'ma-nizhmat'] },
+      { type: 'vocab', vocabIds: ['shalom', 'boker-tov', 'erev-tov', 'toda', 'bevakasha', 'slija', 'ken', 'lo', 'ma-nizhmat'] },
       {
         type: 'quiz',
         prompt: '¿Cómo se dice “gracias”?',
@@ -186,7 +186,7 @@ export const lessons: Lesson[] = [
     estimatedMinutes: 7,
     steps: [
       { type: 'grammar', topicId: 'pronouns' },
-      { type: 'vocab', vocabIds: ['ani', 'ata', 'at', 'hu', 'hi', 'anachnu'] },
+      { type: 'vocab', vocabIds: ['ani', 'ata', 'at', 'hu', 'hi', 'anajnu'] },
       {
         type: 'quiz',
         prompt: 'אַתָּה es…',
@@ -215,7 +215,7 @@ export const lessons: Lesson[] = [
       },
       {
         type: 'vocab',
-        vocabIds: ['ehad', 'achat', 'shnayim', 'shtayim', 'shalosh', 'arba', 'hamesh', 'shesh', 'sheva', 'shmone', 'tesha', 'eser'],
+        vocabIds: ['ehad', 'ajat', 'shnayim', 'shtayim', 'shalosh', 'arba', 'jamesh', 'shesh', 'sheva', 'shmone', 'tesha', 'eser'],
       },
       {
         type: 'quiz',
@@ -238,7 +238,7 @@ export const lessons: Lesson[] = [
     subtitle: 'Casa, familia, amigos',
     estimatedMinutes: 7,
     steps: [
-      { type: 'vocab', vocabIds: ['ish', 'isha', 'yeled', 'yalda', 'aba', 'ima', 'ach', 'achot', 'haver', 'haverá', 'bayit'] },
+      { type: 'vocab', vocabIds: ['ish', 'isha', 'yeled', 'yalda', 'aba', 'ima', 'aj', 'ajot', 'haver', 'haverá', 'bayit'] },
       {
         type: 'quiz',
         prompt: 'אִמָּא significa…',
@@ -367,6 +367,138 @@ export const lessons: Lesson[] = [
         prompt: 'לְהִתְרָאוֹת es…',
         options: ['Hasta luego', 'Perdón', '¿Dónde?'],
         answerIndex: 0,
+      },
+    ],
+  },
+  {
+    id: 'u2-l5',
+    unit: 'Unidad 2 · Primeras palabras',
+    title: 'Días de la semana',
+    subtitle: 'Del domingo al Shabat',
+    estimatedMinutes: 8,
+    steps: [
+      {
+        type: 'info',
+        title: 'La semana hebrea',
+        body: 'La semana empieza el domingo (יוֹם רִאשׁוֹן, “día primero”) y culmina en שַׁבָּת. Es un ancla cultural y práctica.',
+      },
+      {
+        type: 'vocab',
+        vocabIds: [
+          'yom-rishon',
+          'yom-sheni',
+          'yom-shlishi',
+          'yom-revi',
+          'yom-hamishi',
+          'yom-shishi',
+          'shabat',
+          'shavua',
+        ],
+      },
+      {
+        type: 'quiz',
+        prompt: 'שַׁבָּת es…',
+        options: ['Viernes', 'Sábado / Shabat', 'Domingo'],
+        answerIndex: 1,
+      },
+      {
+        type: 'quiz',
+        prompt: 'יוֹם שֵׁנִי corresponde a…',
+        options: ['Lunes', 'Martes', 'Jueves'],
+        answerIndex: 0,
+      },
+    ],
+  },
+  {
+    id: 'u2-l6',
+    unit: 'Unidad 2 · Primeras palabras',
+    title: 'Colores y comida',
+    subtitle: 'Describir y pedir lo básico',
+    estimatedMinutes: 8,
+    steps: [
+      { type: 'vocab', vocabIds: ['adom', 'kajol', 'yarok', 'tzahov', 'shajor', 'lavan'] },
+      { type: 'vocab', vocabIds: ['jalav', 'pri', 'tapuaj', 'geviná', 'salat', 'ochel', 'mayim', 'lejem'] },
+      {
+        type: 'quiz',
+        prompt: 'כָּחֹל significa…',
+        options: ['Rojo', 'Azul', 'Verde'],
+        answerIndex: 1,
+      },
+      {
+        type: 'quiz',
+        prompt: 'תַּפּוּחַ es…',
+        options: ['Queso', 'Manzana', 'Ensalada'],
+        answerIndex: 1,
+      },
+    ],
+  },
+  {
+    id: 'u3-l4',
+    unit: 'Unidad 3 · Gramática',
+    title: 'יֵשׁ y אֵין',
+    subtitle: 'Hay / no hay, tengo / no tengo',
+    estimatedMinutes: 7,
+    steps: [
+      { type: 'grammar', topicId: 'yesh-ein' },
+      { type: 'vocab', vocabIds: ['yesh', 'ein', 'sefer', 'mayim', 'bayit'] },
+      {
+        type: 'quiz',
+        prompt: 'יֵשׁ לִי סֵפֶר significa…',
+        options: ['No tengo libro', 'Tengo un libro', 'El libro es grande'],
+        answerIndex: 1,
+      },
+      {
+        type: 'quiz',
+        prompt: 'אֵין לִי מַיִם es…',
+        options: ['Tengo agua', 'No tengo agua', 'Quiero agua'],
+        answerIndex: 1,
+      },
+    ],
+  },
+  {
+    id: 'u3-l5',
+    unit: 'Unidad 3 · Gramática',
+    title: 'Querer, ir y comer',
+    subtitle: 'Verbos cotidianos en presente',
+    estimatedMinutes: 8,
+    steps: [
+      {
+        type: 'info',
+        title: 'Acción en presente',
+        body: 'Recuerda: el verbo concuerda en género. Si te identificas en femenino, usa las formas con ת- / ה- típicas del femenino singular.',
+      },
+      { type: 'vocab', vocabIds: ['rotzeh', 'rotzah', 'holej', 'holejet', 'oteh', 'otehet', 'lomed', 'lomedet'] },
+      {
+        type: 'quiz',
+        prompt: 'אֲנִי רוֹצָה קָפֶה es…',
+        options: ['Quiero café (f.)', 'Camino a casa (m.)', 'Como pan (m.)'],
+        answerIndex: 0,
+      },
+      {
+        type: 'quiz',
+        prompt: 'הוּא הוֹלֵךְ means…',
+        options: ['Ella va', 'Él va / camina', 'Ellos comen'],
+        answerIndex: 1,
+      },
+    ],
+  },
+  {
+    id: 'u4-l3',
+    unit: 'Unidad 4 · Frases útiles',
+    title: 'En la ciudad',
+    subtitle: 'Lugares, direcciones y planes',
+    estimatedMinutes: 8,
+    steps: [
+      { type: 'vocab', vocabIds: ['ir', 'rehov', 'beit-sefer', 'ulpan', 'misada', 'hanut', 'israel', 'yerushalayim'] },
+      {
+        type: 'phrase',
+        phraseIds: ['where-ulpan', 'i-live', 'want-coffee', 'see-you-tomorrow', 'good-luck'],
+      },
+      {
+        type: 'quiz',
+        prompt: 'אוּלְפָּן es…',
+        options: ['Restaurante', 'Escuela de hebreo', 'Calle'],
+        answerIndex: 1,
       },
     ],
   },

@@ -4,17 +4,19 @@ const desktopLinks = [
   { to: '/', label: 'Inicio', end: true },
   { to: '/lecciones', label: 'Lecciones' },
   { to: '/alefato', label: 'Alefato' },
+  { to: '/vocabulario', label: 'Vocabulario' },
   { to: '/gramatica', label: 'Gramática' },
   { to: '/frases', label: 'Frases' },
   { to: '/practica', label: 'Práctica' },
+  { to: '/progreso', label: 'Progreso' },
 ]
 
 const mobileLinks = [
   { to: '/', label: 'Inicio', end: true, he: 'ב' },
   { to: '/lecciones', label: 'Curso', he: 'ל' },
-  { to: '/alefato', label: 'Letras', he: 'א' },
-  { to: '/frases', label: 'Frases', he: 'מ' },
+  { to: '/vocabulario', label: 'Vocab', he: 'מ' },
   { to: '/practica', label: 'Práctica', he: 'ח' },
+  { to: '/progreso', label: 'Yo', he: 'א' },
 ]
 
 export function Layout() {

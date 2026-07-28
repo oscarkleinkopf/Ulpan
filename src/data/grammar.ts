@@ -98,4 +98,20 @@ export const grammarTopics: GrammarTopic[] = [
       { hebrew: 'הִיא קוֹרֵאת', translit: 'hi korét', spanish: 'ella lee' },
     ],
   },
+  {
+    id: 'yesh-ein',
+    title: 'יֵשׁ y אֵין',
+    summary: 'Para “hay / tengo” y “no hay / no tengo” no se usa el verbo tener como en español.',
+    points: [
+      'יֵשׁ = hay / existe · אֵין = no hay.',
+      'יֵשׁ לִי… = tengo… (literalmente “hay para mí”).',
+      'אֵין לִי… = no tengo…',
+      'Después suele ir el objeto: יֵשׁ לִי סֵפֶר.',
+    ],
+    examples: [
+      { hebrew: 'יֵשׁ לִי סֵפֶר', translit: 'yesh li séfer', spanish: 'tengo un libro' },
+      { hebrew: 'אֵין לִי מַיִם', translit: 'ein li máyim', spanish: 'no tengo agua' },
+      { hebrew: 'יֵשׁ קָפֶה?', translit: 'yesh kafé?', spanish: '¿hay café?' },
+    ],
+  },
 ]

@@ -700,3 +700,38 @@ button {
   border: 1px solid var(--line);
   animation: rise 0.35s ease both;
 }
+
+.field {
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 1rem;
+}
+
+.field span {
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
+.field input {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 0.7rem 0.85rem;
+  background: var(--surface-solid);
+  color: var(--ink);
+}
+
+.field input:focus {
+  outline: 2px solid rgba(42, 90, 76, 0.35);
+  border-color: var(--brand-mid);
+}
+
+button.lesson-row {
+  width: 100%;
+  text-align: start;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+

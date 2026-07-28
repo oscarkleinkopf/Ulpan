@@ -1,4 +1,3 @@
-import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { alphabet } from '../data/alphabet'
 import { phrases } from '../data/phrases'
@@ -6,6 +5,7 @@ import { vocabulary } from '../data/vocabulary'
 import { SpeakButton } from '../components/SpeakButton'
 import { dueCards, enqueueForSrs, reviewCard, type SrsCard } from '../lib/progress'
 import { useProgress } from '../lib/useProgress'
+import { useMemo, useState } from 'react'
 
 type Prompt = {
   card: SrsCard
@@ -51,11 +51,13 @@ function resolvePrompt(card: SrsCard): Prompt | null {
 
 export function PracticePage() {
   const { progress, update } = useProgress()
+  const [mode, setMode] = useState<'hub' | 'srs'>('hub')
   const [revealed, setRevealed] = useState(false)
   const [sessionDone, setSessionDone] = useState(0)
 
   const queue = useMemo(() => dueCards(progress, 25).map(resolvePrompt).filter(Boolean) as Prompt[], [progress])
   const current = queue[0]
+  const due = dueCards(progress).length
 
   function seedStarterDeck() {
     update((prev) =>
@@ -74,10 +76,39 @@ export function PracticePage() {
     setSessionDone((n) => n + 1)
   }
 
+  if (mode === 'hub') {
+    return (
+      <section className="section">
+        <h2>Práctica</h2>
+        <p className="lead">Elige cómo quieres entrenar hoy.</p>
+        <div className="lesson-list">
+          <button type="button" className="lesson-row" onClick={() => { setMode('srs'); setSessionDone(0); setRevealed(false) }}>
+            <div>
+              <h4>Repetición espaciada</h4>
+              <p>{due > 0 ? `${due} tarjetas pendientes` : 'Sin pendientes · puedes cargar un mazo'}</p>
+            </div>
+          </button>
+          <Link className="lesson-row" to="/quiz">
+            <div>
+              <h4>Quiz rápido</h4>
+              <p>Letras y vocabulario a opción múltiple</p>
+            </div>
+          </Link>
+          <Link className="lesson-row" to="/vocabulario">
+            <div>
+              <h4>Explorar vocabulario</h4>
+              <p>{vocabulary.length} palabras del curso</p>
+            </div>
+          </Link>
+        </div>
+      </section>
+    )
+  }
+
   if (!current) {
     return (
       <section className="section panel">
-        <h2>Práctica</h2>
+        <h2>Repetición espaciada</h2>
         <p className="lead">
           {sessionDone > 0
             ? `Repasaste ${sessionDone} tarjeta${sessionDone === 1 ? '' : 's'}. No hay más pendientes ahora.`
@@ -87,9 +118,9 @@ export function PracticePage() {
           <button type="button" className="btn btn-solid" onClick={seedStarterDeck}>
             Cargar mazo inicial
           </button>
-          <Link className="btn btn-outline" to="/lecciones">
-            Ir a lecciones
-          </Link>
+          <button type="button" className="btn btn-outline" onClick={() => setMode('hub')}>
+            Volver
+          </button>
         </div>
         <p className="empty-state" style={{ paddingTop: '1.5rem' }}>
           Mazo total: {Object.keys(progress.srs).length} · Racha: {progress.streak} días
@@ -100,8 +131,13 @@ export function PracticePage() {
 
   return (
     <section className="section">
-      <h2>Práctica</h2>
-      <p className="lead">Repetición espaciada: mira el hebreo, intenta recordar, revela y valora cómo te fue.</p>
+      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '1rem', alignItems: 'baseline' }}>
+        <h2 style={{ margin: 0 }}>Repetición espaciada</h2>
+        <button type="button" className="btn btn-outline" onClick={() => setMode('hub')}>
+          Salir
+        </button>
+      </div>
+      <p className="lead">Mira el hebreo, intenta recordar, revela y valora cómo te fue.</p>
       <div className="progress-track" aria-hidden="true">
         <div
           className="progress-fill"
@@ -109,9 +145,7 @@ export function PracticePage() {
         />
       </div>
       <p className="meta-row" style={{ justifyContent: 'space-between' }}>
-        <span>
-          Pendientes: {queue.length}
-        </span>
+        <span>Pendientes: {queue.length}</span>
         <span>En esta sesión: {sessionDone}</span>
       </p>
 

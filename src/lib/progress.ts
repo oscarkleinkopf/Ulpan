@@ -9,6 +9,8 @@ export type SrsCard = {
   due: number
 }
 
+export type LearnerGender = 'm' | 'f' | 'unset'
+
 export type ProgressState = {
   completedLessons: string[]
   lessonScores: Record<string, number>
@@ -16,6 +18,9 @@ export type ProgressState = {
   streak: number
   lastStudyDay: string | null
   xp: number
+  /** Preferencia para formas m./f. en frases y ejemplos */
+  learnerGender: LearnerGender
+  displayName: string
 }
 
 const STORAGE_KEY = 'ulpan-progress-v1'
@@ -32,7 +37,22 @@ export function defaultProgress(): ProgressState {
     streak: 0,
     lastStudyDay: null,
     xp: 0,
+    learnerGender: 'unset',
+    displayName: '',
   }
+}
+
+export function resetProgress(): ProgressState {
+  const fresh = defaultProgress()
+  saveProgress(fresh)
+  return fresh
+}
+
+export function setPreferences(
+  state: ProgressState,
+  prefs: Partial<Pick<ProgressState, 'learnerGender' | 'displayName'>>,
+): ProgressState {
+  return { ...state, ...prefs }
 }
 
 export function loadProgress(): ProgressState {

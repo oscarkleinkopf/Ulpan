@@ -17,7 +17,7 @@ export const alphabet: Letter[] = [
   { id: 'he', hebrew: 'ה', name: 'He', translit: 'h', sound: 'h suave', note: 'Al final de palabra suele marcar vocal a.' },
   { id: 'vav', hebrew: 'ו', name: 'Vav', translit: 'v / o / u', sound: 'v, o, u', note: 'También forma las vocales o (וֹ) y u (וּ).' },
   { id: 'zayin', hebrew: 'ז', name: 'Záyin', translit: 'z', sound: 'z' },
-  { id: 'het', hebrew: 'ח', name: 'Jet', translit: 'j', sound: 'j fuerte (como jota española)' },
+  { id: 'het', hebrew: 'ח', name: 'Jet', translit: 'j', sound: 'j fuerte (como jota española)', note: 'En español se transcribe con j (nunca ch). Ej.: jaláv, slijá.' },
   { id: 'tet', hebrew: 'ט', name: 'Tet', translit: 't', sound: 't' },
   { id: 'yod', hebrew: 'י', name: 'Yod', translit: 'y / i', sound: 'y o i', note: 'También marca la vocal i.' },
   { id: 'kaf', hebrew: 'כ', name: 'Kaf / Jaf', translit: 'k / j', sound: 'k o j', final: 'ך', note: 'כּ = k, כ = j. Forma final: ך.' },
