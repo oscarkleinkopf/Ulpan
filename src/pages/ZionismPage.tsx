@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { springArc, zionistCalendarDays } from '../data/calendar'
 import { zionismByGroup, zionismTerms, type ZionismGroup } from '../data/zionism'
+import { DedicationBanner } from '../components/DedicationBanner'
 import { SpeakButton } from '../components/SpeakButton'
 import { enqueueForSrs } from '../lib/progress'
 import { useProgress } from '../lib/useProgress'
@@ -38,6 +39,8 @@ export function ZionismPage() {
 
   return (
     <section className="section">
+      <DedicationBanner compact />
+
       <h2>Sionismo</h2>
       <p className="lead">
         Léxico hebreo de conceptos, instituciones, símbolos y el calendario nacional. Enfoque lingüístico y cultural;

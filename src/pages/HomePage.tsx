@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { lessons } from '../data/lessons'
 import { useProgress } from '../lib/useProgress'
 import { dueCards } from '../lib/progress'
+import { DedicationBanner } from '../components/DedicationBanner'
 
 export function HomePage() {
   const { progress } = useProgress()
@@ -34,6 +35,8 @@ export function HomePage() {
           </div>
         </div>
       </section>
+
+      <DedicationBanner />
 
       <section className="section">
         <h2>Tu ritmo</h2>
