@@ -18,7 +18,7 @@ export function HomePage() {
         <div>
           <h1 className="hero-brand">
             Ulpan
-            <span className="he">אולפן היבריד</span>
+            <span className="he">אולפן היברידי</span>
           </h1>
           <p>
             {done === 0

@@ -84,8 +84,8 @@ export function LessonPlayerPage() {
           {lesson.title} · resultado {score}%
           {quizTotal > 0 ? ` (${correctCount}/${quizTotal})` : ''}
         </p>
-        <p className="he hebrew-xl" style={{ fontSize: '3rem' }}>
-          כל הכבוד
+          <p className="hebrew-xl" style={{ fontSize: '3rem' }}>
+          כָּל הַכָּבוֹד
         </p>
         <p className="meta-row">Kol ha-kavód — bien hecho. El material pasó a tu mazo de práctica.</p>
         <div className="step-actions">

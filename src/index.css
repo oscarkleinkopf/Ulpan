@@ -489,6 +489,16 @@ button {
   background: rgba(26, 58, 50, 0.14);
 }
 
+.speak-btn.is-speaking {
+  background: rgba(196, 163, 90, 0.28);
+  color: var(--accent-deep);
+}
+
+.speak-btn.is-error {
+  background: rgba(155, 61, 61, 0.14);
+  color: var(--bad);
+}
+
 .hebrew-xl {
   font-family: var(--font-he);
   font-size: clamp(2.8rem, 10vw, 4.5rem);
