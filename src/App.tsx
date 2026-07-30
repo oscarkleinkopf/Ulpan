@@ -13,8 +13,10 @@ import { VocabularyPage } from './pages/VocabularyPage'
 import { ZionismPage } from './pages/ZionismPage'
 
 export default function App() {
+  const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined
+
   return (
-    <BrowserRouter>
+    <BrowserRouter basename={basename}>
       <Routes>
         <Route element={<Layout />}>
           <Route index element={<HomePage />} />
