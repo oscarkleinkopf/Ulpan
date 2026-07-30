@@ -4,11 +4,14 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "predev": "cp index.source.html index.html",
     "dev": "vite",
+    "prebuild": "cp index.source.html index.html",
     "build": "tsc -b && vite build",
+    "build:ghpages": "GITHUB_PAGES=true npm run build",
+    "pages:sync": "node scripts/sync-pages.mjs",
     "lint": "oxlint",
-    "preview": "vite preview",
-    "build:ghpages": "GITHUB_PAGES=true npm run build"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@netlify/vite-plugin": "^2.12.9",
