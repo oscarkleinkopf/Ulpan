@@ -2,14 +2,15 @@
   "name": "Ulpan Hibrit",
   "short_name": "Ulpan",
   "description": "Aprende hebreo desde cero — alefato, vocabulario, gramática y práctica.",
-  "start_url": "/",
+  "start_url": "./",
+  "scope": "./",
   "display": "standalone",
   "background_color": "#e7eef0",
   "theme_color": "#1a3a32",
   "lang": "es",
   "icons": [
     {
-      "src": "/favicon.svg",
+      "src": "favicon.svg",
       "sizes": "any",
       "type": "image/svg+xml",
       "purpose": "any"

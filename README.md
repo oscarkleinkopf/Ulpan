@@ -19,6 +19,11 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 
 Para hispanohablantes, **ח** y **כ** suave se escriben con **j** (nunca *ch*): *slijá*, *jaláv*, *ajót*.
 
+## Sitio
+
+- **GitHub Pages:** https://oscarkleinkopf.github.io/Ulpan/
+- Despliegue automático en cada push a `main` (Actions → Deploy GitHub Pages)
+
 ## Desarrollo
 
 ```bash
@@ -33,4 +38,11 @@ npm run build
 npm run preview
 ```
 
-Despliegue en Netlify (`netlify.toml` + plugin de Vite). El progreso se guarda en `localStorage`.
+Para previsualizar como en GitHub Pages:
+
+```bash
+GITHUB_PAGES=true npm run build
+npx vite preview
+```
+
+También se puede desplegar en Netlify (`netlify.toml` + plugin de Vite). El progreso se guarda en `localStorage`.
