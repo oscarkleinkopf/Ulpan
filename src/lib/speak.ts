@@ -1,26 +1,101 @@
-/** Pronunciación en hebreo vía Web Speech API */
+/** Pronunciación en hebreo: TTS en línea + Web Speech como respaldo */
 
+export type SpeakResult = 'ok' | 'unsupported' | 'empty'
+
+let currentAudio: HTMLAudioElement | null = null
 let voicesReady: Promise<SpeechSynthesisVoice[]> | null = null
 
 function normalizeHebrew(text: string): string {
   return text
-    .replace(/[״״""]/g, '')
+    .replace(/[״״""']/g, '')
     .replace(/[־–—]/g, ' ')
     .replace(/[·•]/g, ' ')
     .replace(/[?!¡¿.,;:()[\]{}]/g, ' ')
     .replace(/\s+/g, ' ')
     .trim()
+    .slice(0, 180)
+}
+
+function stopAll(): void {
+  if (currentAudio) {
+    currentAudio.pause()
+    currentAudio.src = ''
+    currentAudio = null
+  }
+  if (typeof window !== 'undefined' && window.speechSynthesis) {
+    window.speechSynthesis.cancel()
+  }
+}
+
+function googleTtsUrl(text: string): string {
+  const q = encodeURIComponent(text)
+  return `https://translate.google.com/translate_tts?ie=UTF-8&client=tw-ob&tl=he&q=${q}`
+}
+
+function playHtmlAudio(src: string): Promise<SpeakResult> {
+  return new Promise((resolve) => {
+    stopAll()
+    const audio = document.createElement('audio')
+    audio.preload = 'auto'
+    audio.setAttribute('referrerpolicy', 'no-referrer')
+    audio.src = src
+    currentAudio = audio
+
+    let settled = false
+    const finish = (result: SpeakResult) => {
+      if (settled) return
+      settled = true
+      if (currentAudio === audio) currentAudio = null
+      resolve(result)
+    }
+
+    audio.onended = () => finish('ok')
+    audio.onerror = () => finish('unsupported')
+    void audio.play().then(
+      () => {
+        /* playing */
+      },
+      () => finish('unsupported'),
+    )
+  })
+}
+
+async function playBlob(blob: Blob): Promise<SpeakResult> {
+  if (!blob.type.includes('audio') && blob.size < 500) return 'unsupported'
+  const url = URL.createObjectURL(blob)
+  try {
+    const result = await playHtmlAudio(url)
+    return result
+  } finally {
+    window.setTimeout(() => URL.revokeObjectURL(url), 30_000)
+  }
+}
+
+/** Proxy propio (Netlify). En GitHub Pages no existe y se ignora. */
+async function speakViaProxy(text: string): Promise<SpeakResult | null> {
+  try {
+    const base = import.meta.env.BASE_URL || '/'
+    const endpoint = new URL('api/tts', window.location.origin + base)
+    endpoint.searchParams.set('q', text)
+    const res = await fetch(endpoint.toString())
+    if (!res.ok) return null
+    const type = res.headers.get('content-type') || ''
+    if (!type.includes('audio')) return null
+    return await playBlob(await res.blob())
+  } catch {
+    return null
+  }
+}
+
+async function speakViaGoogleAudio(text: string): Promise<SpeakResult> {
+  return playHtmlAudio(googleTtsUrl(text))
 }
 
 function loadVoices(): Promise<SpeechSynthesisVoice[]> {
-  if (typeof window === 'undefined' || !window.speechSynthesis) {
-    return Promise.resolve([])
-  }
-
+  if (typeof window === 'undefined' || !window.speechSynthesis) return Promise.resolve([])
   const synth = window.speechSynthesis
-  const current = synth.getVoices()
-  if (current.length > 0) return Promise.resolve(current)
-
+  const now = synth.getVoices()
+  if (now.length) return Promise.resolve(now)
   if (!voicesReady) {
     voicesReady = new Promise((resolve) => {
       const done = () => {
@@ -28,62 +103,31 @@ function loadVoices(): Promise<SpeechSynthesisVoice[]> {
         resolve(synth.getVoices())
       }
       synth.addEventListener('voiceschanged', done)
-      // Algunos navegadores nunca disparan voiceschanged
-      window.setTimeout(() => resolve(synth.getVoices()), 750)
+      window.setTimeout(() => resolve(synth.getVoices()), 800)
     })
   }
   return voicesReady
 }
 
-function pickHebrewVoice(voices: SpeechSynthesisVoice[]): SpeechSynthesisVoice | undefined {
-  const scored = voices
-    .map((v) => {
-      const lang = v.lang.toLowerCase()
-      let score = 0
-      if (lang === 'he-il' || lang === 'he_il') score += 5
-      if (lang.startsWith('he')) score += 4
-      if (lang.includes('hebrew') || /עברית/.test(v.name)) score += 3
-      if (/google|premium|enhanced|natural/i.test(v.name)) score += 1
-      return { v, score }
-    })
-    .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score)
-
-  return scored[0]?.v
-}
-
-export function warmSpeech(): void {
-  void loadVoices()
-}
-
-export type SpeakResult = 'ok' | 'unsupported' | 'empty'
-
-export async function speakHebrew(text: string): Promise<SpeakResult> {
+async function speakViaWebSpeech(text: string): Promise<SpeakResult> {
   if (typeof window === 'undefined' || !window.speechSynthesis) return 'unsupported'
+  const voices = await loadVoices()
+  const he =
+    voices.find((v) => v.lang.toLowerCase().startsWith('he')) ??
+    voices.find((v) => /hebrew|עברית/i.test(v.name))
 
-  const clean = normalizeHebrew(text)
-  if (!clean) return 'empty'
+  // Sin voz hebrea instalada, Web Speech suele fallar o leer mal
+  if (!he) return 'unsupported'
 
   const synth = window.speechSynthesis
-  const voices = await loadVoices()
-  const he = pickHebrewVoice(voices)
-
   synth.cancel()
-
-  // Chrome a veces ignora el primer speak tras cancel(); un tick ayuda.
-  await new Promise((r) => window.setTimeout(r, 40))
-
-  const utter = new SpeechSynthesisUtterance(clean)
-  if (he) {
-    utter.voice = he
-    utter.lang = he.lang
-  } else {
-    utter.lang = 'he-IL'
-  }
-  utter.rate = 0.88
-  utter.pitch = 1
+  await new Promise((r) => setTimeout(r, 40))
 
   return await new Promise((resolve) => {
+    const utter = new SpeechSynthesisUtterance(text)
+    utter.voice = he
+    utter.lang = he.lang || 'he-IL'
+    utter.rate = 0.9
     let settled = false
     const finish = (result: SpeakResult) => {
       if (settled) return
@@ -94,20 +138,63 @@ export async function speakHebrew(text: string): Promise<SpeakResult> {
     utter.onerror = () => finish('unsupported')
     try {
       synth.speak(utter)
-      // Si el motor queda en pausa (bug de Chrome), reanudar
       window.setTimeout(() => {
         if (synth.paused) synth.resume()
-      }, 80)
-      // Si nunca arranca, no dejar la promesa colgada
+      }, 60)
       window.setTimeout(() => {
         if (!settled && !synth.speaking) finish('unsupported')
-      }, 1500)
+      }, 1200)
     } catch {
       finish('unsupported')
     }
   })
 }
 
+export function warmSpeech(): void {
+  void loadVoices()
+  // Prefetch silencioso no aplica; solo calentar voces
+}
+
+async function speakViaCorsProxy(text: string): Promise<SpeakResult> {
+  const target = googleTtsUrl(text)
+  const proxies = [
+    `https://corsproxy.io/?${encodeURIComponent(target)}`,
+    `https://api.allorigins.win/raw?url=${encodeURIComponent(target)}`,
+  ]
+
+  for (const proxy of proxies) {
+    try {
+      const res = await fetch(proxy)
+      if (!res.ok) continue
+      const blob = await res.blob()
+      if (blob.size < 800) continue
+      const result = await playBlob(blob)
+      if (result === 'ok') return result
+    } catch {
+      /* probar siguiente */
+    }
+  }
+  return 'unsupported'
+}
+
+export async function speakHebrew(text: string): Promise<SpeakResult> {
+  const clean = normalizeHebrew(text)
+  if (!clean) return 'empty'
+
+  stopAll()
+
+  const viaProxy = await speakViaProxy(clean)
+  if (viaProxy === 'ok') return 'ok'
+
+  const viaGoogle = await speakViaGoogleAudio(clean)
+  if (viaGoogle === 'ok') return 'ok'
+
+  const viaCors = await speakViaCorsProxy(clean)
+  if (viaCors === 'ok') return 'ok'
+
+  return speakViaWebSpeech(clean)
+}
+
 export function canSpeak(): boolean {
-  return typeof window !== 'undefined' && 'speechSynthesis' in window
+  return typeof window !== 'undefined'
 }

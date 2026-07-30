@@ -24,7 +24,7 @@ export function SpeakButton({ text, label = 'Escuchar' }: Props) {
 
   const title =
     state === 'error'
-      ? 'No hay voz en hebreo en este dispositivo. En Chrome/Edge instala el idioma hebreo en el sistema.'
+      ? 'No se pudo reproducir el audio. Revisa tu conexión o prueba otro navegador.'
       : state === 'speaking'
         ? 'Reproduciendo…'
         : label
