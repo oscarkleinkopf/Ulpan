@@ -1,7 +1,7 @@
 {
-  "name": "Ulpan Hibrit",
-  "short_name": "Ulpan",
-  "description": "Aprende hebreo desde cero — alefato, vocabulario, gramática y práctica.",
+  "name": "Ulpan con la Mora Maggie",
+  "short_name": "Ulpan Maggie",
+  "description": "Aprende hebreo desde cero con la Mora Maggie — alefato, vocabulario, gramática, tareas y práctica.",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

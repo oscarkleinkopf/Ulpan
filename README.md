@@ -1,4 +1,4 @@
-# Ulpan Hibrit
+# Ulpan con la Mora Maggie
 
 App web para aprender **hebreo desde cero**, pensada para computadores y móviles. Interfaz en español.
 
@@ -11,6 +11,8 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 - **Gramática** básica para hispanohablantes
 - **Frases útiles** por situación
 - **Práctica** SRS + quizzes rápidos
+- **Perfiles** de morim (mora/more) y talmidim (talmid/talmidá)
+- **Tareas semanales** asignadas por la mora a cada alumno o a toda la clase
 - **Progreso** local (racha, XP, preferencia de género gramatical)
 - Pronunciación vía Web Speech API cuando el navegador la soporte
 - Manifest PWA para instalar en el móvil

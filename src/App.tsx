@@ -7,8 +7,10 @@ import { LessonPlayerPage } from './pages/LessonPlayerPage'
 import { LessonsPage } from './pages/LessonsPage'
 import { PhrasesPage } from './pages/PhrasesPage'
 import { PracticePage } from './pages/PracticePage'
+import { ProfilesPage } from './pages/ProfilesPage'
 import { ProgressPage } from './pages/ProgressPage'
 import { QuizPage } from './pages/QuizPage'
+import { TasksPage } from './pages/TasksPage'
 import { VocabularyPage } from './pages/VocabularyPage'
 import { ZionismPage } from './pages/ZionismPage'
 
@@ -30,6 +32,8 @@ export default function App() {
           <Route path="practica" element={<PracticePage />} />
           <Route path="quiz" element={<QuizPage />} />
           <Route path="progreso" element={<ProgressPage />} />
+          <Route path="perfiles" element={<ProfilesPage />} />
+          <Route path="tareas" element={<TasksPage />} />
           <Route path="*" element={<Navigate to="/" replace />} />
         </Route>
       </Routes>

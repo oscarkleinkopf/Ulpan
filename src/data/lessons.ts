@@ -33,7 +33,7 @@ export const lessons: Lesson[] = [
       {
         type: 'info',
         title: '¡Shalom!',
-        body: 'Ulpan Hibrit te acompaña desde cero. Empezamos por el alefato (א״ב), la base de todo lo demás. El hebreo se lee de derecha a izquierda.',
+        body: 'Ulpan con la Mora Maggie te acompaña desde cero. Empezamos por el alefato (א״ב), la base de todo lo demás. El hebreo se lee de derecha a izquierda.',
         hebrew: 'שָׁלוֹם',
       },
       {
