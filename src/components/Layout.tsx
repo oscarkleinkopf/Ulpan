@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { useAuthContext } from '../lib/AuthProvider'
 
 const desktopLinks = [
   { to: '/', label: 'Inicio', end: true },
@@ -24,6 +25,8 @@ const mobileLinks = [
 ]
 
 export function Layout() {
+  const { user, signOut, cloudReady } = useAuthContext()
+
   return (
     <div className="app-shell">
       <header className="topbar">
@@ -37,6 +40,24 @@ export function Layout() {
             </NavLink>
           ))}
         </nav>
+        {cloudReady ? (
+          <div className="auth-chip">
+            {user ? (
+              <>
+                <NavLink to="/cuenta" className="auth-chip-user" title={user.email}>
+                  {user.name || user.email || 'Cuenta'}
+                </NavLink>
+                <button type="button" className="auth-chip-out" onClick={() => void signOut()}>
+                  Salir
+                </button>
+              </>
+            ) : (
+              <NavLink to="/cuenta" className="auth-chip-in">
+                Entrar
+              </NavLink>
+            )}
+          </div>
+        ) : null}
       </header>
       <main className="main">
         <Outlet />
