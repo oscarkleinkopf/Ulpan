@@ -1069,7 +1069,95 @@ button.lesson-row {
 
 @media (max-width: 900px) {
   .auth-chip-user {
-    display: none;
+    max-width: 5.5rem;
+  }
+}
+
+.role-picker {
+  margin: 0 0 1.15rem;
+  padding: 0;
+  border: none;
+}
+
+.role-picker legend {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--brand);
+  margin-bottom: 0.35rem;
+}
+
+.role-picker-lead {
+  margin: 0 0 0.85rem;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+  line-height: 1.45;
+}
+
+.role-groups {
+  display: grid;
+  gap: 1rem;
+}
+
+.role-groups h4 {
+  margin: 0 0 0.45rem;
+  font-size: 0.82rem;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.role-cards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.55rem;
+}
+
+.role-card {
+  text-align: start;
+  padding: 0.75rem 0.8rem;
+  border-radius: 14px;
+  border: 1px solid var(--line);
+  background: var(--surface-solid);
+  cursor: pointer;
+  display: grid;
+  gap: 0.25rem;
+  font: inherit;
+  color: inherit;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.role-card strong {
+  font-family: var(--font-display);
+  color: var(--brand);
+  font-size: 1.05rem;
+}
+
+.role-card span {
+  font-size: 0.8rem;
+  color: var(--ink-soft);
+  line-height: 1.35;
+}
+
+.role-card.active {
+  border-color: var(--brand);
+  background: rgba(42, 90, 76, 0.08);
+  box-shadow: inset 0 0 0 1px rgba(42, 90, 76, 0.2);
+}
+
+.role-badge {
+  display: inline-block;
+  margin-top: 0.45rem;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  background: rgba(42, 90, 76, 0.1);
+  color: var(--brand);
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+@media (max-width: 560px) {
+  .role-cards {
+    grid-template-columns: 1fr;
   }
 }
 
