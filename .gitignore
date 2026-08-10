@@ -10,8 +10,10 @@ lerna-debug.log*
 logs
 # Logs
 .env
-.env.*
+.env.local
+.env.*.local
 !.env.example
+!.env.production
 .netlify
 # Netlify
 *.njsproj
