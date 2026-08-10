@@ -1014,6 +1014,65 @@ button.lesson-row {
   border-color: rgba(26, 58, 50, 0.28);
 }
 
+.btn-logout {
+  width: 100%;
+  max-width: 16rem;
+  border-color: rgba(140, 54, 40, 0.35);
+  color: #8c3628;
+}
+
+.btn-logout:hover {
+  background: rgba(140, 54, 40, 0.06);
+}
+
+.auth-chip {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-shrink: 0;
+  margin-inline-start: auto;
+}
+
+.auth-chip-user,
+.auth-chip-in {
+  max-width: 9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--brand);
+}
+
+.auth-chip-out {
+  border: 1px solid rgba(140, 54, 40, 0.35);
+  background: #fff;
+  color: #8c3628;
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  font: inherit;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.auth-chip-out:hover {
+  background: rgba(140, 54, 40, 0.06);
+}
+
+.auth-chip-in {
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0.35rem 0.75rem;
+  background: #fff;
+}
+
+@media (max-width: 900px) {
+  .auth-chip-user {
+    display: none;
+  }
+}
+
 .task-list {
   display: grid;
   gap: 1rem;

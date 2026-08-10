@@ -123,10 +123,12 @@ export function AccountPage() {
             <button type="button" className="btn btn-outline" onClick={() => void pushCloudNow()}>
               Subir este dispositivo
             </button>
-            <button type="button" className="btn btn-ghost" onClick={() => void signOut()}>
+          </div>
+          <p style={{ marginTop: '1rem' }}>
+            <button type="button" className="btn btn-outline btn-logout" onClick={() => void signOut()}>
               Cerrar sesión
             </button>
-          </div>
+          </p>
 
           <form onSubmit={onResetPassword} style={{ marginTop: '1.5rem' }}>
             <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
@@ -166,6 +168,18 @@ export function AccountPage() {
             </button>
           </div>
 
+          {mode !== 'recover' ? (
+            <>
+              <button type="button" className="btn btn-google" onClick={() => void signInWithGoogle()}>
+                <GoogleMark />
+                Continuar con Google
+              </button>
+              <div className="auth-divider" aria-hidden="true">
+                <span>o con correo</span>
+              </div>
+            </>
+          ) : null}
+
           {mode === 'signup' ? (
             <label className="field">
               <span>Nombre</span>
@@ -201,18 +215,6 @@ export function AccountPage() {
           <button type="submit" className="btn btn-solid">
             {mode === 'login' ? 'Iniciar sesión' : mode === 'signup' ? 'Registrarme' : 'Enviar enlace'}
           </button>
-
-          {mode !== 'recover' ? (
-            <>
-              <div className="auth-divider" aria-hidden="true">
-                <span>o</span>
-              </div>
-              <button type="button" className="btn btn-google" onClick={() => void signInWithGoogle()}>
-                <GoogleMark />
-                Continuar con Google
-              </button>
-            </>
-          ) : null}
         </form>
       )}
     </section>
