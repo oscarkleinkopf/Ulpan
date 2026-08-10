@@ -158,6 +158,28 @@ export function useAuth() {
     setMessage({ type: 'ok', text: 'Contraseña actualizada.' })
   }
 
+  async function signInWithGoogle() {
+    setMessage(null)
+    const supabase = getSupabase()
+    if (!supabase) {
+      setMessage({ type: 'error', text: 'Supabase no está configurado.' })
+      return
+    }
+    const { error } = await supabase.auth.signInWithOAuth({
+      provider: 'google',
+      options: {
+        redirectTo: authRedirectTo('cuenta'),
+        queryParams: {
+          access_type: 'offline',
+          prompt: 'select_account',
+        },
+      },
+    })
+    if (error) {
+      setMessage({ type: 'error', text: authErrorText(error.message) })
+    }
+  }
+
   return {
     user,
     loading,
@@ -169,6 +191,7 @@ export function useAuth() {
     setMessage,
     signIn,
     signUp,
+    signInWithGoogle,
     signOut,
     recover,
     updatePassword,
@@ -187,5 +210,8 @@ function authErrorText(msg: string): string {
     return 'Ese correo ya tiene cuenta. Prueba iniciar sesión.'
   }
   if (m.includes('password')) return 'Usa una contraseña más fuerte (mín. 8 caracteres).'
+  if (m.includes('provider is not enabled') || m.includes('unsupported provider')) {
+    return 'Google aún no está activado en Supabase (Authentication → Providers → Google).'
+  }
   return msg
 }

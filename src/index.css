@@ -980,6 +980,40 @@ button.lesson-row {
   color: var(--brand);
 }
 
+.auth-divider {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 0.75rem;
+  margin: 1.15rem 0 0.85rem;
+  color: var(--ink-soft);
+  font-size: 0.85rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  height: 1px;
+  background: var(--line);
+}
+
+.btn-google {
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  background: #fff;
+  color: #1f1f1f;
+  border: 1px solid var(--line);
+  font-weight: 600;
+}
+
+.btn-google:hover {
+  background: #f7f7f7;
+  border-color: rgba(26, 58, 50, 0.28);
+}
+
 .task-list {
   display: grid;
   gap: 1rem;
