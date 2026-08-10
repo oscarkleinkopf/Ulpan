@@ -76,3 +76,16 @@ GitHub Pages solo sirve archivos estáticos, así que la sync usa **Supabase** (
 Para desarrollo local, copia `.env.example` a `.env.local` con las mismas variables.
 
 Sin Supabase configurado, todo sigue en `localStorage` de ese dispositivo.
+
+### Login con Google
+
+1. En [Google Cloud Console](https://console.cloud.google.com/) crea un proyecto (o usa uno) → **APIs & Services → Credentials → Create credentials → OAuth client ID**.
+2. Tipo: **Web application**.
+3. **Authorized JavaScript origins:**
+   - `https://qzietzvybqlscgsbiazr.supabase.co`
+   - `https://oscarkleinkopf.github.io`
+4. **Authorized redirect URIs:**
+   - `https://qzietzvybqlscgsbiazr.supabase.co/auth/v1/callback`
+5. Copia **Client ID** y **Client Secret**.
+6. En Supabase → **Authentication → Sign In / Providers → Google** → Enable → pega Client ID y Secret → Save.
+7. En la app: **Cuenta → Continuar con Google**.
