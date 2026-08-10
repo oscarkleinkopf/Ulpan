@@ -1,5 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
 import { Layout } from './components/Layout'
+import { AuthProvider } from './lib/AuthProvider'
+import { AccountPage } from './pages/AccountPage'
 import { AlphabetPage } from './pages/AlphabetPage'
 import { GrammarPage } from './pages/GrammarPage'
 import { HomePage } from './pages/HomePage'
@@ -19,24 +21,27 @@ export default function App() {
 
   return (
     <BrowserRouter basename={basename}>
-      <Routes>
-        <Route element={<Layout />}>
-          <Route index element={<HomePage />} />
-          <Route path="lecciones" element={<LessonsPage />} />
-          <Route path="lecciones/:lessonId" element={<LessonPlayerPage />} />
-          <Route path="alefato" element={<AlphabetPage />} />
-          <Route path="gramatica" element={<GrammarPage />} />
-          <Route path="vocabulario" element={<VocabularyPage />} />
-          <Route path="sionismo" element={<ZionismPage />} />
-          <Route path="frases" element={<PhrasesPage />} />
-          <Route path="practica" element={<PracticePage />} />
-          <Route path="quiz" element={<QuizPage />} />
-          <Route path="progreso" element={<ProgressPage />} />
-          <Route path="perfiles" element={<ProfilesPage />} />
-          <Route path="tareas" element={<TasksPage />} />
-          <Route path="*" element={<Navigate to="/" replace />} />
-        </Route>
-      </Routes>
+      <AuthProvider>
+        <Routes>
+          <Route element={<Layout />}>
+            <Route index element={<HomePage />} />
+            <Route path="lecciones" element={<LessonsPage />} />
+            <Route path="lecciones/:lessonId" element={<LessonPlayerPage />} />
+            <Route path="alefato" element={<AlphabetPage />} />
+            <Route path="gramatica" element={<GrammarPage />} />
+            <Route path="vocabulario" element={<VocabularyPage />} />
+            <Route path="sionismo" element={<ZionismPage />} />
+            <Route path="frases" element={<PhrasesPage />} />
+            <Route path="practica" element={<PracticePage />} />
+            <Route path="quiz" element={<QuizPage />} />
+            <Route path="progreso" element={<ProgressPage />} />
+            <Route path="perfiles" element={<ProfilesPage />} />
+            <Route path="tareas" element={<TasksPage />} />
+            <Route path="cuenta" element={<AccountPage />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
+          </Route>
+        </Routes>
+      </AuthProvider>
     </BrowserRouter>
   )
 }

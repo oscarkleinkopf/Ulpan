@@ -11,6 +11,7 @@ const desktopLinks = [
   { to: '/practica', label: 'Práctica' },
   { to: '/tareas', label: 'Tareas' },
   { to: '/perfiles', label: 'Perfiles' },
+  { to: '/cuenta', label: 'Cuenta' },
   { to: '/progreso', label: 'Progreso' },
 ]
 
@@ -19,7 +20,7 @@ const mobileLinks = [
   { to: '/lecciones', label: 'Curso', he: 'ל' },
   { to: '/tareas', label: 'Tareas', he: 'מ' },
   { to: '/practica', label: 'Práctica', he: 'ח' },
-  { to: '/perfiles', label: 'Yo', he: 'א' },
+  { to: '/cuenta', label: 'Cuenta', he: 'א' },
 ]
 
 export function Layout() {

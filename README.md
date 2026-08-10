@@ -13,7 +13,8 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 - **Práctica** SRS + quizzes rápidos
 - **Perfiles** de morim (mora/more) y talmidim (talmid/talmidá)
 - **Tareas semanales** asignadas por la mora a cada alumno o a toda la clase
-- **Progreso** local (racha, XP, preferencia de género gramatical)
+- **Cuenta en la nube** (Netlify Identity + Database): sincroniza progreso, perfiles y tareas entre dispositivos
+- **Progreso** local (racha, XP, preferencia de género gramatical); con sesión, también en la nube
 - Pronunciación vía Web Speech API cuando el navegador la soporte
 - Manifest PWA para instalar en el móvil
 
@@ -55,4 +56,12 @@ GITHUB_PAGES=true npm run build
 npx vite preview
 ```
 
-También se puede desplegar en Netlify (`netlify.toml` + plugin de Vite). El progreso se guarda en `localStorage`.
+También se puede desplegar en Netlify (`netlify.toml` + plugin de Vite).
+
+### Cuenta en la nube (Netlify)
+
+1. Despliega el sitio en Netlify (la base de datos se provisiona al detectar `@netlify/database`).
+2. Activa **Identity** en Project configuration → Identity (registro abierto).
+3. En la app: **Cuenta** → crear cuenta / iniciar sesión → *Sincronizar ahora*.
+
+Sin Identity o fuera de Netlify, todo sigue funcionando en `localStorage` de ese dispositivo.

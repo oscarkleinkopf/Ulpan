@@ -62,8 +62,11 @@ export function HomePage() {
           </div>
         </div>
         <div className="cta-row" style={{ marginTop: '1rem' }}>
+          <Link className="btn btn-outline" to="/cuenta">
+            Cuenta en la nube
+          </Link>
           <Link className="btn btn-outline" to="/perfiles">
-            Perfiles morim / talmidim
+            Perfiles
           </Link>
           <Link className="btn btn-outline" to="/progreso">
             Progreso

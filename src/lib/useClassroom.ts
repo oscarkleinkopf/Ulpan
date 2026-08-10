@@ -5,6 +5,7 @@ import {
   saveClassroomState,
   type ClassroomState,
 } from './classroom'
+import { scheduleCloudPush } from './cloudSync'
 
 let memory = typeof window !== 'undefined' ? loadClassroomState() : defaultClassroomState()
 const listeners = new Set<() => void>()
@@ -22,6 +23,16 @@ function getSnapshot() {
   return memory
 }
 
+export function replaceClassroomState(next: ClassroomState) {
+  memory = next
+  saveClassroomState(memory)
+  emit()
+}
+
+export function getClassroomSnapshot() {
+  return memory
+}
+
 export function useClassroom() {
   const state = useSyncExternalStore(subscribe, getSnapshot, defaultClassroomState)
 
@@ -29,6 +40,7 @@ export function useClassroom() {
     memory = typeof next === 'function' ? next(memory) : next
     saveClassroomState(memory)
     emit()
+    scheduleCloudPush()
   }, [])
 
   const [hydrated, setHydrated] = useState(false)
