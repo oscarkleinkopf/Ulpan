@@ -1,6 +1,6 @@
-import { getUser } from '@netlify/identity'
 import { getClassroomSnapshot, replaceClassroomState } from './useClassroom'
 import { getProgressSnapshot, replaceProgressState } from './useProgress'
+import { getSupabase } from './supabase'
 import { mergeClassroom, mergeProgress, normalizeBundle, type SyncBundle } from './syncMerge'
 
 export type SyncStatus = 'idle' | 'syncing' | 'ok' | 'error' | 'offline'
@@ -45,57 +45,74 @@ function localBundle(): SyncBundle {
   }
 }
 
-async function apiFetch(method: 'GET' | 'PUT', body?: SyncBundle) {
-  const res = await fetch('/api/sync', {
-    method,
-    credentials: 'include',
-    headers: body ? { 'Content-Type': 'application/json' } : undefined,
-    body: body ? JSON.stringify(body) : undefined,
-  })
-  if (res.status === 401) throw new Error('Inicia sesión para sincronizar.')
-  if (res.status === 503) {
-    const data = (await res.json().catch(() => ({}))) as { error?: string }
-    throw new Error(data.error || 'La nube aún no está disponible en este entorno.')
-  }
-  if (!res.ok) {
-    const text = await res.text().catch(() => '')
-    throw new Error(text || `Error de sincronización (${res.status})`)
-  }
-  return res.json()
+async function requireUserId(): Promise<string | null> {
+  const supabase = getSupabase()
+  if (!supabase) return null
+  const { data } = await supabase.auth.getSession()
+  return data.session?.user.id ?? null
+}
+
+async function fetchRemote(userId: string) {
+  const supabase = getSupabase()
+  if (!supabase) throw new Error('Supabase no configurado')
+  const { data, error } = await supabase
+    .from('user_sync')
+    .select('progress, classroom, updated_at')
+    .eq('user_id', userId)
+    .maybeSingle()
+  if (error) throw new Error(error.message)
+  return data
+}
+
+async function upsertRemote(userId: string, bundle: SyncBundle) {
+  const supabase = getSupabase()
+  if (!supabase) throw new Error('Supabase no configurado')
+  const { error } = await supabase.from('user_sync').upsert(
+    {
+      user_id: userId,
+      progress: bundle.progress,
+      classroom: bundle.classroom,
+      updated_at: new Date().toISOString(),
+    },
+    { onConflict: 'user_id' },
+  )
+  if (error) throw new Error(error.message)
 }
 
 /** Baja la copia remota, la fusiona con lo local y vuelve a subir el resultado */
 export async function pullAndMergeCloud(): Promise<void> {
-  const user = await getUser()
-  if (!user) {
+  const userId = await requireUserId()
+  if (!userId) {
     setStatus('idle', 'Sin sesión')
     return
   }
 
   setStatus('syncing', 'Sincronizando…')
   try {
-    const remote = await apiFetch('GET')
+    const remote = await fetchRemote(userId)
     const local = localBundle()
-    const remoteBundle = normalizeBundle({
-      progress: remote.progress,
-      classroom: remote.classroom,
-      clientUpdatedAt: remote.updatedAt ?? remote.clientUpdatedAt,
-    })
 
     let merged = local
-    if (remoteBundle && (remote.progress || remote.classroom)) {
-      merged = {
-        progress: mergeProgress(local.progress, remoteBundle.progress),
-        classroom: mergeClassroom(local.classroom, remoteBundle.classroom),
-        clientUpdatedAt: new Date().toISOString(),
+    if (remote && (remote.progress || remote.classroom)) {
+      const remoteBundle = normalizeBundle({
+        progress: remote.progress,
+        classroom: remote.classroom,
+        clientUpdatedAt: remote.updated_at,
+      })
+      if (remoteBundle) {
+        merged = {
+          progress: mergeProgress(local.progress, remoteBundle.progress),
+          classroom: mergeClassroom(local.classroom, remoteBundle.classroom),
+          clientUpdatedAt: new Date().toISOString(),
+        }
+        replaceProgressState(merged.progress)
+        replaceClassroomState(merged.classroom)
       }
-      replaceProgressState(merged.progress)
-      replaceClassroomState(merged.classroom)
     }
 
-    await apiFetch('PUT', merged)
+    await upsertRemote(userId, merged)
     lastPushAt = Date.now()
-    setStatus('ok', `Sincronizado · ${user.email ?? user.name ?? 'cuenta'}`)
+    setStatus('ok', 'Sincronizado con la nube')
   } catch (err) {
     const msg = err instanceof Error ? err.message : 'No se pudo sincronizar'
     setStatus(msg.includes('Failed to fetch') || msg.includes('Network') ? 'offline' : 'error', msg)
@@ -103,12 +120,12 @@ export async function pullAndMergeCloud(): Promise<void> {
 }
 
 export async function pushCloudNow(): Promise<void> {
-  const user = await getUser()
-  if (!user) return
+  const userId = await requireUserId()
+  if (!userId) return
 
   setStatus('syncing', 'Subiendo…')
   try {
-    await apiFetch('PUT', localBundle())
+    await upsertRemote(userId, localBundle())
     lastPushAt = Date.now()
     setStatus('ok', 'Guardado en la nube')
   } catch (err) {
@@ -123,7 +140,6 @@ export function scheduleCloudPush() {
   if (pushTimer) clearTimeout(pushTimer)
   pushTimer = setTimeout(() => {
     pushTimer = null
-    // Evita empujar si acabamos de hacer pullAndMerge
     if (Date.now() - lastPushAt < 800) return
     void pushCloudNow()
   }, 1600)

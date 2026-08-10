@@ -1,13 +1,23 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
-import { updateUser } from '@netlify/identity'
 import { useAuthContext } from '../lib/AuthProvider'
 import { getSyncStatus, pullAndMergeCloud, pushCloudNow, subscribeSyncStatus } from '../lib/cloudSync'
 
 type Mode = 'login' | 'signup' | 'recover'
 
 export function AccountPage() {
-  const { user, loading, identityReady, message, signIn, signUp, signOut, recover } = useAuthContext()
+  const {
+    user,
+    loading,
+    cloudReady,
+    message,
+    needsNewPassword,
+    signIn,
+    signUp,
+    signOut,
+    recover,
+    updatePassword,
+  } = useAuthContext()
   const [mode, setMode] = useState<Mode>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -34,13 +44,8 @@ export function AccountPage() {
   async function onResetPassword(e: FormEvent) {
     e.preventDefault()
     if (!newPassword.trim()) return
-    try {
-      await updateUser({ password: newPassword })
-      setNewPassword('')
-      setSyncLabel('Contraseña actualizada')
-    } catch {
-      setSyncLabel('No se pudo actualizar la contraseña')
-    }
+    await updatePassword(newPassword)
+    setNewPassword('')
   }
 
   if (loading) {
@@ -52,18 +57,36 @@ export function AccountPage() {
     )
   }
 
-  if (!identityReady) {
+  if (!cloudReady) {
     return (
       <section className="section panel">
         <h2>Cuenta en la nube</h2>
         <p className="lead">
-          El progreso sigue guardándose en este dispositivo. Para sincronizar entre celular y PC,
-          la app debe estar desplegada en <strong>Netlify</strong> con Identity activado
-          (Project configuration → Identity).
+          El progreso sigue guardándose en este dispositivo. Para sincronizar entre celular y PC en
+          GitHub Pages, configura un proyecto <strong>Supabase</strong> gratuito.
         </p>
-        <p style={{ color: 'var(--ink-soft)' }}>
-          En GitHub Pages la cuenta en la nube no está disponible; usa el despliegue Netlify de Ulpan.
-        </p>
+        <ol className="setup-steps">
+          <li>
+            Crea un proyecto en{' '}
+            <a href="https://supabase.com" target="_blank" rel="noreferrer">
+              supabase.com
+            </a>
+            .
+          </li>
+          <li>
+            En SQL Editor, ejecuta el archivo <code>supabase/schema.sql</code> del repo.
+          </li>
+          <li>
+            En Authentication → URL configuration, agrega{' '}
+            <code>https://oscarkleinkopf.github.io/Ulpan/*</code> como Redirect URL.
+          </li>
+          <li>
+            En GitHub → Settings → Secrets → Actions, crea{' '}
+            <code>VITE_SUPABASE_URL</code> y <code>VITE_SUPABASE_ANON_KEY</code> (Project Settings →
+            API).
+          </li>
+          <li>Vuelve a publicar el sitio (push a main o workflow “Build GitHub Pages”).</li>
+        </ol>
         <Link className="btn btn-outline" to="/">
           Volver al inicio
         </Link>
@@ -75,8 +98,8 @@ export function AccountPage() {
     <section className="section">
       <h2>Cuenta en la nube</h2>
       <p className="lead">
-        Misma cuenta en el celular y la computadora: progreso, perfiles y tareas semanales se
-        fusionan automáticamente.
+        Misma cuenta en el celular y la computadora (también en GitHub Pages): progreso, perfiles y
+        tareas se fusionan automáticamente.
       </p>
 
       {message ? <p className={`banner-msg${message.type === 'error' ? ' is-error' : ''}`}>{message.text}</p> : null}
@@ -106,7 +129,7 @@ export function AccountPage() {
 
           <form onSubmit={onResetPassword} style={{ marginTop: '1.5rem' }}>
             <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
-              Nueva contraseña
+              {needsNewPassword ? 'Nueva contraseña (recuperación)' : 'Cambiar contraseña'}
             </h3>
             <label className="field">
               <span>Contraseña</span>
@@ -124,7 +147,7 @@ export function AccountPage() {
           </form>
 
           <p style={{ marginTop: '1.25rem', color: 'var(--ink-soft)', fontSize: '0.92rem' }}>
-            Estado local: {getSyncStatus().status}. También puedes gestionar{' '}
+            Estado: {getSyncStatus().status}. También puedes gestionar{' '}
             <Link to="/perfiles">perfiles</Link> y <Link to="/tareas">tareas</Link>.
           </p>
         </div>

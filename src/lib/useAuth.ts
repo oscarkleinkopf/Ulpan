@@ -1,134 +1,191 @@
 import { useEffect, useState } from 'react'
-import {
-  AuthError,
-  MissingIdentityError,
-  getSettings,
-  getUser,
-  handleAuthCallback,
-  login,
-  logout,
-  onAuthChange,
-  requestPasswordRecovery,
-  signup,
-  type User,
-} from '@netlify/identity'
+import type { Session } from '@supabase/supabase-js'
 import { pullAndMergeCloud, setCloudAuthEnabled } from './cloudSync'
+import {
+  authRedirectTo,
+  getSupabase,
+  isCloudConfigured,
+  type CloudUser,
+} from './supabase'
 
 export type AuthMessage = { type: 'ok' | 'error' | 'info'; text: string }
 
+function toCloudUser(session: Session | null): CloudUser | null {
+  const u = session?.user
+  if (!u) return null
+  const meta = u.user_metadata ?? {}
+  const name =
+    (typeof meta.full_name === 'string' && meta.full_name) ||
+    (typeof meta.name === 'string' && meta.name) ||
+    undefined
+  return { id: u.id, email: u.email, name }
+}
+
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null)
+  const [user, setUser] = useState<CloudUser | null>(null)
   const [loading, setLoading] = useState(true)
-  const [identityReady, setIdentityReady] = useState(true)
+  const [cloudReady, setCloudReady] = useState(true)
+  const [needsNewPassword, setNeedsNewPassword] = useState(false)
   const [message, setMessage] = useState<AuthMessage | null>(null)
 
   useEffect(() => {
+    const supabase = getSupabase()
+    if (!supabase || !isCloudConfigured()) {
+      setCloudReady(false)
+      setLoading(false)
+      return
+    }
+
     let alive = true
     ;(async () => {
-      try {
-        await getSettings()
-        await handleAuthCallback()
-        const current = await getUser()
-        if (!alive) return
-        setUser(current)
-        setCloudAuthEnabled(Boolean(current))
-        if (current) void pullAndMergeCloud()
-      } catch (err) {
-        if (err instanceof MissingIdentityError) {
-          if (alive) setIdentityReady(false)
-        } else if (alive) {
-          // Entornos sin Identity (p.ej. GitHub Pages / vite puro)
-          setIdentityReady(false)
-        }
-      } finally {
-        if (alive) setLoading(false)
-      }
+      const { data } = await supabase.auth.getSession()
+      if (!alive) return
+      const current = toCloudUser(data.session)
+      setUser(current)
+      setCloudAuthEnabled(Boolean(current))
+      if (current) void pullAndMergeCloud()
+      setLoading(false)
     })()
 
-    try {
-      return onAuthChange((_event, currentUser) => {
-        setUser(currentUser)
-        setCloudAuthEnabled(Boolean(currentUser))
-        if (currentUser) void pullAndMergeCloud()
-      })
-    } catch {
-      return undefined
+    const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
+      const current = toCloudUser(session)
+      setUser(current)
+      setCloudAuthEnabled(Boolean(current))
+      if (event === 'PASSWORD_RECOVERY') {
+        setNeedsNewPassword(true)
+        setMessage({ type: 'info', text: 'Elige una nueva contraseña para tu cuenta.' })
+      }
+      if (event === 'SIGNED_IN' && current) void pullAndMergeCloud()
+    })
+
+    return () => {
+      alive = false
+      sub.subscription.unsubscribe()
     }
   }, [])
 
   async function signIn(email: string, password: string) {
     setMessage(null)
-    try {
-      const current = await login(email, password)
-      setUser(current)
-      setCloudAuthEnabled(true)
-      setMessage({ type: 'ok', text: `Shalom, ${current.name ?? current.email}` })
-      await pullAndMergeCloud()
-    } catch (err) {
-      setMessage({ type: 'error', text: authErrorText(err) })
+    const supabase = getSupabase()
+    if (!supabase) {
+      setMessage({ type: 'error', text: 'Supabase no está configurado.' })
+      return
     }
+    const { data, error } = await supabase.auth.signInWithPassword({ email, password })
+    if (error) {
+      setMessage({ type: 'error', text: authErrorText(error.message) })
+      return
+    }
+    const current = toCloudUser(data.session)
+    setUser(current)
+    setCloudAuthEnabled(true)
+    setMessage({ type: 'ok', text: `Shalom, ${current?.name ?? current?.email}` })
+    await pullAndMergeCloud()
   }
 
   async function signUp(email: string, password: string, name: string) {
     setMessage(null)
-    try {
-      const current = await signup(email, password, { full_name: name })
-      if (current.confirmedAt) {
-        setUser(current)
-        setCloudAuthEnabled(true)
-        setMessage({ type: 'ok', text: 'Cuenta creada. Sincronizando…' })
-        await pullAndMergeCloud()
-      } else {
-        setMessage({
-          type: 'info',
-          text: 'Revisa tu correo para confirmar la cuenta. Luego inicia sesión.',
-        })
-      }
-    } catch (err) {
-      setMessage({ type: 'error', text: authErrorText(err) })
+    const supabase = getSupabase()
+    if (!supabase) {
+      setMessage({ type: 'error', text: 'Supabase no está configurado.' })
+      return
+    }
+    const { data, error } = await supabase.auth.signUp({
+      email,
+      password,
+      options: {
+        data: { full_name: name.trim() || undefined },
+        emailRedirectTo: authRedirectTo('cuenta'),
+      },
+    })
+    if (error) {
+      setMessage({ type: 'error', text: authErrorText(error.message) })
+      return
+    }
+    if (data.session) {
+      const current = toCloudUser(data.session)
+      setUser(current)
+      setCloudAuthEnabled(true)
+      setMessage({ type: 'ok', text: 'Cuenta creada. Sincronizando…' })
+      await pullAndMergeCloud()
+    } else {
+      setMessage({
+        type: 'info',
+        text: 'Revisa tu correo para confirmar la cuenta. Luego inicia sesión.',
+      })
     }
   }
 
   async function signOut() {
-    await logout()
+    const supabase = getSupabase()
+    if (supabase) await supabase.auth.signOut()
     setUser(null)
     setCloudAuthEnabled(false)
+    setNeedsNewPassword(false)
     setMessage({ type: 'info', text: 'Sesión cerrada. Los datos locales siguen en este dispositivo.' })
   }
 
   async function recover(email: string) {
     setMessage(null)
-    try {
-      await requestPasswordRecovery(email)
-      setMessage({ type: 'info', text: 'Te enviamos un enlace para restablecer la contraseña.' })
-    } catch (err) {
-      setMessage({ type: 'error', text: authErrorText(err) })
+    const supabase = getSupabase()
+    if (!supabase) {
+      setMessage({ type: 'error', text: 'Supabase no está configurado.' })
+      return
     }
+    const { error } = await supabase.auth.resetPasswordForEmail(email, {
+      redirectTo: authRedirectTo('cuenta'),
+    })
+    if (error) {
+      setMessage({ type: 'error', text: authErrorText(error.message) })
+      return
+    }
+    setMessage({ type: 'info', text: 'Te enviamos un enlace para restablecer la contraseña.' })
+  }
+
+  async function updatePassword(newPassword: string) {
+    setMessage(null)
+    const supabase = getSupabase()
+    if (!supabase) {
+      setMessage({ type: 'error', text: 'Supabase no está configurado.' })
+      return
+    }
+    const { error } = await supabase.auth.updateUser({ password: newPassword })
+    if (error) {
+      setMessage({ type: 'error', text: authErrorText(error.message) })
+      return
+    }
+    setNeedsNewPassword(false)
+    setMessage({ type: 'ok', text: 'Contraseña actualizada.' })
   }
 
   return {
     user,
     loading,
-    identityReady,
+    cloudReady,
+    /** alias para no romper AccountPage si aún usa identityReady */
+    identityReady: cloudReady,
+    needsNewPassword,
     message,
     setMessage,
     signIn,
     signUp,
     signOut,
     recover,
+    updatePassword,
   }
 }
 
-function authErrorText(err: unknown): string {
-  if (err instanceof MissingIdentityError) {
-    return 'Identity no está activo. Despliega en Netlify y actívalo en Project configuration → Identity.'
+function authErrorText(msg: string): string {
+  const m = msg.toLowerCase()
+  if (m.includes('invalid login') || m.includes('invalid credentials')) {
+    return 'Correo o contraseña incorrectos.'
   }
-  if (err instanceof AuthError) {
-    if (err.status === 401) return 'Correo o contraseña incorrectos.'
-    if (err.status === 403) return 'Registros deshabilitados o acción no permitida.'
-    if (err.status === 422) return 'Datos inválidos (revisa el correo o usa una contraseña más fuerte).'
-    return err.message
+  if (m.includes('email not confirmed')) {
+    return 'Confirma tu correo antes de iniciar sesión.'
   }
-  if (err instanceof Error) return err.message
-  return 'No se pudo completar la operación.'
+  if (m.includes('user already registered')) {
+    return 'Ese correo ya tiene cuenta. Prueba iniciar sesión.'
+  }
+  if (m.includes('password')) return 'Usa una contraseña más fuerte (mín. 8 caracteres).'
+  return msg
 }

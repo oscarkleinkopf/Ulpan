@@ -966,6 +966,20 @@ button.lesson-row {
   color: var(--ink-soft);
 }
 
+.setup-steps {
+  margin: 0 0 1.25rem;
+  padding-left: 1.2rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.setup-steps code {
+  font-size: 0.88em;
+  color: var(--brand);
+}
+
 .task-list {
   display: grid;
   gap: 1rem;
