@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router-dom'
+import { accountRoleLabel } from '../lib/accountRole'
 import { useAuthContext } from '../lib/AuthProvider'
 
 const desktopLinks = [
@@ -44,8 +45,14 @@ export function Layout() {
           <div className="auth-chip">
             {user ? (
               <>
-                <NavLink to="/cuenta" className="auth-chip-user" title={user.email}>
-                  {user.name || user.email || 'Cuenta'}
+                <NavLink
+                  to="/cuenta"
+                  className="auth-chip-user"
+                  title={`${user.email ?? ''} · ${accountRoleLabel(user.role)}`}
+                >
+                  {accountRoleLabel(user.role) !== 'Sin rol'
+                    ? accountRoleLabel(user.role)
+                    : user.name || user.email || 'Cuenta'}
                 </NavLink>
                 <button type="button" className="auth-chip-out" onClick={() => void signOut()}>
                   Salir

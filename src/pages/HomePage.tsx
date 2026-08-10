@@ -1,15 +1,22 @@
 import { Link } from 'react-router-dom'
-import { lessons } from '../data/lessons'
-import { useProgress } from '../lib/useProgress'
-import { dueCards } from '../lib/progress'
 import { DedicationBanner } from '../components/DedicationBanner'
+import { lessons } from '../data/lessons'
+import { useAuthContext } from '../lib/AuthProvider'
+import { isTeacher } from '../lib/classroom'
+import { dueCards } from '../lib/progress'
+import { useProgress } from '../lib/useProgress'
 
 export function HomePage() {
   const { progress } = useProgress()
+  const { user } = useAuthContext()
   const done = progress.completedLessons.length
   const due = dueCards(progress).length
   const next = lessons.find((l) => !progress.completedLessons.includes(l.id)) ?? lessons[0]
-  const greet = progress.displayName.trim() ? `, ${progress.displayName.trim()}` : ''
+  const greet = progress.displayName.trim()
+    ? `, ${progress.displayName.trim()}`
+    : user?.name
+      ? `, ${user.name}`
+      : ''
 
   return (
     <>
@@ -30,7 +37,7 @@ export function HomePage() {
               {done === 0 ? 'Empezar' : 'Continuar'}
             </Link>
             <Link className="btn btn-ghost" to="/tareas">
-              Tareas
+              {user?.role && isTeacher(user.role) ? 'Asignar tareas' : 'Tareas'}
             </Link>
           </div>
         </div>
@@ -63,10 +70,10 @@ export function HomePage() {
         </div>
         <div className="cta-row" style={{ marginTop: '1rem' }}>
           <Link className="btn btn-outline" to="/cuenta">
-            Cuenta en la nube
+            {user ? 'Mi cuenta' : 'Cuenta · Moré o Talmid'}
           </Link>
-          <Link className="btn btn-outline" to="/perfiles">
-            Perfiles
+          <Link className="btn btn-outline" to={user?.role && isTeacher(user.role) ? '/tareas' : '/perfiles'}>
+            {user?.role && isTeacher(user.role) ? 'Clase y tareas' : 'Unirme / perfiles'}
           </Link>
           <Link className="btn btn-outline" to="/progreso">
             Progreso

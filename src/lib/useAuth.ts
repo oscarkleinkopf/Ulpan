@@ -1,5 +1,12 @@
 import { useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
+import {
+  ensureAccountClassroom,
+  parseAccountRole,
+  stashPendingRole,
+  takePendingRole,
+  type Role,
+} from './accountRole'
 import { pullAndMergeCloud, setCloudAuthEnabled } from './cloudSync'
 import {
   authRedirectTo,
@@ -18,7 +25,20 @@ function toCloudUser(session: Session | null): CloudUser | null {
     (typeof meta.full_name === 'string' && meta.full_name) ||
     (typeof meta.name === 'string' && meta.name) ||
     undefined
-  return { id: u.id, email: u.email, name }
+  return {
+    id: u.id,
+    email: u.email,
+    name,
+    role: parseAccountRole(meta.ulpan_role),
+  }
+}
+
+async function afterLogin(user: CloudUser) {
+  setCloudAuthEnabled(true)
+  await pullAndMergeCloud()
+  if (user.role) {
+    ensureAccountClassroom(user.name || user.email || '', user.role)
+  }
 }
 
 export function useAuth() {
@@ -40,22 +60,45 @@ export function useAuth() {
     ;(async () => {
       const { data } = await supabase.auth.getSession()
       if (!alive) return
-      const current = toCloudUser(data.session)
+      let current = toCloudUser(data.session)
+      const pending = takePendingRole()
+      if (current && !current.role && pending) {
+        const { data: updated, error } = await supabase.auth.updateUser({
+          data: { ulpan_role: pending },
+        })
+        if (!error && updated.user) {
+          current = toCloudUser({ ...data.session!, user: updated.user })
+        }
+      }
       setUser(current)
-      setCloudAuthEnabled(Boolean(current))
-      if (current) void pullAndMergeCloud()
+      if (current) await afterLogin(current)
       setLoading(false)
     })()
 
     const { data: sub } = supabase.auth.onAuthStateChange((event, session) => {
-      const current = toCloudUser(session)
-      setUser(current)
-      setCloudAuthEnabled(Boolean(current))
-      if (event === 'PASSWORD_RECOVERY') {
-        setNeedsNewPassword(true)
-        setMessage({ type: 'info', text: 'Elige una nueva contraseña para tu cuenta.' })
-      }
-      if (event === 'SIGNED_IN' && current) void pullAndMergeCloud()
+      void (async () => {
+        let current = toCloudUser(session)
+        if (event === 'PASSWORD_RECOVERY') {
+          setNeedsNewPassword(true)
+          setMessage({ type: 'info', text: 'Elige una nueva contraseña para tu cuenta.' })
+        }
+        if ((event === 'SIGNED_IN' || event === 'USER_UPDATED') && current) {
+          const pending = takePendingRole()
+          if (!current.role && pending) {
+            const { data: updated, error } = await supabase.auth.updateUser({
+              data: { ulpan_role: pending },
+            })
+            if (!error && updated.user && session) {
+              current = toCloudUser({ ...session, user: updated.user })
+            }
+          }
+          setUser(current)
+          if (current) await afterLogin(current)
+        } else {
+          setUser(current)
+          setCloudAuthEnabled(Boolean(current))
+        }
+      })()
     })
 
     return () => {
@@ -78,12 +121,18 @@ export function useAuth() {
     }
     const current = toCloudUser(data.session)
     setUser(current)
-    setCloudAuthEnabled(true)
-    setMessage({ type: 'ok', text: `Shalom, ${current?.name ?? current?.email}` })
-    await pullAndMergeCloud()
+    if (current) {
+      await afterLogin(current)
+      setMessage({
+        type: 'ok',
+        text: current.role
+          ? `Shalom, ${current.name ?? current.email} · ${roleHello(current.role)}`
+          : `Shalom, ${current.name ?? current.email}. Elige tu rol (Moré o Talmid).`,
+      })
+    }
   }
 
-  async function signUp(email: string, password: string, name: string) {
+  async function signUp(email: string, password: string, name: string, role: Role) {
     setMessage(null)
     const supabase = getSupabase()
     if (!supabase) {
@@ -94,7 +143,10 @@ export function useAuth() {
       email,
       password,
       options: {
-        data: { full_name: name.trim() || undefined },
+        data: {
+          full_name: name.trim() || undefined,
+          ulpan_role: role,
+        },
         emailRedirectTo: authRedirectTo('cuenta'),
       },
     })
@@ -105,13 +157,13 @@ export function useAuth() {
     if (data.session) {
       const current = toCloudUser(data.session)
       setUser(current)
-      setCloudAuthEnabled(true)
-      setMessage({ type: 'ok', text: 'Cuenta creada. Sincronizando…' })
-      await pullAndMergeCloud()
+      if (current) await afterLogin(current)
+      setMessage({ type: 'ok', text: `Cuenta de ${roleHello(role)} creada. Sincronizando…` })
     } else {
+      stashPendingRole(role)
       setMessage({
         type: 'info',
-        text: 'Revisa tu correo para confirmar la cuenta. Luego inicia sesión.',
+        text: 'Revisa tu correo para confirmar. Tu rol se guardará al confirmar / iniciar sesión.',
       })
     }
   }
@@ -158,13 +210,14 @@ export function useAuth() {
     setMessage({ type: 'ok', text: 'Contraseña actualizada.' })
   }
 
-  async function signInWithGoogle() {
+  async function signInWithGoogle(role?: Role) {
     setMessage(null)
     const supabase = getSupabase()
     if (!supabase) {
       setMessage({ type: 'error', text: 'Supabase no está configurado.' })
       return
     }
+    if (role) stashPendingRole(role)
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
       options: {
@@ -180,11 +233,33 @@ export function useAuth() {
     }
   }
 
+  async function setAccountRole(role: Role) {
+    setMessage(null)
+    const supabase = getSupabase()
+    if (!supabase) {
+      setMessage({ type: 'error', text: 'Supabase no está configurado.' })
+      return
+    }
+    const { data, error } = await supabase.auth.updateUser({ data: { ulpan_role: role } })
+    if (error) {
+      setMessage({ type: 'error', text: authErrorText(error.message) })
+      return
+    }
+    const { data: sessionData } = await supabase.auth.getSession()
+    const current = toCloudUser(
+      sessionData.session && data.user
+        ? { ...sessionData.session, user: data.user }
+        : sessionData.session,
+    )
+    setUser(current)
+    if (current) await afterLogin(current)
+    setMessage({ type: 'ok', text: `Rol guardado: ${roleHello(role)}` })
+  }
+
   return {
     user,
     loading,
     cloudReady,
-    /** alias para no romper AccountPage si aún usa identityReady */
     identityReady: cloudReady,
     needsNewPassword,
     message,
@@ -195,6 +270,20 @@ export function useAuth() {
     signOut,
     recover,
     updatePassword,
+    setAccountRole,
+  }
+}
+
+function roleHello(role: Role): string {
+  switch (role) {
+    case 'mora':
+      return 'Morá'
+    case 'more':
+      return 'Moré'
+    case 'talmida':
+      return 'Talmidá'
+    case 'talmid':
+      return 'Talmid'
   }
 }
 

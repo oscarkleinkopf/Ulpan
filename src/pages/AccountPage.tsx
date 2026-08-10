@@ -1,5 +1,8 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { RolePicker } from '../components/RolePicker'
+import { accountRoleLabel, type Role } from '../lib/accountRole'
+import { isTeacher } from '../lib/classroom'
 import { useAuthContext } from '../lib/AuthProvider'
 import { getSyncStatus, pullAndMergeCloud, pushCloudNow, subscribeSyncStatus } from '../lib/cloudSync'
 
@@ -18,11 +21,13 @@ export function AccountPage() {
     signOut,
     recover,
     updatePassword,
+    setAccountRole,
   } = useAuthContext()
   const [mode, setMode] = useState<Mode>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
+  const [role, setRole] = useState<Role>('talmid')
   const [newPassword, setNewPassword] = useState('')
   const [syncLabel, setSyncLabel] = useState('')
 
@@ -38,7 +43,7 @@ export function AccountPage() {
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
     if (mode === 'login') await signIn(email, password)
-    else if (mode === 'signup') await signUp(email, password, name)
+    else if (mode === 'signup') await signUp(email, password, name, role)
     else await recover(email)
   }
 
@@ -66,28 +71,6 @@ export function AccountPage() {
           El progreso sigue guardándose en este dispositivo. Para sincronizar entre celular y PC en
           GitHub Pages, configura un proyecto <strong>Supabase</strong> gratuito.
         </p>
-        <ol className="setup-steps">
-          <li>
-            Crea un proyecto en{' '}
-            <a href="https://supabase.com" target="_blank" rel="noreferrer">
-              supabase.com
-            </a>
-            .
-          </li>
-          <li>
-            En SQL Editor, ejecuta el archivo <code>supabase/schema.sql</code> del repo.
-          </li>
-          <li>
-            En Authentication → URL configuration, agrega{' '}
-            <code>https://oscarkleinkopf.github.io/Ulpan/*</code> como Redirect URL.
-          </li>
-          <li>
-            En GitHub → Settings → Secrets → Actions, crea{' '}
-            <code>VITE_SUPABASE_URL</code> y <code>VITE_SUPABASE_ANON_KEY</code> (Project Settings →
-            API).
-          </li>
-          <li>Vuelve a publicar el sitio (push a main o workflow “Build GitHub Pages”).</li>
-        </ol>
         <Link className="btn btn-outline" to="/">
           Volver al inicio
         </Link>
@@ -99,8 +82,8 @@ export function AccountPage() {
     <section className="section">
       <h2>Cuenta en la nube</h2>
       <p className="lead">
-        Misma cuenta en el celular y la computadora (también en GitHub Pages): progreso, perfiles y
-        tareas se fusionan automáticamente.
+        Al crear tu cuenta elige si eres <strong>Moré / Morá</strong> (docente) o{' '}
+        <strong>Talmid / Talmidá</strong> (alumno). El progreso se sincroniza entre dispositivos.
       </p>
 
       {message ? <p className={`banner-msg${message.type === 'error' ? ' is-error' : ''}`}>{message.text}</p> : null}
@@ -115,7 +98,41 @@ export function AccountPage() {
             <strong>{user.name ?? 'Sin nombre'}</strong>
             <br />
             <span style={{ color: 'var(--ink-soft)' }}>{user.email}</span>
+            <br />
+            <span className="role-badge">{accountRoleLabel(user.role)}</span>
           </p>
+
+          {!user.role ? (
+            <div style={{ marginBottom: '1.25rem' }}>
+              <RolePicker value={role} onChange={setRole} legend="Elige tu rol en el Ulpan" />
+              <button type="button" className="btn btn-solid" onClick={() => void setAccountRole(role)}>
+                Guardar rol
+              </button>
+            </div>
+          ) : (
+            <div className="cta-row" style={{ marginBottom: '1rem' }}>
+              {isTeacher(user.role) ? (
+                <>
+                  <Link className="btn btn-solid" to="/tareas">
+                    Asignar tareas
+                  </Link>
+                  <Link className="btn btn-outline" to="/perfiles">
+                    Gestionar clase
+                  </Link>
+                </>
+              ) : (
+                <>
+                  <Link className="btn btn-solid" to="/tareas">
+                    Mis tareas
+                  </Link>
+                  <Link className="btn btn-outline" to="/perfiles">
+                    Unirme a la clase
+                  </Link>
+                </>
+              )}
+            </div>
+          )}
+
           <div className="cta-row">
             <button type="button" className="btn btn-solid" onClick={() => void pullAndMergeCloud()}>
               Sincronizar ahora
@@ -129,6 +146,20 @@ export function AccountPage() {
               Cerrar sesión
             </button>
           </p>
+
+          {user.role ? (
+            <details style={{ marginTop: '1.25rem' }}>
+              <summary style={{ cursor: 'pointer', color: 'var(--ink-soft)', fontWeight: 600 }}>
+                Cambiar rol de cuenta
+              </summary>
+              <div style={{ marginTop: '0.85rem' }}>
+                <RolePicker value={role} onChange={setRole} legend="Nuevo rol" />
+                <button type="button" className="btn btn-outline" onClick={() => void setAccountRole(role)}>
+                  Actualizar rol
+                </button>
+              </div>
+            </details>
+          ) : null}
 
           <form onSubmit={onResetPassword} style={{ marginTop: '1.5rem' }}>
             <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
@@ -150,8 +181,7 @@ export function AccountPage() {
           </form>
 
           <p style={{ marginTop: '1.25rem', color: 'var(--ink-soft)', fontSize: '0.92rem' }}>
-            Estado: {getSyncStatus().status}. También puedes gestionar{' '}
-            <Link to="/perfiles">perfiles</Link> y <Link to="/tareas">tareas</Link>.
+            Estado: {getSyncStatus().status}.
           </p>
         </div>
       ) : (
@@ -168,9 +198,17 @@ export function AccountPage() {
             </button>
           </div>
 
+          {mode === 'signup' || mode === 'login' ? (
+            <RolePicker
+              value={role}
+              onChange={setRole}
+              legend={mode === 'signup' ? '¿Moré o Talmid?' : 'Rol (para Google o cuenta nueva)'}
+            />
+          ) : null}
+
           {mode !== 'recover' ? (
             <>
-              <button type="button" className="btn btn-google" onClick={() => void signInWithGoogle()}>
+              <button type="button" className="btn btn-google" onClick={() => void signInWithGoogle(role)}>
                 <GoogleMark />
                 Continuar con Google
               </button>
