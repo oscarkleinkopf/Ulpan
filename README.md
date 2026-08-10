@@ -1,4 +1,4 @@
-# Ulpan Hibrit
+# Ulpan con la Mora Maggie
 
 App web para aprender **hebreo desde cero**, pensada para computadores y móviles. Interfaz en español.
 
@@ -11,7 +11,10 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 - **Gramática** básica para hispanohablantes
 - **Frases útiles** por situación
 - **Práctica** SRS + quizzes rápidos
-- **Progreso** local (racha, XP, preferencia de género gramatical)
+- **Perfiles** de morim (mora/more) y talmidim (talmid/talmidá)
+- **Tareas semanales** asignadas por la mora a cada alumno o a toda la clase
+- **Cuenta en la nube** (Supabase): sincroniza progreso, perfiles y tareas entre dispositivos — también en GitHub Pages
+- **Progreso** local (racha, XP, preferencia de género gramatical); con sesión, también en la nube
 - Pronunciación vía Web Speech API cuando el navegador la soporte
 - Manifest PWA para instalar en el móvil
 
@@ -53,4 +56,23 @@ GITHUB_PAGES=true npm run build
 npx vite preview
 ```
 
-También se puede desplegar en Netlify (`netlify.toml` + plugin de Vite). El progreso se guarda en `localStorage`.
+También se puede desplegar en Netlify (`netlify.toml` + plugin de Vite).
+
+### Cuenta en la nube (Supabase · GitHub Pages)
+
+GitHub Pages solo sirve archivos estáticos, así que la sync usa **Supabase** (auth + Postgres) desde el navegador.
+
+1. Crea un proyecto gratis en [supabase.com](https://supabase.com).
+2. En **SQL Editor**, ejecuta [`supabase/schema.sql`](supabase/schema.sql).
+3. En **Authentication → URL configuration**, agrega la Redirect URL:
+   `https://oscarkleinkopf.github.io/Ulpan/**`
+4. Copia **Project URL** y **anon public** key (Settings → API).
+5. En el repo de GitHub: **Settings → Secrets and variables → Actions** y crea:
+   - `VITE_SUPABASE_URL`
+   - `VITE_SUPABASE_ANON_KEY`
+6. Lanza el workflow **Build GitHub Pages** (o haz push a `main`).
+7. En la app: **Cuenta** → crear cuenta → *Sincronizar ahora*.
+
+Para desarrollo local, copia `.env.example` a `.env.local` con las mismas variables.
+
+Sin Supabase configurado, todo sigue en `localStorage` de ese dispositivo.

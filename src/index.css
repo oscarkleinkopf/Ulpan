@@ -120,6 +120,13 @@ button {
   color: var(--accent-deep);
 }
 
+.brand .brand-maggie {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: var(--accent-deep);
+}
+
 .nav-links {
   display: flex;
   flex-wrap: wrap;
@@ -245,11 +252,12 @@ button {
 
 .hero-brand {
   font-family: var(--font-display);
-  font-size: clamp(3rem, 11vw, 5.6rem);
-  line-height: 0.95;
+  font-size: clamp(2.2rem, 8vw, 4.4rem);
+  line-height: 1.02;
   letter-spacing: -0.03em;
   margin: 0 0 0.75rem;
   animation: rise 0.8s ease both;
+  max-width: 14ch;
 }
 
 .hero-brand .he {
@@ -936,6 +944,109 @@ button.lesson-row {
   margin-bottom: 0.55rem;
 }
 
+.banner-msg {
+  margin: 0 0 1rem;
+  padding: 0.75rem 1rem;
+  border-radius: 12px;
+  background: rgba(42, 90, 76, 0.1);
+  border: 1px solid rgba(42, 90, 76, 0.22);
+  color: var(--brand);
+  font-weight: 600;
+}
 
+.banner-msg.is-error {
+  background: rgba(140, 54, 40, 0.08);
+  border-color: rgba(140, 54, 40, 0.28);
+  color: #8c3628;
+}
 
+.sync-status {
+  margin: 0 0 1rem;
+  font-size: 0.92rem;
+  color: var(--ink-soft);
+}
 
+.setup-steps {
+  margin: 0 0 1.25rem;
+  padding-left: 1.2rem;
+  color: var(--ink-soft);
+  line-height: 1.55;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.setup-steps code {
+  font-size: 0.88em;
+  color: var(--brand);
+}
+
+.task-list {
+  display: grid;
+  gap: 1rem;
+}
+
+.task-card {
+  padding: 1.1rem 1.15rem;
+  border-radius: var(--radius);
+  background: var(--surface-solid);
+  border: 1px solid var(--line);
+  animation: rise 0.35s ease both;
+}
+
+.task-card h4 {
+  margin: 0.35rem 0 0.4rem;
+  font-family: var(--font-display);
+  color: var(--brand);
+  font-size: 1.2rem;
+}
+
+.task-card p {
+  margin: 0;
+  color: var(--ink-soft);
+  line-height: 1.45;
+}
+
+.task-card.is-done {
+  border-color: rgba(42, 90, 76, 0.35);
+  background: linear-gradient(180deg, rgba(42, 90, 76, 0.06), var(--surface-solid));
+}
+
+.task-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+}
+
+.task-kind {
+  display: inline-block;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand-mid);
+}
+
+.task-meta {
+  margin-top: 0.65rem !important;
+  font-size: 0.9rem;
+}
+
+.task-students {
+  margin: 0.75rem 0 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.35rem;
+  font-size: 0.92rem;
+}
+
+.task-card .cta-row {
+  margin-top: 1rem;
+}
+
+@media (max-width: 720px) {
+  .hero-brand {
+    font-size: clamp(1.85rem, 8vw, 2.6rem);
+  }
+}

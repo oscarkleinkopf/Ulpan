@@ -9,23 +9,26 @@ const desktopLinks = [
   { to: '/gramatica', label: 'Gramática' },
   { to: '/frases', label: 'Frases' },
   { to: '/practica', label: 'Práctica' },
+  { to: '/tareas', label: 'Tareas' },
+  { to: '/perfiles', label: 'Perfiles' },
+  { to: '/cuenta', label: 'Cuenta' },
   { to: '/progreso', label: 'Progreso' },
 ]
 
 const mobileLinks = [
   { to: '/', label: 'Inicio', end: true, he: 'ב' },
   { to: '/lecciones', label: 'Curso', he: 'ל' },
-  { to: '/vocabulario', label: 'Vocab', he: 'מ' },
+  { to: '/tareas', label: 'Tareas', he: 'מ' },
   { to: '/practica', label: 'Práctica', he: 'ח' },
-  { to: '/progreso', label: 'Yo', he: 'א' },
+  { to: '/cuenta', label: 'Cuenta', he: 'א' },
 ]
 
 export function Layout() {
   return (
     <div className="app-shell">
       <header className="topbar">
-        <NavLink to="/" className="brand">
-          Ulpan <span>אולפן</span>
+        <NavLink to="/" className="brand" title="Ulpan con la Mora Maggie">
+          Ulpan <span className="brand-maggie">Maggie</span>
         </NavLink>
         <nav className="nav-links" aria-label="Principal">
           {desktopLinks.map((l) => (

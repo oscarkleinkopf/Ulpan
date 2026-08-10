@@ -17,20 +17,20 @@ export function HomePage() {
         <div className="hero-bg" aria-hidden="true" />
         <div>
           <h1 className="hero-brand">
-            Ulpan
-            <span className="he">אולפן היברידי</span>
+            Ulpan con la Mora Maggie
+            <span className="he">אולפן עם המורה מגי</span>
           </h1>
           <p>
             {done === 0
-              ? 'Hebreo desde cero: alefato, vocabulario, gramática y frases, con práctica de repetición espaciada.'
+              ? 'Hebreo desde cero con la Mora Maggie: alefato, vocabulario, gramática, frases y tareas semanales.'
               : `Shalom${greet}. Sigue tu camino o repasa lo pendiente.`}
           </p>
           <div className="cta-row">
             <Link className="btn btn-primary" to={next ? `/lecciones/${next.id}` : '/lecciones'}>
               {done === 0 ? 'Empezar' : 'Continuar'}
             </Link>
-            <Link className="btn btn-ghost" to="/practica">
-              Practicar
+            <Link className="btn btn-ghost" to="/tareas">
+              Tareas
             </Link>
           </div>
         </div>
@@ -61,11 +61,17 @@ export function HomePage() {
             XP
           </div>
         </div>
-        <p style={{ marginTop: '1rem' }}>
-          <Link className="btn btn-outline" to="/progreso">
-            Ver progreso y preferencias
+        <div className="cta-row" style={{ marginTop: '1rem' }}>
+          <Link className="btn btn-outline" to="/cuenta">
+            Cuenta en la nube
           </Link>
-        </p>
+          <Link className="btn btn-outline" to="/perfiles">
+            Perfiles
+          </Link>
+          <Link className="btn btn-outline" to="/progreso">
+            Progreso
+          </Link>
+        </div>
       </section>
 
       <section className="section">
