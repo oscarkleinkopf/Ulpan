@@ -104,7 +104,20 @@ function mergeClassroomData(
   const completionKey = (c: { taskId: string; studentId: string }) => `${c.taskId}:${c.studentId}`
   const compMap = new Map(a.completions.map((c) => [completionKey(c), c]))
   for (const c of b.completions) {
-    if (!compMap.has(completionKey(c))) compMap.set(completionKey(c), c)
+    const key = completionKey(c)
+    const prev = compMap.get(key)
+    if (!prev) {
+      compMap.set(key, c)
+      continue
+    }
+    // Prefiere la entrega con revisión más reciente o más completa
+    const prevScore =
+      (prev.reviewedAt ? 2 : 0) + (prev.reviewStatus === 'approved' ? 2 : prev.reviewComment ? 1 : 0)
+    const nextScore =
+      (c.reviewedAt ? 2 : 0) + (c.reviewStatus === 'approved' ? 2 : c.reviewComment ? 1 : 0)
+    if (nextScore > prevScore || (c.completedAt || '') > (prev.completedAt || '')) {
+      compMap.set(key, { ...prev, ...c })
+    }
   }
   return {
     ...a,

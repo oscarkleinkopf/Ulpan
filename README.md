@@ -12,7 +12,7 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 - **Frases útiles** por situación
 - **Práctica** SRS + quizzes rápidos
 - **Perfiles** de morim (mora/more) y talmidim (talmid/talmidá)
-- **Tareas semanales** asignadas por la mora a cada alumno o a toda la clase
+- **Tareas semanales** con corrección de la mora (visto bueno, “para corregir” y comentarios)
 - **Cuenta en la nube** (Supabase): sincroniza progreso, perfiles y tareas entre dispositivos — también en GitHub Pages
 - **Progreso** local (racha, XP, preferencia de género gramatical); con sesión, también en la nube
 - Pronunciación vía Web Speech API cuando el navegador la soporte
