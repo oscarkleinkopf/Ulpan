@@ -134,6 +134,14 @@ export function TasksPage() {
             </>
           ) : null}
         </p>
+        <div className="cta-row" style={{ marginBottom: '1rem' }}>
+          <Link className="btn btn-outline" to="/resumen-clase">
+            Resumen de clase
+          </Link>
+          <Link className="btn btn-outline" to="/entrega-semanal">
+            Pack semanal
+          </Link>
+        </div>
 
         <div className="panel" style={{ marginBottom: '1.25rem' }}>
           <h3 style={{ marginTop: 0, fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>

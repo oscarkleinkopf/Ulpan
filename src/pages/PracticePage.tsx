@@ -96,6 +96,18 @@ export function PracticePage() {
               <p>Escuchá y repetí · voz de la Mora cuando haya grabación</p>
             </div>
           </Link>
+          <Link className="lesson-row" to="/pareja">
+            <div>
+              <h4>Modo pareja</h4>
+              <p>Diálogos cortos por turnos A / B</p>
+            </div>
+          </Link>
+          <Link className="lesson-row" to="/entrega-semanal">
+            <div>
+              <h4>Pack semanal</h4>
+              <p>5 palabras + 3 frases para WhatsApp o imprimir</p>
+            </div>
+          </Link>
           <Link className="lesson-row" to="/quiz">
             <div>
               <h4>Quiz rápido</h4>

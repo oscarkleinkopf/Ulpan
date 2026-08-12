@@ -86,6 +86,17 @@ export function HomePage() {
           <Link className="btn btn-outline" to={user?.role && isTeacher(user.role) ? '/tareas' : '/perfiles'}>
             {user?.role && isTeacher(user.role) ? 'Clase y tareas' : 'Unirme / perfiles'}
           </Link>
+          <Link className="btn btn-outline" to="/calendario">
+            Calendario
+          </Link>
+          <Link className="btn btn-outline" to="/certificados">
+            Diplomas
+          </Link>
+          {user?.role && isTeacher(user.role) ? (
+            <Link className="btn btn-outline" to="/resumen-clase">
+              Resumen clase
+            </Link>
+          ) : null}
           <Link className="btn btn-outline" to="/progreso">
             Progreso
           </Link>

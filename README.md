@@ -15,6 +15,11 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 - **Tareas semanales** con corrección de la mora (visto bueno, “para corregir” y comentarios)
 - **Audio guiado** (escuchá y repetí) con TTS de respaldo
 - **Estudio de audio** para la Mora: grabar/subir voz cuando activa el permiso en su cuenta
+- **Resumen de clase** semanal (avance, visto bueno, copiar a WhatsApp)
+- **Calendario en casa**: foco cultural del día + palabra
+- **Modo pareja**: diálogos cortos por turnos
+- **Entrega semanal**: pack de 5 palabras + 3 frases (WhatsApp / imprimir)
+- **Certificados** livianos por unidad o racha
 - **Cuenta en la nube** (Supabase): sincroniza progreso, perfiles y tareas entre dispositivos — también en GitHub Pages
 - **Progreso** local (racha, XP, preferencia de género gramatical); con sesión, también en la nube
 - Pronunciación: voz de la Mora si hay clip; si no, TTS / Web Speech
