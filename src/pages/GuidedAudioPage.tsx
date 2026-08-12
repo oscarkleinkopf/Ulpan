@@ -13,6 +13,7 @@ import {
   type GuidedClip,
 } from '../lib/guidedAudio'
 import { useAuthContext } from '../lib/AuthProvider'
+import { prefetchAudioUrl, prefetchHebrew } from '../lib/speak'
 
 type Item = {
   clipId: string
@@ -59,6 +60,15 @@ export function GuidedAudioPage() {
   useEffect(() => {
     setIndex(0)
   }, [onlyMora, items.length])
+
+  useEffect(() => {
+    const windowItems = items.slice(index, index + 3)
+    for (const item of windowItems) {
+      const url = clips.find((c) => c.clipId === item.clipId)?.url
+      if (url) prefetchAudioUrl(url)
+      else prefetchHebrew(item.hebrew)
+    }
+  }, [clips, items, index])
 
   return (
     <section className="section">

@@ -1,6 +1,6 @@
 import { useEffect, useState, type MouseEvent } from 'react'
 import { guidedAudioUrl, getGuidedClip } from '../lib/guidedAudio'
-import { speakGuided } from '../lib/speak'
+import { prefetchAudioUrl, prefetchHebrew, speakGuided } from '../lib/speak'
 
 type Props = {
   text: string
@@ -16,8 +16,11 @@ export function SpeakButton({ text, clipId, label = 'Escuchar', audioUrl }: Prop
   const [hasMora, setHasMora] = useState(Boolean(audioUrl || (clipId && guidedAudioUrl(clipId))))
 
   useEffect(() => {
-    setHasMora(Boolean(audioUrl || (clipId && getGuidedClip(clipId))))
-  }, [clipId, audioUrl])
+    const url = audioUrl || (clipId ? guidedAudioUrl(clipId) : undefined)
+    setHasMora(Boolean(url || (clipId && getGuidedClip(clipId))))
+    if (url) prefetchAudioUrl(url)
+    else if (text) prefetchHebrew(text)
+  }, [clipId, audioUrl, text])
 
   async function onSpeak(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault()

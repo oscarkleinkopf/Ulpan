@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { SpeakButton } from './SpeakButton'
-import { speakGuided, stopSpeaking } from '../lib/speak'
 import { guidedAudioUrl } from '../lib/guidedAudio'
+import { prefetchAudioUrl, prefetchHebrew, speakGuided, stopSpeaking } from '../lib/speak'
 
 type Props = {
   hebrew: string
@@ -27,6 +27,12 @@ export function GuidedListenCard({
 }: Props) {
   const [phase, setPhase] = useState<'idle' | 'playing' | 'repeat' | 'done'>('idle')
   const timer = useRef<number | null>(null)
+
+  useEffect(() => {
+    const url = audioUrl || (clipId ? guidedAudioUrl(clipId) : undefined)
+    if (url) prefetchAudioUrl(url)
+    else prefetchHebrew(hebrew)
+  }, [audioUrl, clipId, hebrew])
 
   useEffect(() => {
     return () => {
