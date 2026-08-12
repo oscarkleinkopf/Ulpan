@@ -58,7 +58,7 @@ export default defineConfig({
       },
       workbox: {
         navigateFallback: isGitHubPages ? '/Ulpan/index.html' : '/index.html',
-        globPatterns: ['**/*.{js,css,html,svg,png,webmanifest,ico,woff2}'],
+        globPatterns: ['**/*.{js,css,html,svg,png,jpg,webp,webmanifest,ico,woff2}'],
       },
       devOptions: {
         enabled: false,
