@@ -1,7 +1,12 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { PageVisual } from '../components/PageVisual'
-import { canvaDiplomaCatalog, diplomaArtForKind } from '../data/diplomaArt'
+import {
+  canvaDiplomaCatalog,
+  catalogRowByCertId,
+  diplomaArtForKind,
+  generatedDiplomaPaths,
+} from '../data/diplomaArt'
 import {
   certificateLearnerName,
   earnedCertificates,
@@ -28,18 +33,17 @@ export function CertificatesPage() {
       <PageVisual sceneId="progreso" />
       <h2>Certificados</h2>
       <p className="lead">
-        Diplomas con la Mora Maggie según lo logrado. Imprimí o guardá como PDF. Para Canva Bulk Create usá el CSV y
-        las imágenes de fondo.
+        Diplomas con la Mora Maggie ya generados según cada logro. Descargá el JPG o el ZIP completo del lote.
       </p>
 
       {hint ? <p className="banner-msg">{hint}</p> : null}
 
       <div className="cta-row no-print" style={{ marginBottom: '1rem' }}>
-        <a className="btn btn-outline" href={`${base}diplomas/ulpan-diplomas-bulk-create.csv`} download>
-          Descargar CSV Canva
+        <a className="btn btn-solid" href={`${base}diplomas/ulpan-diplomas-maggie.zip`} download>
+          Descargar ZIP (13 diplomas)
         </a>
-        <a className="btn btn-outline" href={`${base}diplomas/README.md`} target="_blank" rel="noreferrer">
-          Guía Canva
+        <a className="btn btn-outline" href={`${base}diplomas/ulpan-diplomas-bulk-create.csv`} download>
+          CSV Canva
         </a>
         <Link className="btn btn-outline" to="/progreso">
           Ver progreso
@@ -49,7 +53,8 @@ export function CertificatesPage() {
       {certs.length === 0 ? (
         <div className="panel">
           <p className="lead" style={{ margin: 0 }}>
-            Todavía no hay certificados. Completá una unidad o mantené una racha de 3 días.
+            Todavía no desbloqueaste certificados. Completá una unidad o mantené una racha de 3 días. Abajo están los
+            13 diplomas del lote listos para descargar.
           </p>
           <div className="cta-row" style={{ marginTop: '1rem' }}>
             <Link className="btn btn-solid" to="/lecciones">
@@ -60,13 +65,17 @@ export function CertificatesPage() {
       ) : (
         <div className="cert-grid">
           {certs.map((c) => {
+            const row = catalogRowByCertId(c.id)
+            const generated = row ? generatedDiplomaPaths(row.diplomaId) : null
             const art = diplomaArtForKind(c.kind)
+            const imgJpg = generated?.jpg ?? art.jpg
+            const imgWebp = generated?.webp ?? art.webp
             return (
               <article className="certificate certificate--art" id={`cert-${c.id}`} key={c.id}>
-                <div className="certificate-art" aria-hidden="true">
+                <div className="certificate-art">
                   <picture>
-                    <source srcSet={`${base}${art.webp}`} type="image/webp" />
-                    <img src={`${base}${art.jpg}`} alt="" />
+                    <source srcSet={`${base}${imgWebp}`} type="image/webp" />
+                    <img src={`${base}${imgJpg}`} alt={`${c.title} — ${name}`} />
                   </picture>
                 </div>
                 <div className="certificate-copy">
@@ -77,9 +86,16 @@ export function CertificatesPage() {
                   <p className="cert-name">{name}</p>
                   <p className="cert-detail">{c.detail}</p>
                   <p className="cert-date">{c.earnedAt}</p>
-                  <button type="button" className="btn btn-outline no-print" onClick={() => printCert(c.id)}>
-                    Imprimir / PDF
-                  </button>
+                  <div className="cta-row no-print" style={{ justifyContent: 'center', marginTop: '0.75rem' }}>
+                    {generated ? (
+                      <a className="btn btn-solid" href={`${base}${generated.jpg}`} download>
+                        Descargar JPG
+                      </a>
+                    ) : null}
+                    <button type="button" className="btn btn-outline" onClick={() => printCert(c.id)}>
+                      Imprimir / PDF
+                    </button>
+                  </div>
                 </div>
               </article>
             )
@@ -96,22 +112,24 @@ function DiplomaCatalog({ base, earnedIds }: { base: string; earnedIds: Set<stri
   return (
     <div className="diploma-preview-rail no-print" style={{ marginTop: '1.75rem' }}>
       <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)', margin: '0 0 0.35rem' }}>
-        Catálogo Canva · Mora Maggie
+        Lote generado · Mora Maggie
       </h3>
       <p className="lead" style={{ marginTop: 0 }}>
-        13 diseños listos para Bulk Create. El arte de fondo cambia según el tipo de logro.
+        13 diplomas listos (nombre placeholder: Talmid/a del Ulpan). Descargá uno o el ZIP completo.
       </p>
       <div className="diploma-catalog-grid">
         {canvaDiplomaCatalog.map((row) => {
-          const art = diplomaArtForKind(row.kind)
+          const art = generatedDiplomaPaths(row.diplomaId)
           const unlocked = earnedIds.has(row.certId)
           return (
             <article key={row.diplomaId} className={`diploma-catalog-card${unlocked ? ' is-unlocked' : ''}`}>
               <figure className="diploma-preview-card">
-                <picture>
-                  <source srcSet={`${base}${art.webp}`} type="image/webp" />
-                  <img src={`${base}${art.jpg}`} alt={art.alt} loading="lazy" />
-                </picture>
+                <a href={`${base}${art.jpg}`} download title={`Descargar ${row.title}`}>
+                  <picture>
+                    <source srcSet={`${base}${art.webp}`} type="image/webp" />
+                    <img src={`${base}${art.jpg}`} alt={`${row.title}: ${row.subtitle}`} loading="lazy" />
+                  </picture>
+                </a>
               </figure>
               <div className="diploma-catalog-meta">
                 <p className="he cert-he" style={{ fontSize: '1.35rem', margin: 0 }}>
@@ -120,7 +138,10 @@ function DiplomaCatalog({ base, earnedIds }: { base: string; earnedIds: Set<stri
                 <h4>{row.title}</h4>
                 <p>{row.subtitle}</p>
                 <p className="cert-detail">{row.detail}</p>
-                <p className="diploma-catalog-status">{unlocked ? 'Desbloqueado' : 'Pendiente'}</p>
+                <p className="diploma-catalog-status">{unlocked ? 'Desbloqueado' : 'En el lote'}</p>
+                <a className="btn btn-outline" style={{ marginTop: '0.5rem' }} href={`${base}${art.jpg}`} download>
+                  JPG
+                </a>
               </div>
             </article>
           )

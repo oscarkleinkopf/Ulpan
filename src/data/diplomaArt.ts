@@ -29,6 +29,18 @@ export function diplomaArtForKind(kind: 'unit' | 'streak' | 'lessons') {
   return diplomaArt[kind] ?? diplomaArt.master
 }
 
+/** Diploma ya generado (JPG/WebP listo para descargar / imprimir) */
+export function generatedDiplomaPaths(diplomaId: string) {
+  return {
+    jpg: `images/diplomas/generated/${diplomaId}.jpg`,
+    webp: `images/diplomas/generated/${diplomaId}.webp`,
+  }
+}
+
+export function catalogRowByCertId(certId: string) {
+  return canvaDiplomaCatalog.find((r) => r.certId === certId)
+}
+
 /** Filas del CSV de Canva Bulk Create (sin encabezado) */
 export type CanvaDiplomaRow = {
   diplomaId: string

@@ -59,6 +59,8 @@ export default defineConfig({
       workbox: {
         navigateFallback: isGitHubPages ? '/Ulpan/index.html' : '/index.html',
         globPatterns: ['**/*.{js,css,html,svg,png,jpg,webp,webmanifest,ico,woff2}'],
+        // Diplomas generados + ZIP: se descargan bajo demanda (no precachear ~12 MB)
+        globIgnores: ['**/images/diplomas/generated/**', '**/diplomas/**'],
       },
       devOptions: {
         enabled: false,
