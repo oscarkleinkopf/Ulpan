@@ -12,6 +12,7 @@ import {
   setActiveProfile,
   type Role,
 } from '../lib/classroom'
+import { PageVisual } from '../components/PageVisual'
 import { useClassroom } from '../lib/useClassroom'
 
 const roles: { role: Role; blurb: string }[] = [
@@ -82,6 +83,7 @@ export function ProfilesPage() {
 
   return (
     <section className="section">
+      <PageVisual sceneId="perfiles" />
       <h2>Perfiles · מורים ותלמידים</h2>
       <p className="lead">
         Ulpan con la Mora Maggie distingue <strong>morim</strong> (profes) y <strong>talmidim</strong> (alumnos). Los

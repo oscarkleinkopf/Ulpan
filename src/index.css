@@ -330,6 +330,38 @@ button {
     linear-gradient(135deg, #1a3a32 0%, #244a40 40%, #0f2823 100%);
 }
 
+.hero-bg--photo {
+  background: #0f241c;
+}
+
+.hero-photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 28%;
+  z-index: 0;
+}
+
+.hero-bg--photo::after {
+  content: '';
+  inset: 0;
+  inset-inline-end: auto;
+  bottom: auto;
+  font-size: 0;
+  opacity: 1;
+  white-space: normal;
+  animation: none;
+  background: linear-gradient(
+    105deg,
+    rgba(12, 28, 22, 0.92) 0%,
+    rgba(12, 28, 22, 0.7) 40%,
+    rgba(12, 28, 22, 0.32) 68%,
+    rgba(12, 28, 22, 0.12) 100%
+  );
+}
+
 .hero-bg::after {
   content: 'אבגדהוזחטיכלמנסעפצקרשת';
   position: absolute;
@@ -342,6 +374,143 @@ button {
   white-space: nowrap;
   direction: rtl;
   animation: drift 18s ease-in-out infinite alternate;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.hero-copy {
+  position: relative;
+  z-index: 2;
+  max-width: 36rem;
+}
+
+/* Maggie gallery + page visuals */
+.page-visual {
+  margin: 0 0 1.25rem;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow);
+}
+
+.page-visual-img,
+.page-visual picture {
+  display: block;
+  width: 100%;
+}
+
+.page-visual-img {
+  height: auto;
+  aspect-ratio: 21 / 9;
+  object-fit: cover;
+  object-position: center 28%;
+}
+
+.page-visual-caption {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem 0.75rem;
+  align-items: baseline;
+  margin: 0;
+  padding: 0.55rem 0.9rem 0.7rem;
+  font-size: 0.82rem;
+  color: var(--ink-soft);
+  border-top: 1px solid var(--line);
+}
+
+.page-visual-caption strong {
+  color: var(--brand);
+  font-family: var(--font-display);
+  font-weight: 650;
+}
+
+.maggie-gallery .maggie-rail {
+  display: flex;
+  gap: 0.85rem;
+  overflow-x: auto;
+  padding: 0.25rem 0 0.85rem;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+.maggie-rail-item {
+  flex: 0 0 min(78vw, 280px);
+  scroll-snap-align: start;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface-solid);
+  box-shadow: var(--shadow);
+  transition: transform 0.2s ease, border-color 0.2s ease;
+}
+
+.maggie-rail-item:hover {
+  transform: translateY(-2px);
+  border-color: rgba(26, 58, 50, 0.28);
+}
+
+.maggie-rail-img,
+.maggie-rail-item picture {
+  display: block;
+  width: 100%;
+}
+
+.maggie-rail-img {
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  object-position: center 25%;
+}
+
+.maggie-rail-caption {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  padding: 0.55rem 0.75rem 0.75rem;
+  font-size: 0.82rem;
+  line-height: 1.35;
+  color: var(--ink-soft);
+}
+
+.maggie-rail-caption strong {
+  color: var(--brand);
+  font-family: var(--font-display);
+  font-weight: 650;
+}
+
+.maggie-rail-caption em {
+  font-style: normal;
+}
+
+.path-with-art .path-row {
+  justify-content: flex-start;
+  gap: 0.9rem;
+}
+
+.path-row > picture {
+  flex: 0 0 88px;
+  width: 88px;
+  height: 66px;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--bg-deep);
+  display: block;
+}
+
+.path-row > picture img,
+.path-row > .path-thumb {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+  transition: transform 0.35s ease;
+  display: block;
+}
+
+.path-row:hover > picture img,
+.path-row:hover > .path-thumb {
+  transform: scale(1.05);
 }
 
 @keyframes drift {

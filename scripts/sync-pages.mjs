@@ -24,6 +24,10 @@ for (const name of readdirSync('dist')) {
 rmSync('icons', { recursive: true, force: true })
 cpSync('dist/icons', 'icons', { recursive: true })
 
+// Ilustraciones Maggie (public/images → raíz Pages)
+rmSync('images', { recursive: true, force: true })
+cpSync('dist/images', 'images', { recursive: true })
+
 writeFileSync('.nojekyll', '')
 
 rmSync('docs', { recursive: true, force: true })

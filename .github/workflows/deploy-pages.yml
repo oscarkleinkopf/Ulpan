@@ -6,10 +6,14 @@ on:
     paths-ignore:
       - 'docs/**'
       - 'assets/**'
+      - 'images/**'
+      - 'icons/**'
       - 'index.html'
       - '404.html'
       - 'favicon.svg'
       - 'manifest.webmanifest'
+      - 'sw.js'
+      - 'workbox-*.js'
       - '.nojekyll'
       - 'README.md'
   workflow_dispatch:
@@ -55,7 +59,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html 404.html assets favicon.svg icons manifest.webmanifest .nojekyll docs
+          git add index.html 404.html assets favicon.svg icons images manifest.webmanifest .nojekyll docs
           git add -f sw.js registerSW.js workbox-*.js 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No site changes"

@@ -2,6 +2,7 @@ import { Link } from 'react-router-dom'
 import { alphabet } from '../data/alphabet'
 import { phrases } from '../data/phrases'
 import { vocabulary } from '../data/vocabulary'
+import { PageVisual } from '../components/PageVisual'
 import { SpeakButton } from '../components/SpeakButton'
 import { dueCards, enqueueForSrs, reviewCard, type SrsCard } from '../lib/progress'
 import { useProgress } from '../lib/useProgress'
@@ -79,6 +80,7 @@ export function PracticePage() {
   if (mode === 'hub') {
     return (
       <section className="section">
+        <PageVisual sceneId="srs" />
         <h2>Práctica</h2>
         <p className="lead">Elige cómo quieres entrenar hoy.</p>
         <div className="lesson-list">

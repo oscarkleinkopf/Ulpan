@@ -21,6 +21,7 @@ import {
   type TaskKind,
   type WeeklyTask,
 } from '../lib/classroom'
+import { PageVisual } from '../components/PageVisual'
 import { useClassroom } from '../lib/useClassroom'
 
 const kindLabel: Record<TaskKind, string> = {
@@ -50,6 +51,7 @@ export function TasksPage() {
   if (!activeProfile) {
     return (
       <section className="section panel">
+        <PageVisual sceneId="tareas" />
         <h2>Tareas semanales</h2>
         <p className="lead">Primero elige o crea tu perfil (morá o talmid).</p>
         <Link className="btn btn-solid" to="/perfiles">
@@ -62,6 +64,7 @@ export function TasksPage() {
   if (!classroom) {
     return (
       <section className="section panel">
+        <PageVisual sceneId="tareas" />
         <h2>Tareas semanales</h2>
         <p className="lead">
           {isTeacher(activeProfile.role)
@@ -120,6 +123,7 @@ export function TasksPage() {
 
     return (
       <section className="section">
+        <PageVisual sceneId="tareas" />
         <h2>Tareas semanales · Corrección</h2>
         <p className="lead">
           {weekLabel(weekKey)} · Clase <strong>{classroom.name}</strong> · código {classroom.code}
@@ -396,6 +400,7 @@ function StudentTasksView({
 
   return (
     <section className="section">
+      <PageVisual sceneId="tareas" />
       <h2>Mis tareas · {profile.name}</h2>
       <p className="lead">
         {weekLabel(weekKey)} · {done}/{mine.length} entregadas · {approved} con visto bueno

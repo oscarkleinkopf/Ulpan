@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom'
 import { lessonsByUnit } from '../data/lessons'
+import { PageVisual } from '../components/PageVisual'
 import { useProgress } from '../lib/useProgress'
 
 export function LessonsPage() {
@@ -8,6 +9,7 @@ export function LessonsPage() {
 
   return (
     <section className="section">
+      <PageVisual sceneId="leccion" />
       <h2>Lecciones</h2>
       <p className="lead">Sigue el orden sugerido. Cada lección mezcla explicación, ejemplos y un breve quiz.</p>
       {units.map(({ unit, lessons }) => (

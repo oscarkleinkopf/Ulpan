@@ -5,6 +5,7 @@ import { getLesson, type LessonStep } from '../data/lessons'
 import { grammarTopics } from '../data/grammar'
 import { phrases } from '../data/phrases'
 import { getVocab } from '../data/vocabulary'
+import { PageVisual } from '../components/PageVisual'
 import { SpeakButton } from '../components/SpeakButton'
 import { enqueueForSrs, markLessonComplete } from '../lib/progress'
 import { useProgress } from '../lib/useProgress'
@@ -79,6 +80,7 @@ export function LessonPlayerPage() {
     const score = quizTotal === 0 ? 100 : Math.round((correctCount / quizTotal) * 100)
     return (
       <section className="section panel">
+        <PageVisual sceneId="leccion" />
         <h2>¡Lección completada!</h2>
         <p className="lead">
           {lesson.title} · resultado {score}%
@@ -102,6 +104,7 @@ export function LessonPlayerPage() {
 
   return (
     <section className="section">
+      {stepIndex === 0 ? <PageVisual sceneId="leccion" /> : null}
       <p className="lead" style={{ marginBottom: 0 }}>
         {lesson.unit}
       </p>

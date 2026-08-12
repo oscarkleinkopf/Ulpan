@@ -1,5 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
+import { PageVisual } from '../components/PageVisual'
 import { RolePicker } from '../components/RolePicker'
 import { accountRoleLabel, type Role } from '../lib/accountRole'
 import { isTeacher } from '../lib/classroom'
@@ -80,6 +81,7 @@ export function AccountPage() {
 
   return (
     <section className="section">
+      <PageVisual sceneId="perfiles" />
       <h2>Cuenta en la nube</h2>
       <p className="lead">
         Al crear tu cuenta elige si eres <strong>Moré / Morá</strong> (docente) o{' '}
