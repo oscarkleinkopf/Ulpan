@@ -1,0 +1,151 @@
+{
+  "generatedAt": "2026-08-12",
+  "studentName": "Talmid/a del Ulpan",
+  "count": 13,
+  "zip": "diplomas/ulpan-diplomas-maggie.zip",
+  "diplomas": [
+    {
+      "diplomaId": "unit-alefato",
+      "kind": "unit",
+      "title": "Unidad completada",
+      "subtitle": "Unidad 1 · El alefato",
+      "hebrewTitle": "כָּל הַכָּבוֹד",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/unit-alefato.jpg",
+      "webp": "images/diplomas/generated/unit-alefato.webp"
+    },
+    {
+      "diplomaId": "unit-palabras",
+      "kind": "unit",
+      "title": "Unidad completada",
+      "subtitle": "Unidad 2 · Primeras palabras",
+      "hebrewTitle": "כָּל הַכָּבוֹד",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/unit-palabras.jpg",
+      "webp": "images/diplomas/generated/unit-palabras.webp"
+    },
+    {
+      "diplomaId": "unit-gramatica",
+      "kind": "unit",
+      "title": "Unidad completada",
+      "subtitle": "Unidad 3 · Gramática",
+      "hebrewTitle": "כָּל הַכָּבוֹד",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/unit-gramatica.jpg",
+      "webp": "images/diplomas/generated/unit-gramatica.webp"
+    },
+    {
+      "diplomaId": "unit-frases",
+      "kind": "unit",
+      "title": "Unidad completada",
+      "subtitle": "Unidad 4 · Frases útiles",
+      "hebrewTitle": "כָּל הַכָּבוֹד",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/unit-frases.jpg",
+      "webp": "images/diplomas/generated/unit-frases.webp"
+    },
+    {
+      "diplomaId": "unit-sionismo",
+      "kind": "unit",
+      "title": "Unidad completada",
+      "subtitle": "Unidad 5 · Sionismo",
+      "hebrewTitle": "כָּל הַכָּבוֹד",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/unit-sionismo.jpg",
+      "webp": "images/diplomas/generated/unit-sionismo.webp"
+    },
+    {
+      "diplomaId": "unit-calendario",
+      "kind": "unit",
+      "title": "Unidad completada",
+      "subtitle": "Unidad 6 · Calendario sionista",
+      "hebrewTitle": "כָּל הַכָּבוֹד",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/unit-calendario.jpg",
+      "webp": "images/diplomas/generated/unit-calendario.webp"
+    },
+    {
+      "diplomaId": "streak-3",
+      "kind": "streak",
+      "title": "Racha de 3 días",
+      "subtitle": "Estudio constante",
+      "hebrewTitle": "יָפֶה מְאֹד",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/streak-3.jpg",
+      "webp": "images/diplomas/generated/streak-3.webp"
+    },
+    {
+      "diplomaId": "streak-7",
+      "kind": "streak",
+      "title": "Racha de 7 días",
+      "subtitle": "Estudio constante",
+      "hebrewTitle": "יָפֶה מְאֹד",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/streak-7.jpg",
+      "webp": "images/diplomas/generated/streak-7.webp"
+    },
+    {
+      "diplomaId": "streak-14",
+      "kind": "streak",
+      "title": "Racha de 14 días",
+      "subtitle": "Estudio constante",
+      "hebrewTitle": "יָפֶה מְאֹד",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/streak-14.jpg",
+      "webp": "images/diplomas/generated/streak-14.webp"
+    },
+    {
+      "diplomaId": "streak-30",
+      "kind": "streak",
+      "title": "Racha de 30 días",
+      "subtitle": "Estudio constante",
+      "hebrewTitle": "יָפֶה מְאֹד",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/streak-30.jpg",
+      "webp": "images/diplomas/generated/streak-30.webp"
+    },
+    {
+      "diplomaId": "lessons-5",
+      "kind": "lessons",
+      "title": "5 lecciones",
+      "subtitle": "Camino del Ulpan",
+      "hebrewTitle": "כָּל הַבְּרָכוֹת",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/lessons-5.jpg",
+      "webp": "images/diplomas/generated/lessons-5.webp"
+    },
+    {
+      "diplomaId": "lessons-10",
+      "kind": "lessons",
+      "title": "10 lecciones",
+      "subtitle": "Camino del Ulpan",
+      "hebrewTitle": "כָּל הַבְּרָכוֹת",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/lessons-10.jpg",
+      "webp": "images/diplomas/generated/lessons-10.webp"
+    },
+    {
+      "diplomaId": "lessons-20",
+      "kind": "lessons",
+      "title": "20 lecciones",
+      "subtitle": "Camino del Ulpan",
+      "hebrewTitle": "כָּל הַבְּרָכוֹת",
+      "studentName": "Talmid/a del Ulpan",
+      "dateLabel": "2026-08-12",
+      "jpg": "images/diplomas/generated/lessons-20.jpg",
+      "webp": "images/diplomas/generated/lessons-20.webp"
+    }
+  ]
+}
