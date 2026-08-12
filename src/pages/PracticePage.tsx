@@ -90,6 +90,12 @@ export function PracticePage() {
               <p>{due > 0 ? `${due} tarjetas pendientes` : 'Sin pendientes · puedes cargar un mazo'}</p>
             </div>
           </button>
+          <Link className="lesson-row" to="/audio-guiado">
+            <div>
+              <h4>Audio guiado</h4>
+              <p>Escuchá y repetí · voz de la Mora cuando haya grabación</p>
+            </div>
+          </Link>
           <Link className="lesson-row" to="/quiz">
             <div>
               <h4>Quiz rápido</h4>

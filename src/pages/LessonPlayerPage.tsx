@@ -5,8 +5,15 @@ import { getLesson, type LessonStep } from '../data/lessons'
 import { grammarTopics } from '../data/grammar'
 import { phrases } from '../data/phrases'
 import { getVocab } from '../data/vocabulary'
+import { GuidedListenCard } from '../components/GuidedListenCard'
 import { PageVisual } from '../components/PageVisual'
 import { SpeakButton } from '../components/SpeakButton'
+import {
+  clipIdForLetter,
+  clipIdForLessonStep,
+  clipIdForPhrase,
+  clipIdForVocab,
+} from '../lib/guidedAudio'
 import { enqueueForSrs, markLessonComplete } from '../lib/progress'
 import { useProgress } from '../lib/useProgress'
 
@@ -139,6 +146,21 @@ export function LessonPlayerPage() {
           </>
         )}
 
+        {step?.type === 'listen' && (
+          <>
+            <h3 style={{ marginTop: 0, fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
+              {step.title}
+            </h3>
+            {step.body ? <p style={{ color: 'var(--ink-soft)' }}>{step.body}</p> : null}
+            <GuidedListenCard
+              hebrew={step.hebrew}
+              translit={step.translit}
+              spanish={step.spanish}
+              clipId={step.clipId ?? clipIdForLessonStep(lesson.id, stepIndex)}
+            />
+          </>
+        )}
+
         {step?.type === 'letter' && (() => {
           const letter = alphabet.find((l) => l.id === step.letterId)
           if (!letter) return <p>Letra no encontrada</p>
@@ -146,7 +168,7 @@ export function LessonPlayerPage() {
             <>
               <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '0.75rem' }}>
                 <p className="hebrew-xl">{letter.hebrew}{letter.final ? ` / ${letter.final}` : ''}</p>
-                <SpeakButton text={letter.hebrew} />
+                <SpeakButton text={letter.hebrew} clipId={clipIdForLetter(letter.id)} />
               </div>
               <h3 style={{ textAlign: 'center', margin: '0 0 0.5rem', fontFamily: 'var(--font-display)' }}>
                 {letter.name}
@@ -172,7 +194,7 @@ export function LessonPlayerPage() {
                     <div className="es">{v.spanish}</div>
                     <div className="tr">{v.translit}</div>
                   </div>
-                  <SpeakButton text={v.hebrew} />
+                  <SpeakButton text={v.hebrew} clipId={clipIdForVocab(v.id)} />
                 </div>
               )
             })}
@@ -221,7 +243,7 @@ export function LessonPlayerPage() {
                       {p.translit} · {p.situation}
                     </div>
                   </div>
-                  <SpeakButton text={p.hebrew} />
+                  <SpeakButton text={p.hebrew} clipId={clipIdForPhrase(p.id)} />
                 </div>
               )
             })}

@@ -13,9 +13,11 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 - **Práctica** SRS + quizzes rápidos
 - **Perfiles** de morim (mora/more) y talmidim (talmid/talmidá)
 - **Tareas semanales** con corrección de la mora (visto bueno, “para corregir” y comentarios)
+- **Audio guiado** (escuchá y repetí) con TTS de respaldo
+- **Estudio de audio** para la Mora: grabar/subir voz cuando activa el permiso en su cuenta
 - **Cuenta en la nube** (Supabase): sincroniza progreso, perfiles y tareas entre dispositivos — también en GitHub Pages
 - **Progreso** local (racha, XP, preferencia de género gramatical); con sesión, también en la nube
-- Pronunciación vía Web Speech API cuando el navegador la soporte
+- Pronunciación: voz de la Mora si hay clip; si no, TTS / Web Speech
 - Manifest PWA para instalar en el móvil (banner “Instalá Ulpan Maggie”; en iOS: Compartir → Agregar a pantalla de inicio)
 
 ## Transliteración
@@ -76,6 +78,14 @@ GitHub Pages solo sirve archivos estáticos, así que la sync usa **Supabase** (
 Para desarrollo local, copia `.env.example` a `.env.local` con las mismas variables.
 
 Sin Supabase configurado, todo sigue en `localStorage` de ese dispositivo.
+
+### Audio guiado + grabación de la Mora
+
+1. Volvé a ejecutar [`supabase/schema.sql`](supabase/schema.sql) (agrega tabla `guided_audio`, bucket `guided-audio` y políticas).
+2. En **Cuenta**, al crear o editar rol **Morá / Moré**, marcá **Puedo grabar audio guiado**.
+3. Abrí **Estudio** (`/estudio-audio`) y grabá o subí clips asociados a frases, vocabulario o letras.
+4. Los alumnos practican en **Audio** (`/audio-guiado`) y en pasos “escuchá y repetí” de las lecciones.
+5. Si no hay grabación, el botón ▶ usa TTS de respaldo.
 
 ### Login con Google
 

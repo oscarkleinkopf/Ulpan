@@ -195,6 +195,34 @@ export async function speakHebrew(text: string): Promise<SpeakResult> {
   return speakViaWebSpeech(clean)
 }
 
+/** Reproduce un archivo de audio (voz de la Mora) por URL. */
+export async function playAudioUrl(url: string): Promise<SpeakResult> {
+  if (!url.trim()) return 'empty'
+  stopAll()
+  return playHtmlAudio(url)
+}
+
+/**
+ * Preferí la grabación de la Mora si hay URL; si no, TTS.
+ * Devuelve `{ result, source }`.
+ */
+export async function speakGuided(
+  text: string,
+  recordedUrl?: string | null,
+): Promise<{ result: SpeakResult; source: 'mora' | 'tts' | 'none' }> {
+  if (recordedUrl) {
+    const played = await playAudioUrl(recordedUrl)
+    if (played === 'ok') return { result: 'ok', source: 'mora' }
+  }
+  const result = await speakHebrew(text)
+  if (result === 'ok') return { result, source: 'tts' }
+  return { result, source: 'none' }
+}
+
 export function canSpeak(): boolean {
   return typeof window !== 'undefined'
+}
+
+export function stopSpeaking(): void {
+  stopAll()
 }
