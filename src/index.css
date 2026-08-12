@@ -1831,6 +1831,47 @@ button.lesson-row {
   object-fit: cover;
 }
 
+.diploma-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.diploma-catalog-card {
+  margin: 0;
+  opacity: 0.78;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.diploma-catalog-card.is-unlocked {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.diploma-catalog-meta {
+  padding: 0.65rem 0.15rem 0.25rem;
+}
+
+.diploma-catalog-meta h4 {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-display);
+  color: var(--brand);
+  font-size: 1.05rem;
+}
+
+.diploma-catalog-meta p {
+  margin: 0.2rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.diploma-catalog-status {
+  font-size: 0.8rem !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand) !important;
+}
+
 .cert-brand {
   margin: 0;
   font-family: var(--font-display);

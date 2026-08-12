@@ -32,6 +32,8 @@ export function diplomaArtForKind(kind: 'unit' | 'streak' | 'lessons') {
 /** Filas del CSV de Canva Bulk Create (sin encabezado) */
 export type CanvaDiplomaRow = {
   diplomaId: string
+  /** Id que usa `earnedCertificates` (`unit:…`, `streak:…`, `lessons:…`) */
+  certId: string
   kind: 'unit' | 'streak' | 'lessons'
   hebrewTitle: string
   title: string
@@ -45,6 +47,7 @@ export type CanvaDiplomaRow = {
 export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   {
     diplomaId: 'unit-alefato',
+    certId: 'unit:unidad-1-el-alefato',
     kind: 'unit',
     hebrewTitle: 'כָּל הַכָּבוֹד',
     title: 'Unidad completada',
@@ -56,6 +59,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'unit-palabras',
+    certId: 'unit:unidad-2-primeras-palabras',
     kind: 'unit',
     hebrewTitle: 'כָּל הַכָּבוֹד',
     title: 'Unidad completada',
@@ -67,6 +71,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'unit-gramatica',
+    certId: 'unit:unidad-3-gramática',
     kind: 'unit',
     hebrewTitle: 'כָּל הַכָּבוֹד',
     title: 'Unidad completada',
@@ -78,6 +83,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'unit-frases',
+    certId: 'unit:unidad-4-frases-útiles',
     kind: 'unit',
     hebrewTitle: 'כָּל הַכָּבוֹד',
     title: 'Unidad completada',
@@ -89,6 +95,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'unit-sionismo',
+    certId: 'unit:unidad-5-sionismo',
     kind: 'unit',
     hebrewTitle: 'כָּל הַכָּבוֹד',
     title: 'Unidad completada',
@@ -100,6 +107,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'unit-calendario',
+    certId: 'unit:unidad-6-calendario-sionista',
     kind: 'unit',
     hebrewTitle: 'כָּל הַכָּבוֹד',
     title: 'Unidad completada',
@@ -111,6 +119,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'streak-3',
+    certId: 'streak:3',
     kind: 'streak',
     hebrewTitle: 'יָפֶה מְאֹד',
     title: 'Racha de 3 días',
@@ -122,6 +131,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'streak-7',
+    certId: 'streak:7',
     kind: 'streak',
     hebrewTitle: 'יָפֶה מְאֹד',
     title: 'Racha de 7 días',
@@ -133,6 +143,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'streak-14',
+    certId: 'streak:14',
     kind: 'streak',
     hebrewTitle: 'יָפֶה מְאֹד',
     title: 'Racha de 14 días',
@@ -144,6 +155,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'streak-30',
+    certId: 'streak:30',
     kind: 'streak',
     hebrewTitle: 'יָפֶה מְאֹד',
     title: 'Racha de 30 días',
@@ -155,6 +167,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'lessons-5',
+    certId: 'lessons:5',
     kind: 'lessons',
     hebrewTitle: 'כָּל הַבְּרָכוֹת',
     title: '5 lecciones',
@@ -166,6 +179,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'lessons-10',
+    certId: 'lessons:10',
     kind: 'lessons',
     hebrewTitle: 'כָּל הַבְּרָכוֹת',
     title: '10 lecciones',
@@ -177,6 +191,7 @@ export const canvaDiplomaCatalog: CanvaDiplomaRow[] = [
   },
   {
     diplomaId: 'lessons-20',
+    certId: 'lessons:20',
     kind: 'lessons',
     hebrewTitle: 'כָּל הַבְּרָכוֹת',
     title: '20 lecciones',

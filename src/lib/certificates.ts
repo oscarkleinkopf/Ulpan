@@ -63,7 +63,7 @@ export function earnedCertificates(progress: ProgressState, now = new Date()): C
         kind: 'lessons',
         title: `${n} lecciones`,
         subtitle: 'Camino del Ulpan',
-        hebrew: 'כַּל הַבְּרָכוֹת',
+        hebrew: 'כָּל הַבְּרָכוֹת',
         earnedAt: when,
         detail: `${progress.completedLessons.length} lecciones hechas · XP ${progress.xp}`,
       })

@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { PageVisual } from '../components/PageVisual'
-import { diplomaArtForKind } from '../data/diplomaArt'
+import { canvaDiplomaCatalog, diplomaArtForKind } from '../data/diplomaArt'
 import {
   certificateLearnerName,
   earnedCertificates,
@@ -15,6 +15,7 @@ export function CertificatesPage() {
   const hint = nextCertificateHint(progress)
   const name = certificateLearnerName(progress)
   const base = import.meta.env.BASE_URL
+  const earnedIds = useMemo(() => new Set(certs.map((c) => c.id)), [certs])
 
   function printCert(id: string) {
     document.body.setAttribute('data-print-cert', id)
@@ -27,8 +28,8 @@ export function CertificatesPage() {
       <PageVisual sceneId="progreso" />
       <h2>Certificados</h2>
       <p className="lead">
-        Diplomas con la Mora Maggie según lo logrado. Imprimí o guardá como PDF. También hay un CSV para Canva Bulk
-        Create en la carpeta del proyecto.
+        Diplomas con la Mora Maggie según lo logrado. Imprimí o guardá como PDF. Para Canva Bulk Create usá el CSV y
+        las imágenes de fondo.
       </p>
 
       {hint ? <p className="banner-msg">{hint}</p> : null}
@@ -36,6 +37,9 @@ export function CertificatesPage() {
       <div className="cta-row no-print" style={{ marginBottom: '1rem' }}>
         <a className="btn btn-outline" href={`${base}diplomas/ulpan-diplomas-bulk-create.csv`} download>
           Descargar CSV Canva
+        </a>
+        <a className="btn btn-outline" href={`${base}diplomas/README.md`} target="_blank" rel="noreferrer">
+          Guía Canva
         </a>
         <Link className="btn btn-outline" to="/progreso">
           Ver progreso
@@ -52,7 +56,6 @@ export function CertificatesPage() {
               Ir a lecciones
             </Link>
           </div>
-          <DiplomaPreviewGallery base={base} />
         </div>
       ) : (
         <div className="cert-grid">
@@ -83,30 +86,45 @@ export function CertificatesPage() {
           })}
         </div>
       )}
+
+      <DiplomaCatalog base={base} earnedIds={earnedIds} />
     </section>
   )
 }
 
-function DiplomaPreviewGallery({ base }: { base: string }) {
-  const samples = [
-    diplomaArtForKind('unit'),
-    diplomaArtForKind('streak'),
-    diplomaArtForKind('lessons'),
-  ]
+function DiplomaCatalog({ base, earnedIds }: { base: string; earnedIds: Set<string> }) {
   return (
-    <div className="diploma-preview-rail no-print" style={{ marginTop: '1.5rem' }}>
-      <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)', margin: '0 0 0.75rem' }}>
-        Plantillas con Maggie
+    <div className="diploma-preview-rail no-print" style={{ marginTop: '1.75rem' }}>
+      <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)', margin: '0 0 0.35rem' }}>
+        Catálogo Canva · Mora Maggie
       </h3>
-      <div className="diploma-preview-grid">
-        {samples.map((art) => (
-          <figure key={art.jpg} className="diploma-preview-card">
-            <picture>
-              <source srcSet={`${base}${art.webp}`} type="image/webp" />
-              <img src={`${base}${art.jpg}`} alt={art.alt} loading="lazy" />
-            </picture>
-          </figure>
-        ))}
+      <p className="lead" style={{ marginTop: 0 }}>
+        13 diseños listos para Bulk Create. El arte de fondo cambia según el tipo de logro.
+      </p>
+      <div className="diploma-catalog-grid">
+        {canvaDiplomaCatalog.map((row) => {
+          const art = diplomaArtForKind(row.kind)
+          const unlocked = earnedIds.has(row.certId)
+          return (
+            <article key={row.diplomaId} className={`diploma-catalog-card${unlocked ? ' is-unlocked' : ''}`}>
+              <figure className="diploma-preview-card">
+                <picture>
+                  <source srcSet={`${base}${art.webp}`} type="image/webp" />
+                  <img src={`${base}${art.jpg}`} alt={art.alt} loading="lazy" />
+                </picture>
+              </figure>
+              <div className="diploma-catalog-meta">
+                <p className="he cert-he" style={{ fontSize: '1.35rem', margin: 0 }}>
+                  {row.hebrewTitle}
+                </p>
+                <h4>{row.title}</h4>
+                <p>{row.subtitle}</p>
+                <p className="cert-detail">{row.detail}</p>
+                <p className="diploma-catalog-status">{unlocked ? 'Desbloqueado' : 'Pendiente'}</p>
+              </div>
+            </article>
+          )
+        })}
       </div>
     </div>
   )
