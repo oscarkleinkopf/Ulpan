@@ -1909,6 +1909,11 @@ button.lesson-row {
   text-align: center;
 }
 
+.banner-msg--warn {
+  border-color: color-mix(in srgb, #b45309 35%, var(--line));
+  background: color-mix(in srgb, #b45309 10%, var(--surface-solid));
+}
+
 @media print {
   .topbar,
   .bottom-nav,
@@ -1917,17 +1922,47 @@ button.lesson-row {
   .no-print,
   .cta-row,
   .pack-preview,
-  .maggie-gallery {
+  .maggie-gallery,
+  .diploma-preview-rail,
+  .panel,
+  .lead,
+  .banner-msg,
+  .section > h2 {
     display: none !important;
   }
 
   .certificate {
     break-inside: avoid;
     box-shadow: none;
+    border: none;
+    background: none;
   }
 
-  body[data-print-cert] .certificate:not(:target) {
-    /* fallback: hide siblings via JS attribute on body if needed */
+  .certificate-copy {
+    display: none !important;
+  }
+
+  .certificate-art {
+    aspect-ratio: auto;
+  }
+
+  .certificate-art img {
+    width: 100%;
+    height: auto;
+    max-height: 100vh;
+    object-fit: contain;
+  }
+
+  body[data-print-cert] .certificate:not(.is-printing) {
+    display: none !important;
+  }
+
+  body[data-print-cert] .certificate.is-printing {
+    display: block !important;
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 0;
   }
 }
 
