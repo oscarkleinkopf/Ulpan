@@ -1909,11 +1909,6 @@ button.lesson-row {
   text-align: center;
 }
 
-.banner-msg--warn {
-  border-color: color-mix(in srgb, #b45309 35%, var(--line));
-  background: color-mix(in srgb, #b45309 10%, var(--surface-solid));
-}
-
 @media print {
   .topbar,
   .bottom-nav,

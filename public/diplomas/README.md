@@ -19,7 +19,7 @@ En la app: `/certificados` (galería + ZIP + descarga por diploma).
 - **Rachas (4):** 3, 7, 14, 30 días  
 - **Lecciones (3):** 5, 10, 20  
 
-Nombre placeholder: `Talmid/a del Ulpan`. Para personalizar, editá el JPG o usá el CSV en Canva con las plantillas base en `images/diplomas/diploma-{unit,streak,lessons}.jpg`.
+Nombre placeholder: `Talmid/a del Ulpan`. En `/certificados`, con tu nombre en **Progreso**, usá **Con mi nombre** / **Descargar con mi nombre** para generar el JPG personalizado en el navegador.
 
 ## Canva (opcional)
 
