@@ -1,6 +1,7 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { accountRoleLabel } from '../lib/accountRole'
 import { useAuthContext } from '../lib/AuthProvider'
+import { InstallPrompt } from './InstallPrompt'
 
 const desktopLinks = [
   { to: '/', label: 'Inicio', end: true },
@@ -67,6 +68,7 @@ export function Layout() {
         ) : null}
       </header>
       <main className="main">
+        <InstallPrompt />
         <Outlet />
       </main>
       <nav className="bottom-nav" aria-label="Móvil">
