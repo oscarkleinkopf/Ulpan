@@ -28,6 +28,14 @@ cpSync('dist/icons', 'icons', { recursive: true })
 rmSync('images', { recursive: true, force: true })
 cpSync('dist/images', 'images', { recursive: true })
 
+// CSV / assets de diplomas Canva
+rmSync('diplomas', { recursive: true, force: true })
+try {
+  cpSync('dist/diplomas', 'diplomas', { recursive: true })
+} catch {
+  /* opcional */
+}
+
 writeFileSync('.nojekyll', '')
 
 rmSync('docs', { recursive: true, force: true })
