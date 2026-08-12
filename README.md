@@ -16,7 +16,7 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 - **Cuenta en la nube** (Supabase): sincroniza progreso, perfiles y tareas entre dispositivos — también en GitHub Pages
 - **Progreso** local (racha, XP, preferencia de género gramatical); con sesión, también en la nube
 - Pronunciación vía Web Speech API cuando el navegador la soporte
-- Manifest PWA para instalar en el móvil
+- Manifest PWA para instalar en el móvil (banner “Instalá Ulpan Maggie”; en iOS: Compartir → Agregar a pantalla de inicio)
 
 ## Transliteración
 

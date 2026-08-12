@@ -37,16 +37,22 @@ html,
 body,
 #root {
   min-height: 100%;
+  min-height: 100dvh;
 }
 
 body {
   margin: 0;
   min-width: 320px;
+  padding:
+    env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom)
+    env(safe-area-inset-left);
   background:
     radial-gradient(ellipse 90% 60% at 10% -10%, rgba(196, 163, 90, 0.22), transparent 55%),
     radial-gradient(ellipse 70% 50% at 100% 0%, rgba(42, 90, 76, 0.18), transparent 50%),
     linear-gradient(165deg, #eef4f5 0%, #dce7ea 45%, #d4e0d8 100%);
   background-attachment: fixed;
+  overscroll-behavior-y: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body::before {
@@ -94,6 +100,7 @@ button {
   justify-content: space-between;
   gap: 1rem;
   padding: 0.85rem 1.25rem;
+  padding-top: max(0.85rem, env(safe-area-inset-top));
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(12px);
   background: rgba(231, 238, 240, 0.72);
@@ -176,10 +183,16 @@ button {
   flex: 1;
   text-align: center;
   padding: 0.55rem 0.25rem;
+  min-height: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   font-size: 0.72rem;
   font-weight: 600;
   color: var(--ink-soft);
   border-radius: 12px;
+  touch-action: manipulation;
 }
 
 .bottom-nav a.active {
@@ -203,7 +216,93 @@ button {
     display: flex;
   }
   .main {
-    padding-bottom: 6.5rem;
+    padding: 1rem 0.9rem 7rem;
+  }
+  .brand {
+    font-size: 1.15rem;
+  }
+  .brand .brand-maggie {
+    font-size: 1rem;
+  }
+  .topbar {
+    padding-inline: 0.85rem;
+    gap: 0.5rem;
+  }
+  body {
+    background-attachment: scroll;
+  }
+  .hero {
+    min-height: min(78dvh, 640px);
+    margin-inline: -0.9rem;
+    padding: 1.5rem 1rem 1.85rem;
+  }
+  .cta-row {
+    gap: 0.55rem;
+  }
+  .cta-row .btn {
+    flex: 1 1 auto;
+    min-height: 44px;
+    justify-content: center;
+  }
+  .field input,
+  .field-select,
+  textarea {
+    font-size: 16px; /* evita zoom automático en iOS */
+    min-height: 44px;
+  }
+  button,
+  .btn {
+    touch-action: manipulation;
+  }
+}
+
+.install-banner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0 0 1rem;
+  padding: 0.85rem 1rem;
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgba(26, 58, 50, 0.1), rgba(196, 163, 90, 0.16));
+  border: 1px solid rgba(26, 58, 50, 0.18);
+  animation: rise 0.45s ease both;
+}
+
+.install-banner-text {
+  display: grid;
+  gap: 0.15rem;
+  flex: 1 1 12rem;
+}
+
+.install-banner-text strong {
+  font-family: var(--font-display);
+  color: var(--brand);
+  font-size: 1.05rem;
+}
+
+.install-banner-text span {
+  color: var(--ink-soft);
+  font-size: 0.88rem;
+  line-height: 1.35;
+}
+
+.install-banner-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+}
+
+.install-banner-actions .btn {
+  min-height: 40px;
+  padding: 0.45rem 0.9rem;
+  font-size: 0.88rem;
+}
+
+@media (display-mode: standalone) {
+  .install-banner {
+    display: none;
   }
 }
 
