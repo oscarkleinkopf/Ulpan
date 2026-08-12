@@ -28,6 +28,13 @@ export type TaskCompletion = {
   taskId: string
   studentId: string
   completedAt: string
+  /** Nota opcional del alumno al marcar la tarea */
+  studentNote?: string
+  /** Revisión de la mora / moré */
+  reviewStatus?: 'pending' | 'approved' | 'needs_work'
+  reviewComment?: string
+  reviewedAt?: string
+  reviewedBy?: string
 }
 
 export type Classroom = {
@@ -174,6 +181,7 @@ export function toggleTaskComplete(
   state: ClassroomState,
   taskId: string,
   studentId: string,
+  studentNote?: string,
 ): ClassroomState {
   if (!state.classroom) return state
   const exists = state.classroom.completions.some(
@@ -183,11 +191,71 @@ export function toggleTaskComplete(
     ? state.classroom.completions.filter((c) => !(c.taskId === taskId && c.studentId === studentId))
     : [
         ...state.classroom.completions,
-        { taskId, studentId, completedAt: new Date().toISOString() },
+        {
+          taskId,
+          studentId,
+          completedAt: new Date().toISOString(),
+          studentNote: studentNote?.trim() || undefined,
+          reviewStatus: 'pending' as const,
+        },
       ]
   return {
     ...state,
     classroom: { ...state.classroom, completions },
+  }
+}
+
+export function getCompletion(
+  classroom: Classroom,
+  taskId: string,
+  studentId: string,
+): TaskCompletion | undefined {
+  return classroom.completions.find((c) => c.taskId === taskId && c.studentId === studentId)
+}
+
+export function setTaskReview(
+  state: ClassroomState,
+  taskId: string,
+  studentId: string,
+  input: {
+    status: 'approved' | 'needs_work' | 'pending'
+    comment?: string
+    reviewedBy: string
+  },
+): ClassroomState {
+  if (!state.classroom) return state
+  const idx = state.classroom.completions.findIndex(
+    (c) => c.taskId === taskId && c.studentId === studentId,
+  )
+  if (idx < 0) return state
+  const completions = [...state.classroom.completions]
+  completions[idx] = {
+    ...completions[idx],
+    reviewStatus: input.status,
+    reviewComment: input.comment?.trim() || undefined,
+    reviewedAt: new Date().toISOString(),
+    reviewedBy: input.reviewedBy,
+  }
+  return {
+    ...state,
+    classroom: { ...state.classroom, completions },
+  }
+}
+
+export function isTaskApproved(classroom: Classroom, taskId: string, studentId: string): boolean {
+  return getCompletion(classroom, taskId, studentId)?.reviewStatus === 'approved'
+}
+
+export function reviewLabel(status: TaskCompletion['reviewStatus']): string {
+  switch (status) {
+    case 'approved':
+      return 'Visto bueno'
+    case 'needs_work':
+      return 'Para corregir'
+    case 'pending':
+      return 'En revisión'
+    default:
+      return 'Sin revisar'
   }
 }
 

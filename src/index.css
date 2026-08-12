@@ -1226,6 +1226,91 @@ button.lesson-row {
   margin-top: 1rem;
 }
 
+.field-select {
+  width: 100%;
+  padding: 0.7rem;
+  border-radius: 12px;
+  border: 1px solid var(--line);
+  background: var(--surface-solid);
+  font: inherit;
+  color: var(--ink);
+}
+
+.review-row {
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 0.45rem;
+}
+
+.review-row:first-child {
+  border-top: none;
+  padding-top: 0;
+}
+
+.review-row-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.review-status {
+  display: inline-block;
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  background: rgba(26, 58, 50, 0.08);
+  color: var(--ink-soft);
+}
+
+.review-status.is-pending {
+  background: rgba(180, 140, 40, 0.14);
+  color: #8a6a12;
+}
+
+.review-status.is-approved {
+  background: rgba(42, 90, 76, 0.14);
+  color: var(--brand);
+}
+
+.review-status.is-needs_work {
+  background: rgba(140, 54, 40, 0.1);
+  color: #8c3628;
+}
+
+.review-status.is-waiting {
+  background: transparent;
+  border: 1px solid var(--line);
+}
+
+.review-note,
+.review-feedback {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.review-feedback {
+  margin-top: 0.55rem;
+  padding: 0.65rem 0.75rem;
+  border-radius: 12px;
+  background: rgba(42, 90, 76, 0.07);
+  border: 1px solid rgba(42, 90, 76, 0.16);
+  color: var(--brand);
+}
+
+.task-card.is-approved {
+  border-color: rgba(42, 90, 76, 0.4);
+}
+
+.task-card.is-needs-work {
+  border-color: rgba(140, 54, 40, 0.35);
+}
+
 @media (max-width: 720px) {
   .hero-brand {
     font-size: clamp(1.85rem, 8vw, 2.6rem);
