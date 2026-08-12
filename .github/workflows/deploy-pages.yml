@@ -7,6 +7,7 @@ on:
       - 'docs/**'
       - 'assets/**'
       - 'images/**'
+      - 'diplomas/**'
       - 'icons/**'
       - 'index.html'
       - '404.html'
@@ -59,7 +60,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add index.html 404.html assets favicon.svg icons images manifest.webmanifest .nojekyll docs
+          git add index.html 404.html assets favicon.svg icons images diplomas manifest.webmanifest .nojekyll docs
           git add -f sw.js registerSW.js workbox-*.js 2>/dev/null || true
           if git diff --staged --quiet; then
             echo "No site changes"

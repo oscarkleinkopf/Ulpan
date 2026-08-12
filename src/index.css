@@ -1784,6 +1784,94 @@ button.lesson-row {
   box-shadow: var(--shadow);
 }
 
+.certificate--art {
+  padding: 0;
+  overflow: hidden;
+  text-align: start;
+}
+
+.certificate-art {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+  background: #e8efe8;
+}
+
+.certificate-art img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 30%;
+}
+
+.certificate-copy {
+  padding: 1.1rem 1.25rem 1.35rem;
+  text-align: center;
+}
+
+.diploma-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0.75rem;
+}
+
+.diploma-preview-card {
+  margin: 0;
+  border-radius: calc(var(--radius) - 4px);
+  overflow: hidden;
+  border: 1px solid var(--line);
+  background: var(--surface-solid);
+}
+
+.diploma-preview-card img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.diploma-catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.diploma-catalog-card {
+  margin: 0;
+  opacity: 0.78;
+  transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.diploma-catalog-card.is-unlocked {
+  opacity: 1;
+  transform: translateY(-2px);
+}
+
+.diploma-catalog-meta {
+  padding: 0.65rem 0.15rem 0.25rem;
+}
+
+.diploma-catalog-meta h4 {
+  margin: 0.25rem 0 0;
+  font-family: var(--font-display);
+  color: var(--brand);
+  font-size: 1.05rem;
+}
+
+.diploma-catalog-meta p {
+  margin: 0.2rem 0 0;
+  color: var(--ink-soft);
+  font-size: 0.92rem;
+}
+
+.diploma-catalog-status {
+  font-size: 0.8rem !important;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--brand) !important;
+}
+
 .cert-brand {
   margin: 0;
   font-family: var(--font-display);

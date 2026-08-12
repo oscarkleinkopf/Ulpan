@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { PageVisual } from '../components/PageVisual'
+import { canvaDiplomaCatalog, diplomaArtForKind } from '../data/diplomaArt'
 import {
   certificateLearnerName,
   earnedCertificates,
@@ -13,15 +14,13 @@ export function CertificatesPage() {
   const certs = useMemo(() => earnedCertificates(progress), [progress])
   const hint = nextCertificateHint(progress)
   const name = certificateLearnerName(progress)
+  const base = import.meta.env.BASE_URL
+  const earnedIds = useMemo(() => new Set(certs.map((c) => c.id)), [certs])
 
   function printCert(id: string) {
-    const el = document.getElementById(`cert-${id}`)
-    if (!el) return
-    const prev = document.body.getAttribute('data-print-cert')
     document.body.setAttribute('data-print-cert', id)
     window.print()
-    if (prev) document.body.setAttribute('data-print-cert', prev)
-    else document.body.removeAttribute('data-print-cert')
+    document.body.removeAttribute('data-print-cert')
   }
 
   return (
@@ -29,10 +28,23 @@ export function CertificatesPage() {
       <PageVisual sceneId="progreso" />
       <h2>Certificados</h2>
       <p className="lead">
-        Reconocimientos livianos al completar unidades o rachas. Podés imprimirlos o guardarlos como PDF.
+        Diplomas con la Mora Maggie según lo logrado. Imprimí o guardá como PDF. Para Canva Bulk Create usá el CSV y
+        las imágenes de fondo.
       </p>
 
       {hint ? <p className="banner-msg">{hint}</p> : null}
+
+      <div className="cta-row no-print" style={{ marginBottom: '1rem' }}>
+        <a className="btn btn-outline" href={`${base}diplomas/ulpan-diplomas-bulk-create.csv`} download>
+          Descargar CSV Canva
+        </a>
+        <a className="btn btn-outline" href={`${base}diplomas/README.md`} target="_blank" rel="noreferrer">
+          Guía Canva
+        </a>
+        <Link className="btn btn-outline" to="/progreso">
+          Ver progreso
+        </Link>
+      </div>
 
       {certs.length === 0 ? (
         <div className="panel">
@@ -43,29 +55,77 @@ export function CertificatesPage() {
             <Link className="btn btn-solid" to="/lecciones">
               Ir a lecciones
             </Link>
-            <Link className="btn btn-outline" to="/progreso">
-              Ver progreso
-            </Link>
           </div>
         </div>
       ) : (
         <div className="cert-grid">
-          {certs.map((c) => (
-            <article className="certificate" id={`cert-${c.id}`} key={c.id}>
-              <p className="cert-brand">Ulpan con la Mora Maggie</p>
-              <p className="he cert-he">{c.hebrew}</p>
-              <h3>{c.title}</h3>
-              <p className="cert-sub">{c.subtitle}</p>
-              <p className="cert-name">{name}</p>
-              <p className="cert-detail">{c.detail}</p>
-              <p className="cert-date">{c.earnedAt}</p>
-              <button type="button" className="btn btn-outline no-print" onClick={() => printCert(c.id)}>
-                Imprimir / PDF
-              </button>
-            </article>
-          ))}
+          {certs.map((c) => {
+            const art = diplomaArtForKind(c.kind)
+            return (
+              <article className="certificate certificate--art" id={`cert-${c.id}`} key={c.id}>
+                <div className="certificate-art" aria-hidden="true">
+                  <picture>
+                    <source srcSet={`${base}${art.webp}`} type="image/webp" />
+                    <img src={`${base}${art.jpg}`} alt="" />
+                  </picture>
+                </div>
+                <div className="certificate-copy">
+                  <p className="cert-brand">Ulpan con la Mora Maggie</p>
+                  <p className="he cert-he">{c.hebrew}</p>
+                  <h3>{c.title}</h3>
+                  <p className="cert-sub">{c.subtitle}</p>
+                  <p className="cert-name">{name}</p>
+                  <p className="cert-detail">{c.detail}</p>
+                  <p className="cert-date">{c.earnedAt}</p>
+                  <button type="button" className="btn btn-outline no-print" onClick={() => printCert(c.id)}>
+                    Imprimir / PDF
+                  </button>
+                </div>
+              </article>
+            )
+          })}
         </div>
       )}
+
+      <DiplomaCatalog base={base} earnedIds={earnedIds} />
     </section>
+  )
+}
+
+function DiplomaCatalog({ base, earnedIds }: { base: string; earnedIds: Set<string> }) {
+  return (
+    <div className="diploma-preview-rail no-print" style={{ marginTop: '1.75rem' }}>
+      <h3 style={{ fontFamily: 'var(--font-display)', color: 'var(--brand)', margin: '0 0 0.35rem' }}>
+        Catálogo Canva · Mora Maggie
+      </h3>
+      <p className="lead" style={{ marginTop: 0 }}>
+        13 diseños listos para Bulk Create. El arte de fondo cambia según el tipo de logro.
+      </p>
+      <div className="diploma-catalog-grid">
+        {canvaDiplomaCatalog.map((row) => {
+          const art = diplomaArtForKind(row.kind)
+          const unlocked = earnedIds.has(row.certId)
+          return (
+            <article key={row.diplomaId} className={`diploma-catalog-card${unlocked ? ' is-unlocked' : ''}`}>
+              <figure className="diploma-preview-card">
+                <picture>
+                  <source srcSet={`${base}${art.webp}`} type="image/webp" />
+                  <img src={`${base}${art.jpg}`} alt={art.alt} loading="lazy" />
+                </picture>
+              </figure>
+              <div className="diploma-catalog-meta">
+                <p className="he cert-he" style={{ fontSize: '1.35rem', margin: 0 }}>
+                  {row.hebrewTitle}
+                </p>
+                <h4>{row.title}</h4>
+                <p>{row.subtitle}</p>
+                <p className="cert-detail">{row.detail}</p>
+                <p className="diploma-catalog-status">{unlocked ? 'Desbloqueado' : 'Pendiente'}</p>
+              </div>
+            </article>
+          )
+        })}
+      </div>
+    </div>
   )
 }

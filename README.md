@@ -19,7 +19,7 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 - **Calendario en casa**: foco cultural del día + palabra
 - **Modo pareja**: diálogos cortos por turnos
 - **Entrega semanal**: pack de 5 palabras + 3 frases (WhatsApp / imprimir)
-- **Certificados** livianos por unidad o racha
+- **Certificados** livianos por unidad o racha (arte diploma con Maggie + CSV para Canva Bulk Create en `docs/canva/`)
 - **Cuenta en la nube** (Supabase): sincroniza progreso, perfiles y tareas entre dispositivos — también en GitHub Pages
 - **Progreso** local (racha, XP, preferencia de género gramatical); con sesión, también en la nube
 - Pronunciación: voz de la Mora si hay clip; si no, TTS / Web Speech
