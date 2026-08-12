@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { alphabet, vowelMarks } from '../data/alphabet'
+import { PageVisual } from '../components/PageVisual'
 import { SpeakButton } from '../components/SpeakButton'
 import { enqueueForSrs } from '../lib/progress'
 import { useProgress } from '../lib/useProgress'
@@ -20,6 +21,7 @@ export function AlphabetPage() {
 
   return (
     <section className="section">
+      <PageVisual sceneId="pizarron" />
       <h2>Alefato</h2>
       <p className="lead">
         Las 22 letras del hebreo. Toca una letra para ver detalles y escucharla. Cinco letras tienen forma final

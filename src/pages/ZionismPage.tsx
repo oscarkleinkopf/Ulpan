@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { springArc, zionistCalendarDays } from '../data/calendar'
 import { zionismByGroup, zionismTerms, type ZionismGroup } from '../data/zionism'
 import { DedicationBanner } from '../components/DedicationBanner'
+import { PageVisual } from '../components/PageVisual'
 import { SpeakButton } from '../components/SpeakButton'
 import { enqueueForSrs } from '../lib/progress'
 import { useProgress } from '../lib/useProgress'
@@ -40,6 +41,7 @@ export function ZionismPage() {
   return (
     <section className="section">
       <DedicationBanner compact />
+      <PageVisual sceneId="calendario" />
 
       <h2>Sionismo</h2>
       <p className="lead">

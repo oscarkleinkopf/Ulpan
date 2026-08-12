@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { tagLabels, vocabulary, vocabTags } from '../data/vocabulary'
+import { PageVisual } from '../components/PageVisual'
 import { SpeakButton } from '../components/SpeakButton'
 import { enqueueForSrs } from '../lib/progress'
 import { useProgress } from '../lib/useProgress'
@@ -29,6 +30,7 @@ export function VocabularyPage() {
 
   return (
     <section className="section">
+      <PageVisual sceneId="shuk" />
       <h2>Vocabulario</h2>
       <p className="lead">Explora el léxico del curso. Filtra por tema o busca en español, hebreo o transliteración.</p>
 

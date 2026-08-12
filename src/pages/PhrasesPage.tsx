@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react'
 import { phrases } from '../data/phrases'
+import { PageVisual } from '../components/PageVisual'
 import { SpeakButton } from '../components/SpeakButton'
 import { enqueueForSrs } from '../lib/progress'
 import { useProgress } from '../lib/useProgress'
@@ -24,6 +25,7 @@ export function PhrasesPage() {
 
   return (
     <section className="section">
+      <PageVisual sceneId="cafe" />
       <h2>Frases útiles</h2>
       <p className="lead">Expresiones listas para presentarte, pedir en un café o desenvolverte en la calle.</p>
       <div className="filter-chips">

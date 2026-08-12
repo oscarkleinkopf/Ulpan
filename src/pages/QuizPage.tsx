@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { alphabet } from '../data/alphabet'
 import { vocabulary } from '../data/vocabulary'
+import { PageVisual } from '../components/PageVisual'
 import { SpeakButton } from '../components/SpeakButton'
 
 function shuffle<T>(arr: T[]): T[] {
@@ -113,6 +114,7 @@ export function QuizPage() {
   if (!mode) {
     return (
       <section className="section">
+        <PageVisual sceneId="quiz" />
         <h2>Quiz rápido</h2>
         <p className="lead">Sesiones cortas de opción múltiple para entrenar reconocimiento sin el mazo SRS.</p>
         <div className="lesson-list">

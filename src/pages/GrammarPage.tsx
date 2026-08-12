@@ -1,9 +1,11 @@
 import { grammarTopics } from '../data/grammar'
+import { PageVisual } from '../components/PageVisual'
 import { SpeakButton } from '../components/SpeakButton'
 
 export function GrammarPage() {
   return (
     <section className="section">
+      <PageVisual sceneId="gramatica" />
       <h2>Gramática</h2>
       <p className="lead">
         Ideas clave para hispanohablantes: dirección de lectura, género, artículo y el presente sin “ser”.

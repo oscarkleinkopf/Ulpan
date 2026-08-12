@@ -1,6 +1,9 @@
 import { Link } from 'react-router-dom'
 import { DedicationBanner } from '../components/DedicationBanner'
+import { MaggieGallery } from '../components/MaggieGallery'
+import { MaggieImg } from '../components/MaggieImg'
 import { lessons } from '../data/lessons'
+import { maggieHero } from '../data/maggieScenes'
 import { useAuthContext } from '../lib/AuthProvider'
 import { isTeacher } from '../lib/classroom'
 import { dueCards } from '../lib/progress'
@@ -17,12 +20,18 @@ export function HomePage() {
     : user?.name
       ? `, ${user.name}`
       : ''
+  const base = import.meta.env.BASE_URL
 
   return (
     <>
       <section className="hero" aria-label="Portada">
-        <div className="hero-bg" aria-hidden="true" />
-        <div>
+        <div className="hero-bg hero-bg--photo" aria-hidden="true">
+          <picture>
+            <source srcSet={`${base}${maggieHero.webp}`} type="image/webp" />
+            <img src={`${base}${maggieHero.jpg}`} alt="" className="hero-photo" />
+          </picture>
+        </div>
+        <div className="hero-copy">
           <h1 className="hero-brand">
             Ulpan con la Mora Maggie
             <span className="he">אולפן עם המורה מגי</span>
@@ -44,6 +53,8 @@ export function HomePage() {
       </section>
 
       <DedicationBanner />
+
+      <MaggieGallery />
 
       <section className="section">
         <h2>Tu ritmo</h2>
@@ -84,38 +95,80 @@ export function HomePage() {
       <section className="section">
         <h2>Camino de aprendizaje</h2>
         <p className="lead">Del alefato a frases útiles. Transliteración en español: ח y כ suave = j (slijá, jaláv).</p>
-        <div className="lesson-list">
-          <Link className="lesson-row" to="/alefato">
+        <div className="lesson-list path-with-art">
+          <Link className="lesson-row path-row" to="/alefato">
+            <MaggieImg
+              className="path-thumb"
+              src="images/maggie/maggie-pizarron-hebreo"
+              alt=""
+              width={88}
+              height={66}
+            />
             <div>
               <h4>1 · Alefato</h4>
               <p>22 letras, formas finales y vocales</p>
             </div>
           </Link>
-          <Link className="lesson-row" to="/lecciones">
+          <Link className="lesson-row path-row" to="/lecciones">
+            <MaggieImg
+              className="path-thumb"
+              src="images/maggie/maggie-leccion-guiada"
+              alt=""
+              width={88}
+              height={66}
+            />
             <div>
               <h4>2 · Lecciones</h4>
               <p>Saludos, números, días, verbos y más</p>
             </div>
           </Link>
-          <Link className="lesson-row" to="/vocabulario">
+          <Link className="lesson-row path-row" to="/vocabulario">
+            <MaggieImg
+              className="path-thumb"
+              src="images/maggie/maggie-shuk-vocabulario"
+              alt=""
+              width={88}
+              height={66}
+            />
             <div>
               <h4>3 · Vocabulario</h4>
               <p>Léxico del curso por temas</p>
             </div>
           </Link>
-          <Link className="lesson-row" to="/gramatica">
+          <Link className="lesson-row path-row" to="/gramatica">
+            <MaggieImg
+              className="path-thumb"
+              src="images/maggie/maggie-gramatica"
+              alt=""
+              width={88}
+              height={66}
+            />
             <div>
               <h4>4 · Gramática</h4>
               <p>Género, artículo ה, יֵשׁ/אֵין y presente</p>
             </div>
           </Link>
-          <Link className="lesson-row" to="/frases">
+          <Link className="lesson-row path-row" to="/frases">
+            <MaggieImg
+              className="path-thumb"
+              src="images/maggie/maggie-cafe-frases"
+              alt=""
+              width={88}
+              height={66}
+            />
             <div>
               <h4>5 · Frases</h4>
               <p>Café, presentaciones y la calle</p>
             </div>
           </Link>
-          <Link className="lesson-row" to="/sionismo">
+          <Link className="lesson-row path-row" to="/sionismo">
+            <MaggieImg
+              className="path-thumb"
+              src="images/maggie/maggie-calendario-sionista"
+              alt=""
+              width={88}
+              height={66}
+            />
             <div>
               <h4>6 · Sionismo y calendario</h4>
               <p>Aliá, instituciones, Shoá–Zikarón–Atzmaút</p>

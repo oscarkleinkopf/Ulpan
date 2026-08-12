@@ -3,6 +3,7 @@ import { lessons } from '../data/lessons'
 import { vocabulary } from '../data/vocabulary'
 import { phrases } from '../data/phrases'
 import { alphabet } from '../data/alphabet'
+import { PageVisual } from '../components/PageVisual'
 import { dueCards, resetProgress, setPreferences, type LearnerGender } from '../lib/progress'
 import { useProgress } from '../lib/useProgress'
 
@@ -22,6 +23,7 @@ export function ProgressPage() {
 
   return (
     <section className="section">
+      <PageVisual sceneId="progreso" />
       <h2>Tu progreso</h2>
       <p className="lead">Resumen de estudio y preferencias. Todo se guarda solo en este navegador.</p>
 
