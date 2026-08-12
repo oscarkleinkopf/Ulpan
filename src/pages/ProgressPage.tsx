@@ -56,6 +56,18 @@ export function ProgressPage() {
         </div>
       </div>
 
+      <div className="cta-row" style={{ marginTop: '1rem' }}>
+        <Link className="btn btn-outline" to="/certificados">
+          Ver diplomas
+        </Link>
+        <Link className="btn btn-outline" to="/calendario">
+          Calendario en casa
+        </Link>
+        <Link className="btn btn-outline" to="/entrega-semanal">
+          Pack semanal
+        </Link>
+      </div>
+
       <div className="panel" style={{ marginTop: '1.5rem' }}>
         <h3 style={{ marginTop: 0, fontFamily: 'var(--font-display)', color: 'var(--brand)' }}>
           Preferencias

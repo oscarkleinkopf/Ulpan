@@ -1725,8 +1725,136 @@ button.lesson-row {
   border-color: rgba(140, 54, 40, 0.35);
 }
 
+.pair-tip {
+  margin: 0 0 0.75rem;
+  font-weight: 650;
+  color: var(--accent-deep);
+  text-align: center;
+}
+
+.pack-list {
+  list-style: none;
+  margin: 0 0 1.25rem;
+  padding: 0;
+  display: grid;
+  gap: 0.55rem;
+}
+
+.pack-list li {
+  display: grid;
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr) auto;
+  gap: 0.65rem;
+  align-items: center;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: rgba(255, 250, 243, 0.65);
+}
+
+.pack-list .he {
+  font-size: 1.2rem;
+}
+
+.pack-preview {
+  margin-top: 1.25rem;
+  padding: 1rem;
+  border-radius: var(--radius);
+  border: 1px dashed var(--line);
+  background: rgba(20, 34, 31, 0.03);
+  white-space: pre-wrap;
+  font-size: 0.88rem;
+  line-height: 1.45;
+  color: var(--ink-soft);
+  overflow: auto;
+}
+
+.cert-grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.certificate {
+  padding: 1.5rem 1.35rem;
+  border-radius: var(--radius);
+  border: 2px solid rgba(196, 163, 90, 0.45);
+  background:
+    radial-gradient(ellipse 80% 50% at 50% 0%, rgba(196, 163, 90, 0.18), transparent 55%),
+    var(--surface-solid);
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+
+.cert-brand {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--brand);
+  font-weight: 650;
+  letter-spacing: 0.02em;
+}
+
+.cert-he {
+  font-size: 2rem;
+  margin: 0.5rem 0 0.35rem;
+  color: var(--brand);
+}
+
+.certificate h3 {
+  margin: 0;
+  font-family: var(--font-display);
+  color: var(--brand);
+}
+
+.cert-sub,
+.cert-detail,
+.cert-date {
+  margin: 0.35rem 0 0;
+  color: var(--ink-soft);
+}
+
+.cert-name {
+  margin: 0.85rem 0 0;
+  font-size: 1.15rem;
+  font-weight: 700;
+}
+
+.home-cal-hero {
+  text-align: center;
+}
+
+@media print {
+  .topbar,
+  .bottom-nav,
+  .install-banner,
+  .page-visual,
+  .no-print,
+  .cta-row,
+  .pack-preview,
+  .maggie-gallery {
+    display: none !important;
+  }
+
+  .certificate {
+    break-inside: avoid;
+    box-shadow: none;
+  }
+
+  body[data-print-cert] .certificate:not(:target) {
+    /* fallback: hide siblings via JS attribute on body if needed */
+  }
+}
+
 @media (max-width: 720px) {
   .hero-brand {
     font-size: clamp(1.85rem, 8vw, 2.6rem);
+  }
+
+  .pack-list li {
+    grid-template-columns: 1fr auto;
+  }
+
+  .pack-list li span:nth-child(2) {
+    grid-column: 1 / -1;
+    font-size: 0.9rem;
+    color: var(--ink-soft);
   }
 }

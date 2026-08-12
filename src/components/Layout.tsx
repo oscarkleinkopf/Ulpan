@@ -29,6 +29,9 @@ export function Layout() {
           <NavLink to="/sionismo" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Sionismo
           </NavLink>
+          <NavLink to="/calendario" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            Calendario
+          </NavLink>
           <NavLink to="/gramatica" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Gramática
           </NavLink>
@@ -37,6 +40,9 @@ export function Layout() {
           </NavLink>
           <NavLink to="/audio-guiado" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Audio
+          </NavLink>
+          <NavLink to="/pareja" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            Pareja
           </NavLink>
           <NavLink to="/practica" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Práctica
@@ -49,6 +55,12 @@ export function Layout() {
               Estudio
             </NavLink>
           ) : null}
+          <NavLink to="/entrega-semanal" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            Semanal
+          </NavLink>
+          <NavLink to="/certificados" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            Diplomas
+          </NavLink>
           <NavLink to="/perfiles" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Perfiles
           </NavLink>
