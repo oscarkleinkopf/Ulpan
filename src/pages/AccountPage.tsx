@@ -2,7 +2,7 @@ import { useEffect, useState, type FormEvent } from 'react'
 import { Link } from 'react-router-dom'
 import { PageVisual } from '../components/PageVisual'
 import { RolePicker } from '../components/RolePicker'
-import { accountRoleLabel, type Role } from '../lib/accountRole'
+import { accountRoleLabel, canRecordAudio, type Role } from '../lib/accountRole'
 import { isTeacher } from '../lib/classroom'
 import { useAuthContext } from '../lib/AuthProvider'
 import { getSyncStatus, pullAndMergeCloud, pushCloudNow, subscribeSyncStatus } from '../lib/cloudSync'
@@ -23,12 +23,14 @@ export function AccountPage() {
     recover,
     updatePassword,
     setAccountRole,
+    setCanRecord,
   } = useAuthContext()
   const [mode, setMode] = useState<Mode>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [role, setRole] = useState<Role>('talmid')
+  const [wantRecord, setWantRecord] = useState(true)
   const [newPassword, setNewPassword] = useState('')
   const [syncLabel, setSyncLabel] = useState('')
 
@@ -41,10 +43,16 @@ export function AccountPage() {
     })
   }, [])
 
+  useEffect(() => {
+    if (user?.canRecord != null) setWantRecord(Boolean(user.canRecord))
+  }, [user?.canRecord])
+
+  const showRecordOpt = isTeacher(role)
+
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
     if (mode === 'login') await signIn(email, password)
-    else if (mode === 'signup') await signUp(email, password, name, role)
+    else if (mode === 'signup') await signUp(email, password, name, role, wantRecord)
     else await recover(email)
   }
 
@@ -85,7 +93,7 @@ export function AccountPage() {
       <h2>Cuenta en la nube</h2>
       <p className="lead">
         Al crear tu cuenta elige si eres <strong>Moré / Morá</strong> (docente) o{' '}
-        <strong>Talmid / Talmidá</strong> (alumno). El progreso se sincroniza entre dispositivos.
+        <strong>Talmid / Talmidá</strong> (alumno). La Morá puede activar acceso a grabar audio guiado.
       </p>
 
       {message ? <p className={`banner-msg${message.type === 'error' ? ' is-error' : ''}`}>{message.text}</p> : null}
@@ -102,12 +110,18 @@ export function AccountPage() {
             <span style={{ color: 'var(--ink-soft)' }}>{user.email}</span>
             <br />
             <span className="role-badge">{accountRoleLabel(user.role)}</span>
+            {canRecordAudio(user) ? <span className="role-badge is-record">Puede grabar audio</span> : null}
           </p>
 
           {!user.role ? (
             <div style={{ marginBottom: '1.25rem' }}>
               <RolePicker value={role} onChange={setRole} legend="Elige tu rol en el Ulpan" />
-              <button type="button" className="btn btn-solid" onClick={() => void setAccountRole(role)}>
+              {isTeacher(role) ? <RecordOpt checked={wantRecord} onChange={setWantRecord} /> : null}
+              <button
+                type="button"
+                className="btn btn-solid"
+                onClick={() => void setAccountRole(role, wantRecord)}
+              >
                 Guardar rol
               </button>
             </div>
@@ -121,6 +135,11 @@ export function AccountPage() {
                   <Link className="btn btn-outline" to="/perfiles">
                     Gestionar clase
                   </Link>
+                  {canRecordAudio(user) ? (
+                    <Link className="btn btn-outline" to="/estudio-audio">
+                      Estudio de audio
+                    </Link>
+                  ) : null}
                 </>
               ) : (
                 <>
@@ -132,8 +151,28 @@ export function AccountPage() {
                   </Link>
                 </>
               )}
+              <Link className="btn btn-outline" to="/audio-guiado">
+                Audio guiado
+              </Link>
             </div>
           )}
+
+          {user.role && isTeacher(user.role) ? (
+            <div className="panel record-toggle" style={{ marginBottom: '1.25rem' }}>
+              <RecordOpt
+                checked={Boolean(user.canRecord)}
+                onChange={(v) => {
+                  setWantRecord(v)
+                  void setCanRecord(v)
+                }}
+              />
+              {canRecordAudio(user) ? (
+                <p style={{ margin: '0.5rem 0 0', color: 'var(--ink-soft)', fontSize: '0.9rem' }}>
+                  Abrí el <Link to="/estudio-audio">estudio de audio</Link> para grabar frases y vocabulario.
+                </p>
+              ) : null}
+            </div>
+          ) : null}
 
           <div className="cta-row">
             <button type="button" className="btn btn-solid" onClick={() => void pullAndMergeCloud()}>
@@ -156,7 +195,12 @@ export function AccountPage() {
               </summary>
               <div style={{ marginTop: '0.85rem' }}>
                 <RolePicker value={role} onChange={setRole} legend="Nuevo rol" />
-                <button type="button" className="btn btn-outline" onClick={() => void setAccountRole(role)}>
+                {isTeacher(role) ? <RecordOpt checked={wantRecord} onChange={setWantRecord} /> : null}
+                <button
+                  type="button"
+                  className="btn btn-outline"
+                  onClick={() => void setAccountRole(role, wantRecord)}
+                >
                   Actualizar rol
                 </button>
               </div>
@@ -201,16 +245,23 @@ export function AccountPage() {
           </div>
 
           {mode === 'signup' || mode === 'login' ? (
-            <RolePicker
-              value={role}
-              onChange={setRole}
-              legend={mode === 'signup' ? '¿Moré o Talmid?' : 'Rol (para Google o cuenta nueva)'}
-            />
+            <>
+              <RolePicker
+                value={role}
+                onChange={setRole}
+                legend={mode === 'signup' ? '¿Moré o Talmid?' : 'Rol (para Google o cuenta nueva)'}
+              />
+              {showRecordOpt ? <RecordOpt checked={wantRecord} onChange={setWantRecord} /> : null}
+            </>
           ) : null}
 
           {mode !== 'recover' ? (
             <>
-              <button type="button" className="btn btn-google" onClick={() => void signInWithGoogle(role)}>
+              <button
+                type="button"
+                className="btn btn-google"
+                onClick={() => void signInWithGoogle(role, wantRecord)}
+              >
                 <GoogleMark />
                 Continuar con Google
               </button>
@@ -258,6 +309,18 @@ export function AccountPage() {
         </form>
       )}
     </section>
+  )
+}
+
+function RecordOpt({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
+  return (
+    <label className="record-opt">
+      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
+      <span>
+        <strong>Puedo grabar audio guiado</strong>
+        <em>Opcional. La Morá/Moré publica su voz para que la clase escuche y repita.</em>
+      </span>
+    </label>
   )
 }
 

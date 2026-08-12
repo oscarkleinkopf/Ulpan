@@ -38,4 +38,6 @@ export type CloudUser = {
   name?: string
   /** Rol de cuenta: Moré/Morá (profesor) o Talmid/Talmidá (alumno) */
   role?: Role | null
+  /** Morá/Moré con permiso para grabar audio guiado */
+  canRecord?: boolean
 }

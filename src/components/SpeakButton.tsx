@@ -1,19 +1,34 @@
-import { useState, type MouseEvent } from 'react'
-import { speakHebrew } from '../lib/speak'
+import { useEffect, useState, type MouseEvent } from 'react'
+import { guidedAudioUrl, getGuidedClip } from '../lib/guidedAudio'
+import { prefetchAudioUrl, prefetchHebrew, speakGuided } from '../lib/speak'
 
 type Props = {
   text: string
+  /** Clave del clip (letter:… / phrase:… / …). Si hay grabación de la Mora, se usa primero. */
+  clipId?: string
   label?: string
+  /** Forzar URL de audio (p. ej. recién subida) */
+  audioUrl?: string
 }
 
-export function SpeakButton({ text, label = 'Escuchar' }: Props) {
+export function SpeakButton({ text, clipId, label = 'Escuchar', audioUrl }: Props) {
   const [state, setState] = useState<'idle' | 'speaking' | 'error'>('idle')
+  const [hasMora, setHasMora] = useState(Boolean(audioUrl || (clipId && guidedAudioUrl(clipId))))
+
+  useEffect(() => {
+    const url = audioUrl || (clipId ? guidedAudioUrl(clipId) : undefined)
+    setHasMora(Boolean(url || (clipId && getGuidedClip(clipId))))
+    if (url) prefetchAudioUrl(url)
+    else if (text) prefetchHebrew(text)
+  }, [clipId, audioUrl, text])
 
   async function onSpeak(e: MouseEvent<HTMLButtonElement>) {
     e.preventDefault()
     e.stopPropagation()
     setState('speaking')
-    const result = await speakHebrew(text)
+    const url = audioUrl || (clipId ? guidedAudioUrl(clipId) : undefined)
+    const { result, source } = await speakGuided(text, url)
+    if (source === 'mora') setHasMora(true)
     if (result === 'ok') {
       setState('idle')
       return
@@ -27,12 +42,14 @@ export function SpeakButton({ text, label = 'Escuchar' }: Props) {
       ? 'No se pudo reproducir el audio. Revisa tu conexión o prueba otro navegador.'
       : state === 'speaking'
         ? 'Reproduciendo…'
-        : label
+        : hasMora
+          ? `${label} · voz de la Mora`
+          : label
 
   return (
     <button
       type="button"
-      className={`speak-btn${state === 'speaking' ? ' is-speaking' : ''}${state === 'error' ? ' is-error' : ''}`}
+      className={`speak-btn${state === 'speaking' ? ' is-speaking' : ''}${state === 'error' ? ' is-error' : ''}${hasMora ? ' has-mora' : ''}`}
       aria-label={title}
       title={title}
       onClick={onSpeak}

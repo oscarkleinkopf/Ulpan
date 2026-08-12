@@ -1,5 +1,15 @@
 export type LessonStep =
   | { type: 'info'; title: string; body: string; hebrew?: string }
+  | {
+      type: 'listen'
+      title: string
+      body?: string
+      hebrew: string
+      translit?: string
+      spanish?: string
+      /** Si se omite, se usa lesson:{lessonId}:{stepIndex} */
+      clipId?: string
+    }
   | { type: 'letter'; letterId: string }
   | { type: 'vocab'; vocabIds: string[] }
   | { type: 'grammar'; topicId: string }
@@ -35,6 +45,24 @@ export const lessons: Lesson[] = [
         title: '¡Shalom!',
         body: 'Ulpan con la Mora Maggie te acompaña desde cero. Empezamos por el alefato (א״ב), la base de todo lo demás. El hebreo se lee de derecha a izquierda.',
         hebrew: 'שָׁלוֹם',
+      },
+      {
+        type: 'listen',
+        title: 'Audio guiado · Shalom',
+        body: 'Escuchá la pronunciación y repetí en voz alta. Si la Mora grabó su voz, la vas a oír a ella.',
+        hebrew: 'שָׁלוֹם',
+        translit: 'shalom',
+        spanish: 'hola / paz',
+        clipId: 'vocab:shalom',
+      },
+      {
+        type: 'listen',
+        title: 'Audio guiado · Todá',
+        body: 'Otra palabra esencial: gracias.',
+        hebrew: 'תּוֹדָה',
+        translit: 'todá',
+        spanish: 'gracias',
+        clipId: 'vocab:toda',
       },
       {
         type: 'info',

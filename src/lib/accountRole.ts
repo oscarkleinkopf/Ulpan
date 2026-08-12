@@ -53,24 +53,53 @@ export function accountRoleLabel(role: Role | null | undefined): string {
   return role ? roleLabel(role) : 'Sin rol'
 }
 
-const PENDING_KEY = 'ulpan_pending_role'
+const PENDING_KEY = 'ulpan_pending_account'
 
-export function stashPendingRole(role: Role) {
+export type PendingAccount = {
+  role: Role
+  canRecord: boolean
+}
+
+export function stashPendingRole(role: Role, canRecord = false) {
   try {
-    sessionStorage.setItem(PENDING_KEY, role)
+    const payload: PendingAccount = { role, canRecord: Boolean(canRecord) }
+    sessionStorage.setItem(PENDING_KEY, JSON.stringify(payload))
   } catch {
     /* ignore */
   }
 }
 
 export function takePendingRole(): Role | null {
+  const pending = takePendingAccount()
+  return pending?.role ?? null
+}
+
+export function takePendingAccount(): PendingAccount | null {
   try {
     const raw = sessionStorage.getItem(PENDING_KEY)
     sessionStorage.removeItem(PENDING_KEY)
-    return parseAccountRole(raw)
+    if (!raw) return null
+    // Compat: antes solo se guardaba el rol como string
+    if (raw === 'mora' || raw === 'more' || raw === 'talmid' || raw === 'talmida') {
+      return { role: raw, canRecord: false }
+    }
+    const parsed = JSON.parse(raw) as PendingAccount
+    const role = parseAccountRole(parsed.role)
+    if (!role) return null
+    return { role, canRecord: Boolean(parsed.canRecord) }
   } catch {
     return null
   }
+}
+
+export function parseCanRecord(raw: unknown): boolean {
+  return raw === true || raw === 'true'
+}
+
+/** ¿Puede esta cuenta abrir el estudio de grabación? */
+export function canRecordAudio(user: { role?: Role | null; canRecord?: boolean } | null | undefined): boolean {
+  if (!user?.role) return false
+  return isTeacher(user.role) && Boolean(user.canRecord)
 }
 
 /**
