@@ -22,6 +22,7 @@ import { TasksPage } from './pages/TasksPage'
 import { VocabularyPage } from './pages/VocabularyPage'
 import { WeeklyPackPage } from './pages/WeeklyPackPage'
 import { ZionismPage } from './pages/ZionismPage'
+import { MorePage } from './pages/MorePage'
 
 export default function App() {
   const basename = import.meta.env.BASE_URL.replace(/\/$/, '') || undefined
@@ -52,6 +53,7 @@ export default function App() {
             <Route path="perfiles" element={<ProfilesPage />} />
             <Route path="tareas" element={<TasksPage />} />
             <Route path="cuenta" element={<AccountPage />} />
+            <Route path="mas" element={<MorePage />} />
             <Route path="*" element={<Navigate to="/" replace />} />
           </Route>
         </Routes>

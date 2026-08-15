@@ -4,6 +4,7 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 
 ## Qué incluye
 
+- **Hoy en el Ulpan**: inicio con 3 pasos (lección, repaso, tarea) + palabra del día; menú corto y el resto en **Más**
 - **Lecciones** guiadas (alefato, vocabulario, gramática, frases)
 - **Alefato** completo con formas finales y vocales (nikud)
 - **Vocabulario** buscable por temas
