@@ -1,10 +1,16 @@
 import { NavLink, Outlet } from 'react-router-dom'
 import { accountRoleLabel, canRecordAudio } from '../lib/accountRole'
 import { useAuthContext } from '../lib/AuthProvider'
+import { isTeacher } from '../lib/classroom'
+import { useClassroom } from '../lib/useClassroom'
 import { InstallPrompt } from './InstallPrompt'
 
 export function Layout() {
   const { user, signOut, cloudReady } = useAuthContext()
+  const { activeProfile } = useClassroom()
+  const teacher = Boolean(
+    (user?.role && isTeacher(user.role)) || (activeProfile && isTeacher(activeProfile.role)),
+  )
   const showStudio = canRecordAudio(user)
 
   return (
@@ -15,34 +21,10 @@ export function Layout() {
         </NavLink>
         <nav className="nav-links" aria-label="Principal">
           <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Inicio
+            Hoy
           </NavLink>
           <NavLink to="/lecciones" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Lecciones
-          </NavLink>
-          <NavLink to="/alefato" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Alefato
-          </NavLink>
-          <NavLink to="/vocabulario" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Vocabulario
-          </NavLink>
-          <NavLink to="/sionismo" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Sionismo
-          </NavLink>
-          <NavLink to="/calendario" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Calendario
-          </NavLink>
-          <NavLink to="/gramatica" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Gramática
-          </NavLink>
-          <NavLink to="/frases" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Frases
-          </NavLink>
-          <NavLink to="/audio-guiado" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Audio
-          </NavLink>
-          <NavLink to="/pareja" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Pareja
           </NavLink>
           <NavLink to="/practica" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Práctica
@@ -50,25 +32,21 @@ export function Layout() {
           <NavLink to="/tareas" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Tareas
           </NavLink>
+          {teacher ? (
+            <NavLink to="/resumen-clase" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+              Aula
+            </NavLink>
+          ) : null}
           {showStudio ? (
             <NavLink to="/estudio-audio" className={({ isActive }) => (isActive ? 'active' : undefined)}>
               Estudio
             </NavLink>
           ) : null}
-          <NavLink to="/entrega-semanal" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Semanal
-          </NavLink>
-          <NavLink to="/certificados" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Diplomas
-          </NavLink>
-          <NavLink to="/perfiles" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Perfiles
+          <NavLink to="/mas" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+            Más
           </NavLink>
           <NavLink to="/cuenta" className={({ isActive }) => (isActive ? 'active' : undefined)}>
             Cuenta
-          </NavLink>
-          <NavLink to="/progreso" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-            Progreso
           </NavLink>
         </nav>
         {cloudReady ? (
@@ -102,24 +80,24 @@ export function Layout() {
       </main>
       <nav className="bottom-nav" aria-label="Móvil">
         <NavLink to="/" end className={({ isActive }) => (isActive ? 'active' : undefined)}>
-          <span className="he-mini">ב</span>
-          Inicio
+          <span className="he-mini">ה</span>
+          Hoy
         </NavLink>
         <NavLink to="/lecciones" className={({ isActive }) => (isActive ? 'active' : undefined)}>
           <span className="he-mini">ל</span>
           Curso
         </NavLink>
-        <NavLink to="/audio-guiado" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-          <span className="he-mini">ש</span>
-          Audio
-        </NavLink>
         <NavLink to="/practica" className={({ isActive }) => (isActive ? 'active' : undefined)}>
           <span className="he-mini">ח</span>
           Práctica
         </NavLink>
-        <NavLink to="/cuenta" className={({ isActive }) => (isActive ? 'active' : undefined)}>
-          <span className="he-mini">א</span>
-          Cuenta
+        <NavLink to="/tareas" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+          <span className="he-mini">ת</span>
+          Tareas
+        </NavLink>
+        <NavLink to="/mas" className={({ isActive }) => (isActive ? 'active' : undefined)}>
+          <span className="he-mini">ע</span>
+          Más
         </NavLink>
       </nav>
     </div>
