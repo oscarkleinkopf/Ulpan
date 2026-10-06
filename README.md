@@ -105,3 +105,9 @@ Sin Supabase configurado, todo sigue en `localStorage` de ese dispositivo.
 5. Copia **Client ID** y **Client Secret**.
 6. En Supabase → **Authentication → Sign In / Providers → Google** → Enable → pega Client ID y Secret → Save.
 7. En la app: **Cuenta → Continuar con Google**.
+
+## Licencia
+
+- **Código:** [MIT](LICENSE). Copyright (c) 2026 Osias Kleinkopf.
+- **Contenido propio** (lecciones, vocabulario, gramática, frases y ejercicios): [CC BY-NC-SA 4.0](LICENSE-CONTENT.md).
+- **Material de terceros** (grabaciones de voz de la Mora Maggie y de otras personas): no cubierto; ver [THIRD-PARTY.md](THIRD-PARTY.md).
