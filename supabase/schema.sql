@@ -33,30 +33,80 @@ create policy "user_sync_delete_own"
   on public.user_sync for delete
   using (auth.uid() = user_id);
 
--- ─── Audio guiado (voz de la Mora) ───────────────────────────────────────────
+-- ─── Privilegios de grabación (NO editables por el cliente) ──────────────────
+-- auth.users.user_metadata es escribible con supabase.auth.updateUser().
+-- El permiso de grabar audio compartido vive en esta tabla: el cliente solo
+-- puede LEER su fila. Otorgar / revocar se hace en SQL Editor (service_role):
+--
+--   update public.ulpan_privileges
+--   set can_record = true, updated_at = now()
+--   where user_id = '<uuid-de-la-mora>';
+--
+-- Tras aplicar este schema, nadie graba hasta ese UPDATE (fail-closed).
 
-create or replace function public.ulpan_is_teacher()
-returns boolean
-language sql
-stable
+create table if not exists public.ulpan_privileges (
+  user_id uuid primary key references auth.users (id) on delete cascade,
+  can_record boolean not null default false,
+  updated_at timestamptz not null default now()
+);
+
+alter table public.ulpan_privileges enable row level security;
+
+revoke insert, update, delete on public.ulpan_privileges from anon, authenticated, public;
+grant select on public.ulpan_privileges to authenticated;
+
+drop policy if exists "ulpan_privileges_select_own" on public.ulpan_privileges;
+drop policy if exists "ulpan_privileges_insert" on public.ulpan_privileges;
+drop policy if exists "ulpan_privileges_update" on public.ulpan_privileges;
+drop policy if exists "ulpan_privileges_delete" on public.ulpan_privileges;
+
+create policy "ulpan_privileges_select_own"
+  on public.ulpan_privileges for select
+  using (auth.uid() = user_id);
+
+create or replace function public.ulpan_privileges_on_signup()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
 as $$
-  select coalesce(
-    (auth.jwt() -> 'user_metadata' ->> 'ulpan_role') in ('mora', 'more'),
-    false
-  );
+begin
+  insert into public.ulpan_privileges (user_id, can_record)
+  values (new.id, false)
+  on conflict (user_id) do nothing;
+  return new;
+end;
 $$;
+
+drop trigger if exists on_auth_user_created_ulpan_privileges on auth.users;
+create trigger on_auth_user_created_ulpan_privileges
+  after insert on auth.users
+  for each row execute procedure public.ulpan_privileges_on_signup();
+
+insert into public.ulpan_privileges (user_id, can_record)
+select id, false from auth.users
+on conflict (user_id) do nothing;
+
+-- ─── Audio guiado (voz de la Mora) ───────────────────────────────────────────
 
 create or replace function public.ulpan_can_record()
 returns boolean
 language sql
 stable
+security definer
+set search_path = public
 as $$
-  select public.ulpan_is_teacher()
-    and coalesce(
-      (auth.jwt() -> 'user_metadata' ->> 'ulpan_can_record') = 'true',
-      false
-    );
+  select coalesce(
+    (select p.can_record from public.ulpan_privileges p where p.user_id = auth.uid()),
+    false
+  );
 $$;
+
+revoke all on function public.ulpan_can_record() from public;
+grant execute on function public.ulpan_can_record() to anon, authenticated;
+
+-- Old helper read user_metadata (client-writable). Do not use it in RLS.
+drop function if exists public.ulpan_is_teacher();
 
 create table if not exists public.guided_audio (
   clip_id text primary key,

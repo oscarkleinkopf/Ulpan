@@ -15,7 +15,7 @@ App web para aprender **hebreo desde cero**, pensada para computadores y móvile
 - **Perfiles** de morim (mora/more) y talmidim (talmid/talmidá)
 - **Tareas semanales** con corrección de la mora (visto bueno, “para corregir” y comentarios)
 - **Audio guiado** (escuchá y repetí) con TTS de respaldo
-- **Estudio de audio** para la Mora: grabar/subir voz cuando activa el permiso en su cuenta
+- **Estudio de audio** para la Mora: grabar/subir voz cuando el proyecto le otorga permiso en Supabase
 - **Resumen de clase** semanal (avance, visto bueno, copiar a WhatsApp)
 - **Calendario en casa**: foco cultural del día + palabra
 - **Modo pareja**: diálogos cortos por turnos
@@ -87,8 +87,15 @@ Sin Supabase configurado, todo sigue en `localStorage` de ese dispositivo.
 
 ### Audio guiado + grabación de la Mora
 
-1. Volvé a ejecutar [`supabase/schema.sql`](supabase/schema.sql) (agrega tabla `guided_audio`, bucket `guided-audio` y políticas).
-2. En **Cuenta**, al crear o editar rol **Morá / Moré**, marcá **Puedo grabar audio guiado**.
+1. Volvé a ejecutar [`supabase/schema.sql`](supabase/schema.sql) (agrega `ulpan_privileges`, tabla `guided_audio`, bucket `guided-audio` y políticas).
+2. Otorgá grabación en SQL Editor (el cliente no puede autoasignarse este permiso):
+
+   ```sql
+   update public.ulpan_privileges
+   set can_record = true, updated_at = now()
+   where user_id = '<uuid-de-la-mora>';
+   ```
+
 3. Abrí **Estudio** (`/estudio-audio`) y grabá o subí clips asociados a frases, vocabulario o letras.
 4. Los alumnos practican en **Audio** (`/audio-guiado`) y en pasos “escuchá y repetí” de las lecciones.
 5. Si no hay grabación, el botón ▶ usa TTS de respaldo.

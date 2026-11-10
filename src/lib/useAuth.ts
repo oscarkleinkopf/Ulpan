@@ -2,14 +2,15 @@ import { useEffect, useState } from 'react'
 import type { Session } from '@supabase/supabase-js'
 import {
   canRecordAudio,
+  clientAuthUserData,
   ensureAccountClassroom,
   parseAccountRole,
-  parseCanRecord,
   stashPendingRole,
   takePendingAccount,
   type Role,
 } from './accountRole'
 import { fetchGuidedClips } from './guidedAudio'
+import { fetchServerCanRecord } from './privileges'
 import { pullAndMergeCloud, setCloudAuthEnabled } from './cloudSync'
 import {
   authRedirectTo,
@@ -34,8 +35,15 @@ function toCloudUser(session: Session | null): CloudUser | null {
     email: u.email,
     name,
     role,
-    canRecord: role ? parseCanRecord(meta.ulpan_can_record) : false,
+    canRecord: false,
   }
+}
+
+async function hydrateCloudUser(session: Session | null): Promise<CloudUser | null> {
+  const current = toCloudUser(session)
+  if (!current) return null
+  current.canRecord = await fetchServerCanRecord()
+  return current
 }
 
 async function afterLogin(user: CloudUser) {
@@ -49,29 +57,20 @@ async function afterLogin(user: CloudUser) {
 
 async function applyPendingAccount(session: Session): Promise<CloudUser | null> {
   const supabase = getSupabase()
-  if (!supabase) return toCloudUser(session)
-  let current = toCloudUser(session)
+  if (!supabase) return hydrateCloudUser(session)
+  const current = toCloudUser(session)
   const pending = takePendingAccount()
-  if (!current || !pending) return current
+  let nextSession = session
 
-  const needsRole = !current.role
-  const needsRecordFlag =
-    pending.role &&
-    (pending.role === 'mora' || pending.role === 'more') &&
-    current.canRecord !== pending.canRecord
-
-  if (!needsRole && !needsRecordFlag) return current
-
-  const { data: updated, error } = await supabase.auth.updateUser({
-    data: {
-      ...(needsRole ? { ulpan_role: pending.role } : {}),
-      ulpan_can_record: pending.canRecord,
-    },
-  })
-  if (!error && updated.user) {
-    current = toCloudUser({ ...session, user: updated.user })
+  if (current && pending?.role && !current.role) {
+    const { data: updated, error } = await supabase.auth.updateUser({
+      data: clientAuthUserData({ role: pending.role }),
+    })
+    if (!error && updated.user) {
+      nextSession = { ...session, user: updated.user }
+    }
   }
-  return current
+  return hydrateCloudUser(nextSession)
 }
 
 export function useAuth() {
@@ -93,7 +92,7 @@ export function useAuth() {
     ;(async () => {
       const { data } = await supabase.auth.getSession()
       if (!alive) return
-      let current = data.session ? await applyPendingAccount(data.session) : null
+      const current = data.session ? await applyPendingAccount(data.session) : null
       setUser(current)
       if (current) await afterLogin(current)
       else void fetchGuidedClips(true)
@@ -111,7 +110,7 @@ export function useAuth() {
           setUser(current)
           if (current) await afterLogin(current)
         } else {
-          const current = toCloudUser(session)
+          const current = await hydrateCloudUser(session)
           setUser(current)
           setCloudAuthEnabled(Boolean(current))
         }
@@ -136,7 +135,7 @@ export function useAuth() {
       setMessage({ type: 'error', text: authErrorText(error.message) })
       return
     }
-    const current = toCloudUser(data.session)
+    const current = await hydrateCloudUser(data.session)
     setUser(current)
     if (current) {
       await afterLogin(current)
@@ -149,29 +148,18 @@ export function useAuth() {
     }
   }
 
-  async function signUp(
-    email: string,
-    password: string,
-    name: string,
-    role: Role,
-    canRecord = false,
-  ) {
+  async function signUp(email: string, password: string, name: string, role: Role) {
     setMessage(null)
     const supabase = getSupabase()
     if (!supabase) {
       setMessage({ type: 'error', text: 'Supabase no está configurado.' })
       return
     }
-    const record = role === 'mora' || role === 'more' ? Boolean(canRecord) : false
     const { data, error } = await supabase.auth.signUp({
       email,
       password,
       options: {
-        data: {
-          full_name: name.trim() || undefined,
-          ulpan_role: role,
-          ulpan_can_record: record,
-        },
+        data: clientAuthUserData({ role, name }),
         emailRedirectTo: authRedirectTo('cuenta'),
       },
     })
@@ -180,17 +168,15 @@ export function useAuth() {
       return
     }
     if (data.session) {
-      const current = toCloudUser(data.session)
+      const current = await hydrateCloudUser(data.session)
       setUser(current)
       if (current) await afterLogin(current)
       setMessage({
         type: 'ok',
-        text: record
-          ? `Cuenta de ${roleHello(role)} creada con acceso a grabar audio.`
-          : `Cuenta de ${roleHello(role)} creada. Sincronizando…`,
+        text: `Cuenta de ${roleHello(role)} creada. Sincronizando…`,
       })
     } else {
-      stashPendingRole(role, record)
+      stashPendingRole(role)
       setMessage({
         type: 'info',
         text: 'Revisa tu correo para confirmar. Tu rol se guardará al confirmar / iniciar sesión.',
@@ -240,7 +226,7 @@ export function useAuth() {
     setMessage({ type: 'ok', text: 'Contraseña actualizada.' })
   }
 
-  async function signInWithGoogle(role?: Role, canRecord = false) {
+  async function signInWithGoogle(role?: Role) {
     setMessage(null)
     const supabase = getSupabase()
     if (!supabase) {
@@ -248,8 +234,7 @@ export function useAuth() {
       return
     }
     if (role) {
-      const record = role === 'mora' || role === 'more' ? Boolean(canRecord) : false
-      stashPendingRole(role, record)
+      stashPendingRole(role)
     }
     const { error } = await supabase.auth.signInWithOAuth({
       provider: 'google',
@@ -266,72 +251,31 @@ export function useAuth() {
     }
   }
 
-  async function setAccountRole(role: Role, canRecord?: boolean) {
+  async function setAccountRole(role: Role) {
     setMessage(null)
     const supabase = getSupabase()
     if (!supabase) {
       setMessage({ type: 'error', text: 'Supabase no está configurado.' })
       return
     }
-    const record =
-      role === 'mora' || role === 'more'
-        ? canRecord !== undefined
-          ? Boolean(canRecord)
-          : true
-        : false
     const { data, error } = await supabase.auth.updateUser({
-      data: { ulpan_role: role, ulpan_can_record: record },
+      data: clientAuthUserData({ role }),
     })
     if (error) {
       setMessage({ type: 'error', text: authErrorText(error.message) })
       return
     }
     const { data: sessionData } = await supabase.auth.getSession()
-    const current = toCloudUser(
+    const session =
       sessionData.session && data.user
         ? { ...sessionData.session, user: data.user }
-        : sessionData.session,
-    )
+        : sessionData.session
+    const current = await hydrateCloudUser(session)
     setUser(current)
     if (current) await afterLogin(current)
     setMessage({
       type: 'ok',
-      text: record
-        ? `Rol guardado: ${roleHello(role)} · puede grabar audio`
-        : `Rol guardado: ${roleHello(role)}`,
-    })
-  }
-
-  async function setCanRecord(canRecord: boolean) {
-    setMessage(null)
-    const supabase = getSupabase()
-    if (!supabase) {
-      setMessage({ type: 'error', text: 'Supabase no está configurado.' })
-      return
-    }
-    if (!user?.role || (user.role !== 'mora' && user.role !== 'more')) {
-      setMessage({ type: 'error', text: 'Solo Morá / Moré pueden activar la grabación.' })
-      return
-    }
-    const { data, error } = await supabase.auth.updateUser({
-      data: { ulpan_can_record: Boolean(canRecord) },
-    })
-    if (error) {
-      setMessage({ type: 'error', text: authErrorText(error.message) })
-      return
-    }
-    const { data: sessionData } = await supabase.auth.getSession()
-    const current = toCloudUser(
-      sessionData.session && data.user
-        ? { ...sessionData.session, user: data.user }
-        : sessionData.session,
-    )
-    setUser(current)
-    setMessage({
-      type: 'ok',
-      text: canRecord
-        ? 'Acceso a grabar audio activado. Abrí Estudio de audio.'
-        : 'Acceso a grabar audio desactivado.',
+      text: `Rol guardado: ${roleHello(role)}`,
     })
   }
 
@@ -350,7 +294,6 @@ export function useAuth() {
     recover,
     updatePassword,
     setAccountRole,
-    setCanRecord,
     canRecord: canRecordAudio(user),
   }
 }
