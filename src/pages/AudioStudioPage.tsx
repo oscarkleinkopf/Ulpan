@@ -119,11 +119,11 @@ export function AudioStudioPage() {
         <PageVisual sceneId="srs" />
         <h2>Estudio de audio</h2>
         <p className="lead">
-          Esta cuenta no tiene acceso a grabar. En <strong>Cuenta</strong>, como Morá/Moré, activá “Puedo grabar
-          audio guiado”.
+          Esta cuenta no tiene permiso de grabación. Ese permiso lo otorga quien administra el Ulpan
+          en Supabase; no se puede activar desde la app.
         </p>
         <Link className="btn btn-solid" to="/cuenta">
-          Activar en mi cuenta
+          Volver a mi cuenta
         </Link>
       </section>
     )

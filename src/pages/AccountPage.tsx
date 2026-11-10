@@ -23,14 +23,12 @@ export function AccountPage() {
     recover,
     updatePassword,
     setAccountRole,
-    setCanRecord,
   } = useAuthContext()
   const [mode, setMode] = useState<Mode>('login')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [name, setName] = useState('')
   const [role, setRole] = useState<Role>('talmid')
-  const [wantRecord, setWantRecord] = useState(true)
   const [newPassword, setNewPassword] = useState('')
   const [syncLabel, setSyncLabel] = useState('')
 
@@ -43,16 +41,10 @@ export function AccountPage() {
     })
   }, [])
 
-  useEffect(() => {
-    if (user?.canRecord != null) setWantRecord(Boolean(user.canRecord))
-  }, [user?.canRecord])
-
-  const showRecordOpt = isTeacher(role)
-
   async function onSubmit(e: FormEvent) {
     e.preventDefault()
     if (mode === 'login') await signIn(email, password)
-    else if (mode === 'signup') await signUp(email, password, name, role, wantRecord)
+    else if (mode === 'signup') await signUp(email, password, name, role)
     else await recover(email)
   }
 
@@ -93,7 +85,8 @@ export function AccountPage() {
       <h2>Cuenta en la nube</h2>
       <p className="lead">
         Al crear tu cuenta elige si eres <strong>Moré / Morá</strong> (docente) o{' '}
-        <strong>Talmid / Talmidá</strong> (alumno). La Morá puede activar acceso a grabar audio guiado.
+        <strong>Talmid / Talmidá</strong> (alumno). El permiso para grabar audio guiado lo otorga
+        quien administra el proyecto; no se puede autoasignar.
       </p>
 
       {message ? <p className={`banner-msg${message.type === 'error' ? ' is-error' : ''}`}>{message.text}</p> : null}
@@ -116,11 +109,10 @@ export function AccountPage() {
           {!user.role ? (
             <div style={{ marginBottom: '1.25rem' }}>
               <RolePicker value={role} onChange={setRole} legend="Elige tu rol en el Ulpan" />
-              {isTeacher(role) ? <RecordOpt checked={wantRecord} onChange={setWantRecord} /> : null}
               <button
                 type="button"
                 className="btn btn-solid"
-                onClick={() => void setAccountRole(role, wantRecord)}
+                onClick={() => void setAccountRole(role)}
               >
                 Guardar rol
               </button>
@@ -159,18 +151,16 @@ export function AccountPage() {
 
           {user.role && isTeacher(user.role) ? (
             <div className="panel record-toggle" style={{ marginBottom: '1.25rem' }}>
-              <RecordOpt
-                checked={Boolean(user.canRecord)}
-                onChange={(v) => {
-                  setWantRecord(v)
-                  void setCanRecord(v)
-                }}
-              />
               {canRecordAudio(user) ? (
-                <p style={{ margin: '0.5rem 0 0', color: 'var(--ink-soft)', fontSize: '0.9rem' }}>
+                <p style={{ margin: 0, color: 'var(--ink-soft)', fontSize: '0.9rem' }}>
                   Abrí el <Link to="/estudio-audio">estudio de audio</Link> para grabar frases y vocabulario.
                 </p>
-              ) : null}
+              ) : (
+                <p style={{ margin: 0, color: 'var(--ink-soft)', fontSize: '0.9rem' }}>
+                  Esta cuenta no puede grabar audio guiado. El permiso lo otorga quien administra el
+                  Ulpan en Supabase.
+                </p>
+              )}
             </div>
           ) : null}
 
@@ -195,11 +185,10 @@ export function AccountPage() {
               </summary>
               <div style={{ marginTop: '0.85rem' }}>
                 <RolePicker value={role} onChange={setRole} legend="Nuevo rol" />
-                {isTeacher(role) ? <RecordOpt checked={wantRecord} onChange={setWantRecord} /> : null}
                 <button
                   type="button"
                   className="btn btn-outline"
-                  onClick={() => void setAccountRole(role, wantRecord)}
+                  onClick={() => void setAccountRole(role)}
                 >
                   Actualizar rol
                 </button>
@@ -251,7 +240,6 @@ export function AccountPage() {
                 onChange={setRole}
                 legend={mode === 'signup' ? '¿Moré o Talmid?' : 'Rol (para Google o cuenta nueva)'}
               />
-              {showRecordOpt ? <RecordOpt checked={wantRecord} onChange={setWantRecord} /> : null}
             </>
           ) : null}
 
@@ -260,7 +248,7 @@ export function AccountPage() {
               <button
                 type="button"
                 className="btn btn-google"
-                onClick={() => void signInWithGoogle(role, wantRecord)}
+                onClick={() => void signInWithGoogle(role)}
               >
                 <GoogleMark />
                 Continuar con Google
@@ -309,18 +297,6 @@ export function AccountPage() {
         </form>
       )}
     </section>
-  )
-}
-
-function RecordOpt({ checked, onChange }: { checked: boolean; onChange: (v: boolean) => void }) {
-  return (
-    <label className="record-opt">
-      <input type="checkbox" checked={checked} onChange={(e) => onChange(e.target.checked)} />
-      <span>
-        <strong>Puedo grabar audio guiado</strong>
-        <em>Opcional. La Morá/Moré publica su voz para que la clase escuche y repita.</em>
-      </span>
-    </label>
   )
 }
 

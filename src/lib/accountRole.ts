@@ -57,12 +57,11 @@ const PENDING_KEY = 'ulpan_pending_account'
 
 export type PendingAccount = {
   role: Role
-  canRecord: boolean
 }
 
-export function stashPendingRole(role: Role, canRecord = false) {
+export function stashPendingRole(role: Role) {
   try {
-    const payload: PendingAccount = { role, canRecord: Boolean(canRecord) }
+    const payload: PendingAccount = { role }
     sessionStorage.setItem(PENDING_KEY, JSON.stringify(payload))
   } catch {
     /* ignore */
@@ -81,25 +80,31 @@ export function takePendingAccount(): PendingAccount | null {
     if (!raw) return null
     // Compat: antes solo se guardaba el rol como string
     if (raw === 'mora' || raw === 'more' || raw === 'talmid' || raw === 'talmida') {
-      return { role: raw, canRecord: false }
+      return { role: raw }
     }
     const parsed = JSON.parse(raw) as PendingAccount
     const role = parseAccountRole(parsed.role)
     if (!role) return null
-    return { role, canRecord: Boolean(parsed.canRecord) }
+    return { role }
   } catch {
     return null
   }
 }
 
-export function parseCanRecord(raw: unknown): boolean {
-  return raw === true || raw === 'true'
+/**
+ * Metadata the client may write on sign-up / role change.
+ * Recording privilege is server-granted and must never appear here.
+ */
+export function clientAuthUserData(input: { role: Role; name?: string }): Record<string, string> {
+  const data: Record<string, string> = { ulpan_role: input.role }
+  const name = input.name?.trim()
+  if (name) data.full_name = name
+  return data
 }
 
-/** ¿Puede esta cuenta abrir el estudio de grabación? */
-export function canRecordAudio(user: { role?: Role | null; canRecord?: boolean } | null | undefined): boolean {
-  if (!user?.role) return false
-  return isTeacher(user.role) && Boolean(user.canRecord)
+/** ¿Puede esta cuenta abrir el estudio de grabación? Solo el flag de servidor. */
+export function canRecordAudio(user: { canRecord?: boolean } | null | undefined): boolean {
+  return Boolean(user?.canRecord)
 }
 
 /**
